@@ -22,14 +22,22 @@ class SplashView extends StatelessWidget {
                 SizedBox(height: 2.0),
                 Text(
                   'Soul Note',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: Colors.black, fontFamily: 'Kantumruy'),
+                  style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                      fontFamily: 'Kantumruy'),
                 ),
                 SizedBox(height: 4.0),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 56.0),
                   child: Text(
                     'Your Digital DiaryNote, Your Trusted Best Friend!',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black, fontFamily: 'Kantumruy'),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                        fontFamily: 'Kantumruy'),
                     maxLines: 2,
                     textAlign: TextAlign.center,
                   ),
