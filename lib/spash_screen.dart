@@ -11,6 +11,7 @@ class SplashScreen extends StatelessWidget {
         splash: Image.asset('assets/images/diary_logo.png'),
         splashIconSize: 250,
         duration: 3000,
-        nextScreen: const HomeView());
+        nextScreen: HomeView()
+      );
   }
 }
