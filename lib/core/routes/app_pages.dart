@@ -26,15 +26,13 @@ class AppPages {
   AppPages._();
   static final routes = [
     GetPage(
-      name: Paths.SPLASH,
-      page: () => const SplashView(),
-      binding: SplashBinding()
-    ),
+        name: Paths.SPLASH,
+        page: () => const SplashView(),
+        binding: SplashBinding()),
     GetPage(
-      name: Paths.START,
-      page: () => const StartView(),
-      binding: StartBinding()
-    ),
+        name: Paths.START,
+        page: () => const StartView(),
+        binding: StartBinding()),
     GetPage(
       name: Paths.SIGN_IN,
       page: () => SignInView(),
@@ -46,34 +44,27 @@ class AppPages {
       binding: SignUpBinding(),
     ),
     GetPage(
-      name: Paths.TAB_BAR_WRAPPER,
-      page: () => const TabBarWrapperView(),
-      binding: TabBarWrapperBinding()
-    ),
+        name: Paths.TAB_BAR_WRAPPER,
+        page: () => const TabBarWrapperView(),
+        binding: TabBarWrapperBinding()),
     GetPage(
       name: Paths.HOME,
       page: () => const HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
-      name: Paths.MOOD,
-      page: () => const MoodView(),
-      binding: MoodBinding()
-    ),
+        name: Paths.MOOD, page: () => const MoodView(), binding: MoodBinding()),
     GetPage(
-      name: Paths.CREATE,
-      page: () => const CreateView(),
-      binding: CreateBinding()
-    ),
+        name: Paths.CREATE,
+        page: () => const CreateView(),
+        binding: CreateBinding()),
     GetPage(
-      name: Paths.SHARE,
-      page: () => const ShareView(),
-      binding: ShareBinding()
-    ),
+        name: Paths.SHARE,
+        page: () => const ShareView(),
+        binding: ShareBinding()),
     GetPage(
-      name: Paths.PROFILE,
-      page: () => const ProfileView(),
-      binding: ProfileBinding()
-    ),
+        name: Paths.PROFILE,
+        page: () => const ProfileView(),
+        binding: ProfileBinding()),
   ];
 }
