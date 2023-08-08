@@ -7,7 +7,8 @@ class ThemeConfig {
   ThemeConfig(this.isDarkMode);
 
   ThemeData get themeData {
-    final scheme = isDarkMode ? ThemeConstant.darkScheme : ThemeConstant.lightScheme;
+    final scheme =
+        isDarkMode ? ThemeConstant.darkScheme : ThemeConstant.lightScheme;
     return ThemeData(
       primaryColor: scheme.primary,
       scaffoldBackgroundColor: scheme.background,
@@ -18,7 +19,8 @@ class ThemeConfig {
         centerTitle: false,
         elevation: 0.0,
         iconTheme: IconThemeData(color: scheme.onPrimary),
-        titleTextStyle: ThemeConstant.textTheme.titleLarge?.copyWith(color: scheme.onPrimary),
+        titleTextStyle: ThemeConstant.textTheme.titleLarge
+            ?.copyWith(color: scheme.onPrimary),
         foregroundColor: scheme.onPrimary,
       ),
       iconTheme: IconThemeData(color: scheme.onBackground),
@@ -35,7 +37,8 @@ class ThemeConfig {
           disabledForegroundColor: scheme.onSurface.withOpacity(0.38),
         ),
       ),
-      progressIndicatorTheme: ProgressIndicatorThemeData(color: scheme.onPrimary),
+      progressIndicatorTheme:
+          ProgressIndicatorThemeData(color: scheme.onPrimary),
       dialogTheme: DialogTheme(
         backgroundColor: scheme.background,
         titleTextStyle: TextStyle(color: scheme.onBackground),

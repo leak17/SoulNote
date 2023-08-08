@@ -8,8 +8,8 @@ abstract class Routes {
   static const SIGN_UP = Paths.SIGN_UP;
   static const TAB_BAR_WRAPPER = Paths.TAB_BAR_WRAPPER;
   static const HOME = Paths.HOME;
-static const MOOD = Paths.MOOD;
-static const CREATE = Paths.CREATE;
-static const SHARE = Paths.SHARE;
-static const PROFILE = Paths.PROFILE;
+  static const MOOD = Paths.MOOD;
+  static const CREATE = Paths.CREATE;
+  static const SHARE = Paths.SHARE;
+  static const PROFILE = Paths.PROFILE;
 }
