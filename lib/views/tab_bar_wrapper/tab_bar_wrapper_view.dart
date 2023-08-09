@@ -3,7 +3,6 @@ import 'package:diary_journal/views/tab_bar_wrapper/tab_bar_wrapper_controller.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class TabBarWrapperView extends GetView<TabBarWrapperController> {
   const TabBarWrapperView({super.key});
 
@@ -35,7 +34,7 @@ class TabBarWrapperView extends GetView<TabBarWrapperController> {
         currentIndex: controller.selectedIndex.abs(),
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
-           controller.switchIndex(index);
+          controller.switchIndex(index);
         },
         backgroundColor: Theme.of(context).colorScheme.onSurface,
         items: TabBarConfig.bottomNavigationBarItems(),

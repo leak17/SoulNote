@@ -8,7 +8,8 @@ class TabBarWrapperController extends GetxController {
 
   void switchIndex(int index) {
     if (index == selectedIndex.abs()) {
-      NavigatorState? currentState = TabBarConfig.navigationKeyAt(index).currentState;
+      NavigatorState? currentState =
+          TabBarConfig.navigationKeyAt(index).currentState;
       currentState?.popUntil((route) => route.isFirst);
     } else {
       selectedIndex.value = index;
