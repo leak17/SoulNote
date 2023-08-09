@@ -16,9 +16,8 @@ class Signinbutton extends StatelessWidget {
         height: 40,
         width: 290,
         margin: const EdgeInsets.symmetric(horizontal: 45),
-        decoration: BoxDecoration(
-          color: const Color(0xFF213A5C),
-          borderRadius: BorderRadius.circular(10),
+        decoration: const BoxDecoration(
+          color: Color(0xFF213A5C),
         ),
         child: const Center(
           child: Text(

@@ -17,7 +17,6 @@ import 'package:diary_journal/views/splash/splash_binding.dart';
 import 'package:diary_journal/views/splash/splash_view.dart';
 import 'package:diary_journal/views/start/start_binding.dart';
 import 'package:diary_journal/views/start/start_view.dart';
-import 'package:diary_journal/views/tab_bar_wrapper/tab_bar_wrapper_binding.dart';
 import 'package:diary_journal/views/tab_bar_wrapper/tab_bar_wrapper_view.dart';
 
 import 'package:get/get_navigation/src/routes/get_route.dart';
