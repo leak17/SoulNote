@@ -2,17 +2,10 @@ import 'package:diary_journal/views/signin/signin_components/Square_tile.dart';
 import 'package:diary_journal/views/signin/signin_components/Textfield.dart';
 import 'package:diary_journal/views/signin/signin_components/signin_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'signin_controller.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-
-  // text editing controllers
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  // sign user in method
-  void signUserIn() {}
-
+class SignInView extends GetView<SignInController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,67 +17,84 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(
-                  height: 20,
+                  height: 50,
                 ),
-                // logo
-                const Icon(
-                  Icons.architecture_sharp,
-                  size: 100,
-                ),
-                const SizedBox(height: 10),
-                // welcome back, you've been missed!
-                Text(
-                  'Welcome back you\'ve been missed!',
-                  style: TextStyle(
-                    color: Colors.grey[700],
-                    fontSize: 16,
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(15), // Adding rounded corners
+                    color: Colors.white, // Add a background color if necessary
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                        15), // Applying border radius to the image
+                    child: Image.asset(
+                      'assets/images/diary_logo.png', // Replace with your logo image path
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-
                 const SizedBox(height: 25),
-
-                // username textfield
+                const Text(
+                  'Sign In',
+                  style: TextStyle(
+                    color: Color(0xFF213A5C), // Set the color using Color class
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 15),
                 MyTextField(
-                  controller: usernameController,
-                  hintText: 'Username',
+                  controller: controller.emailController,
+                  hintText: 'Your Email',
                   obscureText: false,
                 ),
-
                 const SizedBox(height: 10),
-
-                // password textfield
                 MyTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
+                  controller: controller.passwordController,
+                  hintText: 'Your Password',
                   obscureText: true,
                 ),
-                // forgot password?
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      Checkbox(
+                        value: false, // Set the initial value as needed
+                        onChanged:
+                            null, // No callback attached, checkbox is not interactive
+                      ),
                       Text(
-                        'Forgot Password',
-                        style: TextStyle(color: Colors.grey[600]),
+                        'Remember Me',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF213A5C),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 70,
+                      ), // Add space to separate Remember Me and Forgot Password
+                      Text(
+                        'Forgot Password!',
+                        style: TextStyle(
+                          color: Color(0xFF213A5C),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 10,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                // sign in button
+                const SizedBox(height: 10),
                 Signinbutton(
-                  onTap: signUserIn,
+                  onTap: controller.signUserIn,
                 ),
-
-                const SizedBox(
-                  height: 25,
-                ),
-
-                // or continue with
+                const SizedBox(height: 25),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Row(
@@ -112,27 +122,18 @@ class LoginPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                // google and apple sign in button
+                const SizedBox(height: 10),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // google sign in button
                     SquareTile(imagePath: 'assets/images/google.png'),
                     SizedBox(
                       width: 25,
                     ),
-                    // apple sign in button
-                    SquareTile(imagePath: 'assets/images/apple.png'),
+                    SquareTile(imagePath: 'assets/images/facebook.png'),
                   ],
                 ),
-                const SizedBox(
-                  height: 50,
-                ),
-
-                // not a member? Register now
+                const SizedBox(height: 50),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

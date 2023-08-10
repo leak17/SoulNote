@@ -13,10 +13,11 @@ class Signinbutton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(25),
-        margin: const EdgeInsets.symmetric(horizontal: 25),
+        height: 40,
+        width: 290,
+        margin: const EdgeInsets.symmetric(horizontal: 45),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: const Color(0xFF213A5C),
           borderRadius: BorderRadius.circular(10),
         ),
         child: const Center(
@@ -24,7 +25,7 @@ class Signinbutton extends StatelessWidget {
             "Sign In",
             style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
               fontSize: 16,
             ),
           ),

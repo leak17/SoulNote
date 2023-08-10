@@ -16,8 +16,8 @@
 //   }
 // }
 
+import 'package:diary_journal/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-import '../../core/routes/app_routes.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -42,6 +42,7 @@ class HomeView extends StatelessWidget {
               onPressed: () {
                 // Navigate to the Sign In page using GetX
                 Navigator.pushNamed(context, Routes.SIGN_IN);
+                // Get.pushNamed(Routes.SIGN_IN);
               },
               child: const Text("Sign In"),
             ),
