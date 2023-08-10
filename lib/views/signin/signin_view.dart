@@ -9,7 +9,7 @@ class SignInView extends GetView<SignInController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: const Color(0xffDDE1E0),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -17,7 +17,7 @@ class SignInView extends GetView<SignInController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(
-                  height: 50,
+                  height: 70,
                 ),
                 Container(
                   width: 100,
@@ -73,18 +73,18 @@ class SignInView extends GetView<SignInController> {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Color(0xFF213A5C),
+                          color: Color.fromRGBO(33, 58, 92, 0.6),
                         ),
                       ),
                       SizedBox(
-                        width: 70,
+                        width: 60,
                       ), // Add space to separate Remember Me and Forgot Password
                       Text(
                         'Forgot Password!',
                         style: TextStyle(
                           color: Color(0xFF213A5C),
                           fontWeight: FontWeight.w700,
-                          fontSize: 10,
+                          fontSize: 12,
                         ),
                       ),
                     ],
@@ -96,27 +96,26 @@ class SignInView extends GetView<SignInController> {
                 ),
                 const SizedBox(height: 25),
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  padding: EdgeInsets.symmetric(horizontal: 50),
                   child: Row(
                     children: [
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
-                          color: Color.fromARGB(255, 189, 189, 189),
+                          color: Color(0xff213A5C),
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          "Or Continue with",
-                          style:
-                              TextStyle(color: Color.fromARGB(255, 97, 97, 97)),
+                          "Or",
+                          style: TextStyle(color: Color(0xff213A5C)),
                         ),
                       ),
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
-                          color: Color.fromARGB(255, 189, 189, 189),
+                          color: Color(0xff213A5C),
                         ),
                       ),
                     ],
@@ -128,28 +127,29 @@ class SignInView extends GetView<SignInController> {
                   children: [
                     SquareTile(imagePath: 'assets/images/google.png'),
                     SizedBox(
-                      width: 25,
+                      width: 40,
                     ),
                     SquareTile(imagePath: 'assets/images/facebook.png'),
                   ],
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 30),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a member?',
+                      'Need an account?',
                       style: TextStyle(
-                        color: Color.fromARGB(255, 189, 189, 189),
-                        fontWeight: FontWeight.bold,
+                        color: Color.fromRGBO(33, 58, 92, 0.4),
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                     SizedBox(width: 6),
                     Text(
                       'Register Now',
                       style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF213A5C),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
                       ),
                     ),
                   ],
