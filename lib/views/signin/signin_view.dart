@@ -66,7 +66,8 @@ class SignInView extends GetView<SignInController> {
                     children: [
                       Checkbox(
                         value: false, // Set the initial value as needed
-                        onChanged: null, // No callback attached, checkbox is not interactive
+                        onChanged:
+                            null, // No callback attached, checkbox is not interactive
                       ),
                       Text(
                         'Remember Me',
@@ -93,7 +94,7 @@ class SignInView extends GetView<SignInController> {
                 const SizedBox(height: 10),
                 Signinbutton(
                   // onTap: controller.signUserIn,
-                  onTap: (){
+                  onTap: () {
                     Navigator.pushNamed(context, Routes.TAB_BAR_WRAPPER);
                   },
                 ),
