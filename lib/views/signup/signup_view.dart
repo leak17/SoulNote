@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'signup_controller.dart';
 
-
 class SignUpView extends GetView<SignUpController> {
   const SignUpView({super.key});
 
@@ -55,8 +54,6 @@ class SignUpView extends GetView<SignUpController> {
                   controller: controller.textController,
                   hintText: 'Your Name',
                   obscureText: false,
-                  
-                  
                 ),
                 const SizedBox(height: 15),
                 MyTextField(
@@ -71,48 +68,45 @@ class SignUpView extends GetView<SignUpController> {
                   obscureText: true,
                 ),
                 const SizedBox(height: 15),
-               MyTextField(
+                MyTextField(
                   controller: controller.confirmController,
                   hintText: 'Confirm Password',
                   obscureText: true,
                 ),
-                
                 const SizedBox(height: 15),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 50),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center, // Align children vertically
-                      children: [
-                        Checkbox(
-                          value: false, // Set the initial value as needed
-                          onChanged:
-                              null, // No callback attached, checkbox is not interactive
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.center, // Align children vertically
+                    children: [
+                      Checkbox(
+                        value: false, // Set the initial value as needed
+                        onChanged:
+                            null, // No callback attached, checkbox is not interactive
+                      ),
+                      Text(
+                        "I'm not a robot!",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromRGBO(33, 58, 92, 0.6),
                         ),
-                        Text(
-                          "I'm not a robot!",
-                          style: TextStyle(
-    
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromRGBO(33, 58, 92, 0.6),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ), // Add space to separate Remember Me and Forgot Password
-                        // Text(
-                        //   'Forgot Password!',
-                        //   style: TextStyle(
-                        //     color: Color(0xFF213A5C),
-                        //     fontWeight: FontWeight.w700,
-                        //     fontSize: 12,
-                        //   ),
-                        // ),
-                      ],
+                      ),
+                      SizedBox(
+                        width: 30,
+                      ), // Add space to separate Remember Me and Forgot Password
+                      // Text(
+                      //   'Forgot Password!',
+                      //   style: TextStyle(
+                      //     color: Color(0xFF213A5C),
+                      //     fontWeight: FontWeight.w700,
+                      //     fontSize: 12,
+                      //   ),
+                      // ),
+                    ],
                   ),
-                  
-                  
                 ),
                 const SizedBox(height: 10),
                 Signupbutton(
