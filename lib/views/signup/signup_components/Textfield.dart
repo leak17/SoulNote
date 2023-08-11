@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// import 'package:table_calendar/table_calendar.dart';
+
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
@@ -12,14 +14,24 @@ class MyTextField extends StatelessWidget {
     required this.obscureText,
   }) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
-    Icon prefixIcon =
-        obscureText ? const Icon(Icons.lock) : const Icon(Icons.mail);
+    Icon prefixIcon;
+
+    if (hintText == 'Email') {
+      prefixIcon = const Icon(Icons.mail);
+    } else if (hintText == 'Your Password') {
+      prefixIcon = const Icon(Icons.lock);
+    } else if (hintText == 'Your Name'){
+      prefixIcon = const Icon(Icons.person);
+    }else {
+      prefixIcon = const Icon(Icons.lock);
+    }
 
     return SizedBox(
       width: 290, // Set the desired width
-      height: 45, // Set the desired height
+      height: 50, // Set the desired height
       child: Padding(
         padding: const EdgeInsets.symmetric(
             horizontal: 0.0), // Adjust horizontal padding as needed

@@ -46,10 +46,11 @@ class HomeView extends StatelessWidget {
               },
               child: const Text("Sign In"),
             ),
-            const SizedBox(height: 10),
-            OutlinedButton(
+            const SizedBox(height: 20),
+            ElevatedButton(
               onPressed: () {
                 // Handle Sign Up button press
+                Navigator.pushNamed(context, Routes.SIGN_UP);
               },
               child: const Text("Sign Up"),
             ),
