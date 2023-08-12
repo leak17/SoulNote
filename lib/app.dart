@@ -16,7 +16,7 @@ class App extends StatelessWidget {
     return GetMaterialApp(
       title: "Application",
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.HOME,
+      initialRoute: Routes.SPLASH,
       getPages: AppPages.routes,
       theme: ThemeConfig(false).themeData,
       builder: (context, child) {
