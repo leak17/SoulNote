@@ -49,7 +49,7 @@ class AppPages {
         binding: TabBarWrapperBinding()),
     GetPage(
       name: Paths.HOME,
-      page: () => const HomeView(),
+      page: () => HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(

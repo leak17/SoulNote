@@ -1,12 +1,15 @@
-import 'package:diary_journal/views/create/create_view.dart';
 import 'package:diary_journal/views/home/home_controller.dart';
+import 'package:diary_journal/widget/custom_app_bar.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  HomeView({Key? key}) : super(key: key);
+
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
