@@ -49,11 +49,14 @@ class AppPages {
         binding: TabBarWrapperBinding()),
     GetPage(
       name: Paths.HOME,
-      page: () => const HomeView(),
+      page: () => HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
-        name: Paths.MOOD, page: () => const MoodView(), binding: MoodBinding()),
+      name: Paths.MOOD,
+      page: () => const MoodView(),
+      binding: MoodBinding(),
+    ),
     GetPage(
         name: Paths.CREATE,
         page: () => const CreateView(),

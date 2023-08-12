@@ -14,7 +14,7 @@ class TabBarConfig {
       title: 'Home',
       icon: Icons.home_outlined,
       path: Routes.HOME,
-      screen: const HomeView(),
+      screen: HomeView(),
       key: GlobalKey<NavigatorState>(),
       activeIcon: Icons.home,
     ),

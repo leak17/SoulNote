@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-
 class ProfileView extends StatelessWidget {
   ProfileView({Key? key}) : super(key: key);
   final ProfileController profileController = Get.put(ProfileController());
-      
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +34,8 @@ class ProfileView extends StatelessWidget {
                   CircleAvatar(
                     radius: 60,
                     backgroundColor: Colors.white,
-                    backgroundImage: CachedNetworkImageProvider('${profileController.profileImageUrl.value}?timestamp=${DateTime.now().millisecondsSinceEpoch}'),
+                    backgroundImage: CachedNetworkImageProvider(
+                        '${profileController.profileImageUrl.value}?timestamp=${DateTime.now().millisecondsSinceEpoch}'),
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -82,13 +82,13 @@ class ProfileView extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Obx(() => Text(
-                      profileController.aboutMeText.value,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.justify,
-                    )),
+                          profileController.aboutMeText.value,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                          textAlign: TextAlign.justify,
+                        )),
                     const Spacer(),
                     buildButton('Edit Profile', const Color(0xFF213A5C), () {
                       editProfile(context);
@@ -119,7 +119,8 @@ class ProfileView extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           String updatedText = profileController.aboutMeText.value;
-          TextEditingController textController = TextEditingController(text: updatedText);
+          TextEditingController textController =
+              TextEditingController(text: updatedText);
           return AlertDialog(
             title: Text('Edit About Me'),
             content: TextField(

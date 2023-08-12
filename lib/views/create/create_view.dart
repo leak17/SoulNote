@@ -1,3 +1,4 @@
+import 'package:diary_journal/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class CreateView extends StatelessWidget {
@@ -6,10 +7,13 @@ class CreateView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffDDE1E0),
+      appBar: AppBar(
+        flexibleSpace: const CustomAppBar(),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Column(
         children: [
-          const CustomAppBar(),
           const SizedBox(width: 16),
           Padding(
             padding: const EdgeInsets.only(top: 16), // Add top padding
@@ -80,43 +84,6 @@ class CreateView extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: JournalBox(),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFF213A5C),
-      height: 100,
-      padding: const EdgeInsets.only(top: 30, left: 16, right: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/logo.png',
-            width: 40,
-            height: 40,
-          ),
-          const Text(
-            'Sak Lysem',
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xffDDE1E0),
-            ),
-          ),
-          const CircleAvatar(
-            backgroundImage: NetworkImage(
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9qMp3RM66v5flm1qdQm-xI8qajl0USrQT2A&usqp=CAU',
-            ),
-            radius: 20,
           ),
         ],
       ),

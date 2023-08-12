@@ -113,10 +113,10 @@ class SignUpView extends GetView<SignUpController> {
                   onTap: controller.signUserUp,
                 ),
                 const SizedBox(height: 25),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 50),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: Row(
-                    children: [
+                    children: const [
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
