@@ -1,7 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:diary_journal/core/routes/app_pages.dart';
 import 'package:diary_journal/core/routes/app_routes.dart';
-import 'package:diary_journal/theme/theme_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
