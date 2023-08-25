@@ -54,14 +54,14 @@ class _StartViewState extends State<StartView> {
           children: [
             // Your PageView with auto-scroll
             SizedBox(
-              height: 400,
-              width: 300,
+              height: 350,
+              width: 220,
               child: PageView(
                 controller: _pageController,
                 children: [
-                  Image.asset('assets/images/slide_image.png'),
-                  Image.asset('assets/images/slide_image.png'),
-                  Image.asset('assets/images/slide_image.png'),
+                  Image.asset('assets/images/slide_img1.png'),
+                  Image.asset('assets/images/slide_img2.png'),
+                  Image.asset('assets/images/slide_img3.png'),
                 ],
               ),
             ),
@@ -81,7 +81,7 @@ class _StartViewState extends State<StartView> {
 
             const SizedBox(height: 10),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: 50),
               child: Text(
                 "Notice your mood and track output everyday. Find your strength and weakness to improve to gain more effective habit, productivity.",
                 textAlign: TextAlign.left,
