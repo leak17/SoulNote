@@ -17,6 +17,7 @@ import 'package:diary_journal/views/splash/splash_binding.dart';
 import 'package:diary_journal/views/splash/splash_view.dart';
 import 'package:diary_journal/views/start/start_binding.dart';
 import 'package:diary_journal/views/start/start_view.dart';
+import 'package:diary_journal/views/tab_bar_wrapper/tab_bar_wrapper_binding.dart';
 import 'package:diary_journal/views/tab_bar_wrapper/tab_bar_wrapper_view.dart';
 
 import 'package:get/get_navigation/src/routes/get_route.dart';
@@ -34,7 +35,7 @@ class AppPages {
         binding: StartBinding()),
     GetPage(
       name: Paths.SIGN_IN,
-      page: () => SignInView(),
+      page: () => const SignInView(),
       binding: SignInBinding(),
     ),
     GetPage(
@@ -48,7 +49,7 @@ class AppPages {
         binding: TabBarWrapperBinding()),
     GetPage(
       name: Paths.HOME,
-      page: () => HomeView(),
+      page: () => const HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(

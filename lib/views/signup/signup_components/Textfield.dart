@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-// import 'package:table_calendar/table_calendar.dart';
-
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
@@ -14,7 +12,6 @@ class MyTextField extends StatelessWidget {
     required this.obscureText,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     Icon prefixIcon;
@@ -23,9 +20,9 @@ class MyTextField extends StatelessWidget {
       prefixIcon = const Icon(Icons.mail);
     } else if (hintText == 'Your Password') {
       prefixIcon = const Icon(Icons.lock);
-    } else if (hintText == 'Your Name'){
+    } else if (hintText == 'Your Name') {
       prefixIcon = const Icon(Icons.person);
-    }else {
+    } else {
       prefixIcon = const Icon(Icons.lock);
     }
 
