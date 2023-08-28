@@ -7,7 +7,6 @@ class SignInController extends GetxController {
 
   void signUserIn() {
     // Implement your sign-in logic here
-
   }
 
   @override

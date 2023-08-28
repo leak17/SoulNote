@@ -5,10 +5,10 @@ class StartView extends StatefulWidget {
   const StartView({Key? key}) : super(key: key);
 
   @override
-  _StartViewState createState() => _StartViewState();
+  StartViewState createState() => StartViewState();
 }
 
-class _StartViewState extends State<StartView> {
+class StartViewState extends State<StartView> {
   late PageController _pageController;
   int _currentPage = 0;
   final int _numPages = 3; // Number of pages (images) in your PageView

@@ -50,14 +50,6 @@ class TabBarConfig {
       key: GlobalKey<NavigatorState>(),
       activeIcon: Icons.person_2,
     ),
-    TabBarConfigItem(
-      title: 'Profile',
-      icon: Icons.person_2_outlined,
-      path: Routes.HOME,
-      screen: const ProfileView(),
-      key: GlobalKey<NavigatorState>(),
-      activeIcon: Icons.person_2,
-    ),
   ];
 
   static Widget screenAt(int index) {
