@@ -46,7 +46,7 @@ class TabBarConfig {
       title: 'Profile',
       icon: Icons.person_2_outlined,
       path: Routes.HOME,
-      screen: const ProfileView(),
+      screen: ProfileView(),
       key: GlobalKey<NavigatorState>(),
       activeIcon: Icons.person_2,
     ),

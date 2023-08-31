@@ -64,7 +64,7 @@ class AppPages {
         binding: ShareBinding()),
     GetPage(
         name: Paths.PROFILE,
-        page: () => const ProfileView(),
+        page: () => ProfileView(),
         binding: ProfileBinding()),
   ];
 }
