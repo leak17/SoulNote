@@ -38,7 +38,7 @@ class TabBarConfig {
       title: 'Share',
       icon: Icons.share_outlined,
       path: Routes.HOME,
-      screen: const ShareView(),
+      screen: ShareView(),
       key: GlobalKey<NavigatorState>(),
       activeIcon: Icons.share,
     ),

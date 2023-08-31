@@ -62,9 +62,7 @@ class AppPages {
         page: () => const CreateView(),
         binding: CreateBinding()),
     GetPage(
-        name: Paths.SHARE,
-        page: () => const ShareView(),
-        binding: ShareBinding()),
+        name: Paths.SHARE, page: () => ShareView(), binding: ShareBinding()),
     GetPage(
         name: Paths.PROFILE,
         page: () => ProfileView(),
