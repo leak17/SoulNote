@@ -1,19 +1,18 @@
 import 'package:diary_journal/core/routes/app_routes.dart';
 import 'package:diary_journal/views/profile/profile_controller.dart';
 import 'package:diary_journal/widget/Term&Condition.dart';
+import 'package:diary_journal/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
-
 class ProfileView extends StatefulWidget {
-  ProfileView({Key? key}) : super(key: key);
+  const ProfileView({Key? key}) : super(key: key);
 
   @override
-  _ProfileViewState createState() => _ProfileViewState();
+  ProfileViewState createState() => ProfileViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> {
+class ProfileViewState extends State<ProfileView> {
   final ProfileController profileController = Get.put(ProfileController());
   bool showTermsAndConditions = false;
 
@@ -54,7 +53,8 @@ class _ProfileViewState extends State<ProfileView> {
                                 return CircleAvatar(
                                   radius: 60,
                                   backgroundColor: Colors.white,
-                                  backgroundImage: FileImage(profileController.image.value!),
+                                  backgroundImage:
+                                      FileImage(profileController.image.value!),
                                 );
                               } else {
                                 return CircleAvatar(
@@ -69,14 +69,14 @@ class _ProfileViewState extends State<ProfileView> {
                               bottom: 0,
                               right: 0,
                               child: Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
+                                padding: const EdgeInsets.all(8),
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: const Color.fromARGB(255, 86, 143, 170), // Customize the icon background color
+                                  color: Color.fromARGB(255, 86, 143, 170),
                                 ),
-                                child: Icon(
-                                  Icons.edit, // Customize the edit icon
-                                  color: Colors.white, // Customize the icon color
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -85,7 +85,6 @@ class _ProfileViewState extends State<ProfileView> {
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 10),
                   Text(
                     profileController.userName.value,
@@ -139,14 +138,14 @@ class _ProfileViewState extends State<ProfileView> {
                           textAlign: TextAlign.justify,
                         )),
                     const Spacer(),
-                    buildButton(
-                      'Term & Condition',
-                      const Color(0xFF213A5C),
-                      Icons.description,
-                      Icons.arrow_forward_ios,
-                      () {
+                    CustomButton(
+                      text: 'Term & Condition',
+                      color: const Color(0xFF213A5C),
+                      onTap: () {
                         _showTermsAndConditions(context);
                       },
+                      firstIcon: Icons.description,
+                      secondIcon: Icons.arrow_forward_ios,
                     ),
                     const SizedBox(height: 10),
                     if (showTermsAndConditions)
@@ -156,9 +155,9 @@ class _ProfileViewState extends State<ProfileView> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text(
+                        child: const Text(
                           'Your terms and conditions text goes here.',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             color: Colors.black,
                           ),
@@ -166,24 +165,24 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                       ),
                     const SizedBox(height: 10),
-                    buildButton(
-                      'Language',
-                      const Color(0xFF213A5C),
-                      Icons.language,
-                      Icons.arrow_forward_ios,
-                      () {
+                    CustomButton(
+                      text: 'Language',
+                      color: const Color(0xFF213A5C),
+                      onTap: () {
                         _showLanguageModal(context);
                       },
+                      firstIcon: Icons.language,
+                      secondIcon: Icons.arrow_forward_ios,
                     ),
                     const SizedBox(height: 10),
-                    buildButton(
-                      'Logout',
-                      const Color(0xFF213A5C),
-                      Icons.logout,
-                      Icons.arrow_forward_ios,
-                      () {
+                    CustomButton(
+                      text: 'Logout',
+                      color: const Color(0xFF213A5C),
+                      onTap: () {
                         _showLogoutConfirmation(context);
                       },
+                      firstIcon: Icons.logout,
+                      secondIcon: Icons.arrow_forward_ios,
                     ),
                   ],
                 ),
@@ -196,101 +195,104 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Future<void> _showImagePickerDialog(BuildContext context) async {
-  final imageFile = await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text(
-          "Select Image Source",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-            color: Color(0xFF213A5C),
+    final imageFile = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "Select Image Source",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Color(0xFF213A5C),
+            ),
           ),
-        ),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              ButtonTheme(
-                minWidth: double.infinity, // Set the width of both buttons
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Navigator.of(context).pop(profileController.takePhoto());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ButtonTheme(
+                  minWidth: double.infinity, // Set the width of both buttons
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop(profileController.takePhoto());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: const Row(
+                      children: [
+                        SizedBox(width: 12),
+                        Icon(
+                          Icons.camera_alt,
+                          size: 24,
+                          color: Color.fromARGB(255, 86, 143, 170),
+                        ),
+                        SizedBox(
+                            width:
+                                12), // Adjusted spacing between icon and text
+                        Text(
+                          "Take a picture",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 86, 143, 170),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      SizedBox(width: 12),
-                      Icon(
-                        Icons.camera_alt,
-                        size: 24,
-                        color: const Color.fromARGB(255, 86, 143, 170),
-                      ),
-                      SizedBox(width: 12), // Adjusted spacing between icon and text
-                      Text(
-                        "Take a picture",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: const Color.fromARGB(255, 86, 143, 170),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
-              ),
-              SizedBox(height: 16), // Add space between buttons
-              ButtonTheme(
-                minWidth: double.infinity, // Set the width of both buttons
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Navigator.of(context)
-                        .pop(profileController.pickImageFromGallery());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+                const SizedBox(height: 16), // Add space between buttons
+                ButtonTheme(
+                  minWidth: double.infinity, // Set the width of both buttons
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context)
+                          .pop(profileController.pickImageFromGallery());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: const Row(
+                      children: [
+                        SizedBox(width: 12),
+                        Icon(
+                          Icons.photo,
+                          size: 24,
+                          color: Color.fromARGB(255, 86, 143, 170),
+                        ),
+                        SizedBox(
+                            width:
+                                12), // Adjusted spacing between icon and text
+                        Text(
+                          "Choose from gallery",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 86, 143, 170),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      SizedBox(width: 12),
-                      Icon(
-                        Icons.photo,
-                        size: 24,
-                        color: const Color.fromARGB(255, 86, 143, 170),
-                      ),
-                      SizedBox(width: 12), // Adjusted spacing between icon and text
-                      Text(
-                        "Choose from gallery",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: const Color.fromARGB(255, 86, 143, 170),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
+        );
+      },
+    );
 
-  if (imageFile != null) {
-    profileController.saveImageToStorage(imageFile);
+    if (imageFile != null) {
+      profileController.saveImageToStorage(imageFile);
+    }
   }
-}
-
 
   void _showLanguageModal(BuildContext context) {
     showModalBottomSheet(
@@ -315,7 +317,7 @@ class _ProfileViewState extends State<ProfileView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
+          title: const Text(
             'Confirm Logout',
             style: TextStyle(
               fontSize: 18,
@@ -323,18 +325,18 @@ class _ProfileViewState extends State<ProfileView> {
               color: Color(0xFF213A5C),
             ),
           ),
-          content: Text('Are you sure you want to logout?'),
+          content: const Text('Are you sure you want to logout?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
               },
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style: TextStyle(
-                  color: const Color.fromARGB(255, 86, 143, 170),
+                  color: Color.fromARGB(255, 86, 143, 170),
                 ),
-                ),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -342,7 +344,7 @@ class _ProfileViewState extends State<ProfileView> {
                 Navigator.pop(context); // Close the dialog
                 Navigator.pushReplacementNamed(context, Routes.SIGN_IN);
               },
-              child: Text(
+              child: const Text(
                 'Logout',
                 style: TextStyle(
                   color: Colors.red,
@@ -358,7 +360,9 @@ class _ProfileViewState extends State<ProfileView> {
   void _showTermsAndConditions(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TermsAndConditionsPage()), // Replace with your actual page
+      MaterialPageRoute(
+          builder: (context) =>
+              TermsAndConditionsPage()), // Replace with your actual page
     );
   }
 
@@ -370,7 +374,7 @@ class _ProfileViewState extends State<ProfileView> {
         Navigator.pop(context);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: Colors.white, // Background color
           borderRadius: BorderRadius.circular(8),
@@ -379,7 +383,7 @@ class _ProfileViewState extends State<ProfileView> {
               color: Colors.grey.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 5,
-              offset: Offset(0, 3), // changes the position of shadow
+              offset: const Offset(0, 3), // changes the position of shadow
             ),
           ],
         ),
@@ -390,12 +394,12 @@ class _ProfileViewState extends State<ProfileView> {
               icon,
               color: const Color(0xFF213A5C), // Icon color
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Text(
               language,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
-                color: const Color(0xFF213A5C), // Text color
+                color: Color(0xFF213A5C), // Text color
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -404,98 +408,4 @@ class _ProfileViewState extends State<ProfileView> {
       ),
     );
   }
-
-//   void _showTermsAndConditionsDialog(BuildContext context) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: Text(
-//           'Terms & Conditions',
-//           style: TextStyle(
-//             fontSize: 18,
-//             fontWeight: FontWeight.bold,
-//             color: Color(0xFF213A5C),
-//           ),
-//         ),
-//         content: SingleChildScrollView(
-//           child: Text(
-//             // Your terms and conditions text goes here
-//             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ...',
-//             style: TextStyle(
-//               fontSize: 16,
-//               color: Colors.black,
-//             ),
-//           ),
-//         ),
-//         actions: <Widget>[
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//             child: Text(
-//               'Close',
-//               style: TextStyle(
-//                 color: const Color.fromARGB(255, 86, 143, 170),
-//               ),
-//               ),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
-
-
-  Widget buildButton(
-    String text,
-    Color color,
-    IconData iconData,
-    IconData rightIconData, // New parameter for the right icon
-    VoidCallback onTap,
-  ) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              iconData,
-              color: Colors.white,
-            ),
-            const SizedBox(width: 10), // Add space between left icon and text
-            Expanded(
-              child: Align(
-                alignment: Alignment.center, // Center-align the text
-                child: Text(
-                  text,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            Icon(
-              rightIconData,
-              color: Colors.white,
-            ), // Right icon
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: ProfileView(),
-  ));
 }

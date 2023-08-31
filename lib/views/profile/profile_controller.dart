@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -36,7 +37,7 @@ class ProfileController extends GetxController {
     try {
       final appDir = await getApplicationDocumentsDirectory();
       final localPath = appDir.path;
-      final fileName = 'my_image.png'; // Change to a unique name
+      const fileName = 'my_image.png'; // Change to a unique name
 
       final localFile = File('$localPath/$fileName');
       await imageFile.copy(localFile.path);
