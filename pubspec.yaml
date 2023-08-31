@@ -27,7 +27,6 @@ dependencies:
   page_view_dot_indicator: ^2.3.0
   easy_date_timeline: ^0.1.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -44,6 +43,7 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+    - assets/Term&Condition.txt
 
 
   # fonts:
