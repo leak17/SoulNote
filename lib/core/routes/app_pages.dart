@@ -53,18 +53,19 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-        name: Paths.MOOD, page: () => const MoodView(), binding: MoodBinding()),
+      name: Paths.MOOD,
+      page: () => const MoodView(),
+      binding: MoodBinding(),
+    ),
     GetPage(
         name: Paths.CREATE,
         page: () => const CreateView(),
         binding: CreateBinding()),
     GetPage(
-        name: Paths.SHARE,
-        page: () => const ShareView(),
-        binding: ShareBinding()),
+        name: Paths.SHARE, page: () => ShareView(), binding: ShareBinding()),
     GetPage(
         name: Paths.PROFILE,
-        page: () => const ProfileView(),
+        page: () => ProfileView(),
         binding: ProfileBinding()),
   ];
 }

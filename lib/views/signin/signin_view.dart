@@ -60,10 +60,10 @@ class SignInView extends GetView<SignInController> {
                   hintText: 'Your Password',
                   obscureText: true,
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Row(
-                    children: [
+                    children: const [
                       Checkbox(
                         value: false, // Set the initial value as needed
                         onChanged:
@@ -99,10 +99,10 @@ class SignInView extends GetView<SignInController> {
                   },
                 ),
                 const SizedBox(height: 25),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 50),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: Row(
-                    children: [
+                    children: const [
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
@@ -126,9 +126,9 @@ class SignInView extends GetView<SignInController> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     SquareTile(imagePath: 'assets/images/google.png'),
                     SizedBox(
                       width: 40,

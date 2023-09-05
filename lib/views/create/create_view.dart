@@ -1,3 +1,4 @@
+import 'package:diary_journal/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class CreateView extends StatelessWidget {
@@ -116,7 +117,6 @@ class CustomAppBar extends StatelessWidget {
             backgroundImage: NetworkImage(
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9qMp3RM66v5flm1qdQm-xI8qajl0USrQT2A&usqp=CAU',
             ),
-            radius: 20,
           ),
         ],
       ),
