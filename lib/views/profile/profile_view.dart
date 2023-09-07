@@ -1,18 +1,17 @@
 import 'package:diary_journal/core/routes/app_routes.dart';
 import 'package:diary_journal/views/profile/profile_controller.dart';
 import 'package:diary_journal/widget/Term&Condition.dart';
-import 'package:diary_journal/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({Key? key}) : super(key: key);
+  ProfileView({Key? key}) : super(key: key);
 
   @override
-  ProfileViewState createState() => ProfileViewState();
+  _ProfileViewState createState() => _ProfileViewState();
 }
 
-class ProfileViewState extends State<ProfileView> {
+class _ProfileViewState extends State<ProfileView> {
   final ProfileController profileController = Get.put(ProfileController());
   bool showTermsAndConditions = false;
 
@@ -69,14 +68,16 @@ class ProfileViewState extends State<ProfileView> {
                               bottom: 0,
                               right: 0,
                               child: Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: const BoxDecoration(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Color.fromARGB(255, 86, 143, 170),
+                                  color: const Color.fromARGB(255, 86, 143,
+                                      170), // Customize the icon background color
                                 ),
-                                child: const Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
+                                child: Icon(
+                                  Icons.edit, // Customize the edit icon
+                                  color:
+                                      Colors.white, // Customize the icon color
                                 ),
                               ),
                             ),
@@ -138,14 +139,14 @@ class ProfileViewState extends State<ProfileView> {
                           textAlign: TextAlign.justify,
                         )),
                     const Spacer(),
-                    CustomButton(
-                      text: 'Term & Condition',
-                      color: const Color(0xFF213A5C),
-                      onTap: () {
+                    buildButton(
+                      'Term & Condition',
+                      const Color(0xFF213A5C),
+                      Icons.description,
+                      Icons.arrow_forward_ios,
+                      () {
                         _showTermsAndConditions(context);
                       },
-                      firstIcon: Icons.description,
-                      secondIcon: Icons.arrow_forward_ios,
                     ),
                     const SizedBox(height: 10),
                     if (showTermsAndConditions)
@@ -155,9 +156,9 @@ class ProfileViewState extends State<ProfileView> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Your terms and conditions text goes here.',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black,
                           ),
@@ -165,24 +166,24 @@ class ProfileViewState extends State<ProfileView> {
                         ),
                       ),
                     const SizedBox(height: 10),
-                    CustomButton(
-                      text: 'Language',
-                      color: const Color(0xFF213A5C),
-                      onTap: () {
+                    buildButton(
+                      'Language',
+                      const Color(0xFF213A5C),
+                      Icons.language,
+                      Icons.arrow_forward_ios,
+                      () {
                         _showLanguageModal(context);
                       },
-                      firstIcon: Icons.language,
-                      secondIcon: Icons.arrow_forward_ios,
                     ),
                     const SizedBox(height: 10),
-                    CustomButton(
-                      text: 'Logout',
-                      color: const Color(0xFF213A5C),
-                      onTap: () {
+                    buildButton(
+                      'Logout',
+                      const Color(0xFF213A5C),
+                      Icons.logout,
+                      Icons.arrow_forward_ios,
+                      () {
                         _showLogoutConfirmation(context);
                       },
-                      firstIcon: Icons.logout,
-                      secondIcon: Icons.arrow_forward_ios,
                     ),
                   ],
                 ),
@@ -218,18 +219,18 @@ class ProfileViewState extends State<ProfileView> {
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
                         SizedBox(width: 12),
                         Icon(
                           Icons.camera_alt,
                           size: 24,
-                          color: Color.fromARGB(255, 86, 143, 170),
+                          color: const Color.fromARGB(255, 86, 143, 170),
                         ),
                         SizedBox(
                             width:
@@ -238,14 +239,14 @@ class ProfileViewState extends State<ProfileView> {
                           "Take a picture",
                           style: TextStyle(
                             fontSize: 18,
-                            color: Color.fromARGB(255, 86, 143, 170),
+                            color: const Color.fromARGB(255, 86, 143, 170),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 16), // Add space between buttons
+                SizedBox(height: 16), // Add space between buttons
                 ButtonTheme(
                   minWidth: double.infinity, // Set the width of both buttons
                   child: ElevatedButton(
@@ -255,18 +256,18 @@ class ProfileViewState extends State<ProfileView> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
                         SizedBox(width: 12),
                         Icon(
                           Icons.photo,
                           size: 24,
-                          color: Color.fromARGB(255, 86, 143, 170),
+                          color: const Color.fromARGB(255, 86, 143, 170),
                         ),
                         SizedBox(
                             width:
@@ -275,7 +276,7 @@ class ProfileViewState extends State<ProfileView> {
                           "Choose from gallery",
                           style: TextStyle(
                             fontSize: 18,
-                            color: Color.fromARGB(255, 86, 143, 170),
+                            color: const Color.fromARGB(255, 86, 143, 170),
                           ),
                         ),
                       ],
@@ -317,7 +318,7 @@ class ProfileViewState extends State<ProfileView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
+          title: Text(
             'Confirm Logout',
             style: TextStyle(
               fontSize: 18,
@@ -325,16 +326,16 @@ class ProfileViewState extends State<ProfileView> {
               color: Color(0xFF213A5C),
             ),
           ),
-          content: const Text('Are you sure you want to logout?'),
+          content: Text('Are you sure you want to logout?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
               },
-              child: const Text(
+              child: Text(
                 'Cancel',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 86, 143, 170),
+                  color: const Color.fromARGB(255, 86, 143, 170),
                 ),
               ),
             ),
@@ -344,7 +345,7 @@ class ProfileViewState extends State<ProfileView> {
                 Navigator.pop(context); // Close the dialog
                 Navigator.pushReplacementNamed(context, Routes.SIGN_IN);
               },
-              child: const Text(
+              child: Text(
                 'Logout',
                 style: TextStyle(
                   color: Colors.red,
@@ -374,7 +375,7 @@ class ProfileViewState extends State<ProfileView> {
         Navigator.pop(context);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: Colors.white, // Background color
           borderRadius: BorderRadius.circular(8),
@@ -383,7 +384,7 @@ class ProfileViewState extends State<ProfileView> {
               color: Colors.grey.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 5,
-              offset: const Offset(0, 3), // changes the position of shadow
+              offset: Offset(0, 3), // changes the position of shadow
             ),
           ],
         ),
@@ -394,12 +395,12 @@ class ProfileViewState extends State<ProfileView> {
               icon,
               color: const Color(0xFF213A5C), // Icon color
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Text(
               language,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
-                color: Color(0xFF213A5C), // Text color
+                color: const Color(0xFF213A5C), // Text color
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -408,4 +409,56 @@ class ProfileViewState extends State<ProfileView> {
       ),
     );
   }
+
+  Widget buildButton(
+    String text,
+    Color color,
+    IconData iconData,
+    IconData rightIconData, // New parameter for the right icon
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              iconData,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 10), // Add space between left icon and text
+            Expanded(
+              child: Align(
+                alignment: Alignment.center, // Center-align the text
+                child: Text(
+                  text,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Icon(
+              rightIconData,
+              color: Colors.white,
+            ), // Right icon
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: ProfileView(),
+  ));
 }

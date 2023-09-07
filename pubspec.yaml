@@ -14,7 +14,6 @@ dependencies:
   table_calendar: ^3.0.0
   image_picker: ^0.8.4
   cached_network_image: ^3.2.3
-
   provider: ^6.0.3
   path_provider: ^2.0.14 
 
@@ -28,7 +27,15 @@ dependencies:
   page_view_dot_indicator: ^2.3.0
   easy_date_timeline: ^0.1.0
   group_button: ^5.3.3
-  
+  intl: ^0.18.0 
+  flutter_launcher_icons: ^0.13.1
+  emoji_picker_flutter: ^1.6.1
+
+flutter_icons:
+  android: true
+  iso: true
+  image_path: "assets/images/logo.png"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -45,7 +52,7 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
-    - assets/Term&Condition.txt
+    # - assets/Term&Condition.txt
 
 
   # fonts:

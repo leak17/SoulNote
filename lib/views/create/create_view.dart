@@ -1,8 +1,10 @@
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/views/create/create_controller.dart';
 import 'package:diary_journal/views/create/local_widget/journal_box.dart';
+import 'package:diary_journal/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CreateView extends StatelessWidget {
   const CreateView({super.key});
@@ -12,6 +14,11 @@ class CreateView extends StatelessWidget {
     final CreateController createController = Get.put(CreateController());
 
     return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: const CustomAppBar(),
+        backgroundColor: ThemeColor.transparentColor,
+        elevation: 0,
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));

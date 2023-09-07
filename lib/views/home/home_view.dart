@@ -6,10 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class HomeView extends StatelessWidget {
-  HomeView({Key? key}) : super(key: key);
-
-  final TextEditingController _searchController = TextEditingController();
-  final FocusNode _searchFocusNode = FocusNode();
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
