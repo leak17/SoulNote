@@ -1,3 +1,4 @@
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +14,7 @@ class MoodView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: const CustomAppBar(),
-        backgroundColor: Colors.transparent,
+        backgroundColor: ThemeColor.transparentColor,
         elevation: 0,
       ),
       body: Column(
@@ -24,17 +25,18 @@ class MoodView extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    color: Colors.white,
+                    color: ThemeColor.colorScheme.onSurface,
                     child: Text(
-                      formattedDate, // Display current month and year
-                      style: const TextStyle(
-                        color: Color(0xff213A5C),
+                      formattedDate,
+                      style: TextStyle(
+                        fontFamily: 'KantumruyPro',
+                        color: ThemeColor.mainColor,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8), // Add spacing
+                  const SizedBox(height: 8),
                   Padding(
                     padding: const EdgeInsets.only(top: 14, right: 4),
                     child: Row(
@@ -62,25 +64,29 @@ class MoodView extends StatelessWidget {
     );
   }
 
-  Widget _buildMoodIconWithNumber(String label, IconData iconData, int number) {
+  Widget _buildMoodIconWithNumber(
+    String label,
+    IconData iconData,
+    int number,
+  ) {
     return Column(
       children: [
         Icon(
           iconData,
-          color: Colors.black, // Change this to your desired icon color
+          color: ThemeColor.colorScheme.background,
           size: 36,
         ),
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.black, // Change this to your desired text color
+          style: TextStyle(
+            color: ThemeColor.colorScheme.background,
             fontSize: 16,
           ),
         ),
         Text(
-          '$number', // Display the associated number
-          style: const TextStyle(
-            color: Colors.black, // Change this to your desired text color
+          '$number',
+          style: TextStyle(
+            color: ThemeColor.colorScheme.background,
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),

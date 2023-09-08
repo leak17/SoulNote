@@ -1,3 +1,4 @@
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:flutter/material.dart';
 
 class SquareTile extends StatelessWidget {
@@ -12,10 +13,10 @@ class SquareTile extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.white,
+          color: ThemeColor.colorScheme.onSurface,
         ),
         borderRadius: BorderRadius.circular(100),
-        color: Colors.white,
+        color: ThemeColor.colorScheme.onSurface,
       ),
       child: Image.asset(
         imagePath,

@@ -62,12 +62,27 @@ class JournalBoxState extends State<JournalBox> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Select Image Source"),
+          title: Text(
+            "Select Image Source",
+            style: TextStyle(
+              fontFamily: 'KantumruyPro',
+              color: ThemeColor.mainColor,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 GestureDetector(
-                  child: const Text("Take a picture"),
+                  child: Text(
+                    "Take a picture",
+                    style: TextStyle(
+                      fontFamily: 'KantumruyPro',
+                      color: ThemeColor.colorScheme.background,
+                      fontSize: 14,
+                    ),
+                  ),
                   onTap: () async {
                     Navigator.of(context).pop(true);
                     await createController.takePhoto();
@@ -75,7 +90,14 @@ class JournalBoxState extends State<JournalBox> {
                 ),
                 const SizedBox(height: 16),
                 GestureDetector(
-                  child: const Text("Choose from gallery"),
+                  child: Text(
+                    "Choose from gallery",
+                    style: TextStyle(
+                      fontFamily: 'KantumruyPro',
+                      color: ThemeColor.colorScheme.background,
+                      fontSize: 14,
+                    ),
+                  ),
                   onTap: () async {
                     Navigator.of(context).pop(true);
                     await createController.pickImageFromGallery();
@@ -89,7 +111,14 @@ class JournalBoxState extends State<JournalBox> {
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text("Cancel"),
+              child: Text(
+                "Cancel",
+                style: TextStyle(
+                  fontFamily: 'KantumruyPro',
+                  color: ThemeColor.colorScheme.primary,
+                  fontSize: 14,
+                ),
+              ),
             ),
           ],
         );
@@ -169,7 +198,11 @@ class JournalBoxState extends State<JournalBox> {
                         decoration: InputDecoration(
                           hintText: 'What is your title?',
                           hintStyle: TextStyle(
-                              color: ThemeColor.colorScheme.onSurface),
+                            color: ThemeColor.colorScheme.onSurface,
+                            fontFamily: 'KantumruyPro',
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                           border: InputBorder.none,
                         ),
                       ),
@@ -230,6 +263,9 @@ class JournalBoxState extends State<JournalBox> {
                     border: InputBorder.none,
                     hintText: "What's on your mind?",
                     hintStyle: TextStyle(
+                      fontFamily: 'KantumruyPro',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                       color: ThemeColor.colorScheme.onSurface,
                     ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:diary_journal/core/routes/app_routes.dart';
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class SignUpController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmController = TextEditingController();
+  final RxBool obscureText = true.obs;
 
   // Add an RxBool to track sign-up processing state
   final RxBool isProcessing = false.obs;
@@ -36,8 +38,8 @@ class SignUpController extends GetxController {
       Get.snackbar(
         'Error',
         'All fields are required',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
       );
       isProcessing.value = false; // Set isProcessing back to false
       return;
@@ -47,8 +49,8 @@ class SignUpController extends GetxController {
       Get.snackbar(
         'Error',
         'Please enter a valid email',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
       );
       isProcessing.value = false; // Set isProcessing back to false
       return;
@@ -59,8 +61,8 @@ class SignUpController extends GetxController {
       Get.snackbar(
         'Error',
         'Password and Confirm Password do not match',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
       );
       isProcessing.value = false; // Set isProcessing back to false
       return;
@@ -88,8 +90,8 @@ class SignUpController extends GetxController {
         Get.snackbar(
           'Success',
           'Sign-up successful',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+          backgroundColor: ThemeColor.successColor,
+          colorText: ThemeColor.colorScheme.onSurface,
         );
 
         // Parse the access_token from the response JSON
@@ -115,8 +117,8 @@ class SignUpController extends GetxController {
         Get.snackbar(
           'Error',
           'Sign-up failed. Please try again later.',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
+          backgroundColor: ThemeColor.colorScheme.error,
+          colorText: ThemeColor.colorScheme.onSurface,
         );
         isProcessing.value = false; // Set isProcessing back to false
       }
@@ -125,11 +127,15 @@ class SignUpController extends GetxController {
       Get.snackbar(
         'Error',
         'An error occurred. Please try again later.',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
       );
       isProcessing.value = false; // Set isProcessing back to false
     }
+  }
+
+  void toggleObscureText() {
+    obscureText.value = !obscureText.value;
   }
 
   @override

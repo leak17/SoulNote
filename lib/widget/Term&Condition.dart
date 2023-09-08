@@ -1,33 +1,52 @@
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:flutter/material.dart';
 
 class TermsAndConditionsPage extends StatelessWidget {
+  const TermsAndConditionsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Terms and Conditions'),
-        backgroundColor: const Color(0xFF213A5C),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: ThemeColor.colorScheme.onSecondary,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text(
+          'Terms and Conditions',
+          style: TextStyle(
+            fontFamily: 'KantumruyPro',
+            color: ThemeColor.colorScheme.onSurface,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: ThemeColor.mainColor,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal margin
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Image.asset(
-                  'assets/images/logo.png', // Replace with your app logo image path
-                  width: 100, // Adjust the width as needed
-                  height: 100, // Adjust the height as needed
+                  'assets/images/logo.png',
+                  width: 100,
+                  height: 100,
                 ),
               ),
               _buildSection(
                 title: 'Effective Date: today onward',
                 content: 'Regulations to follow',
-                centerTitle: true, // Center the title
+                centerTitle: true,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               _buildSection(
                 title: '1. User Agreement',
                 content:
@@ -50,20 +69,19 @@ class TermsAndConditionsPage extends StatelessWidget {
               ),
               _buildSection(
                 title: '5. Termination',
-                content:
-                    'We can suspend or terminate accounts for violations.',
+                content: 'We can suspend or terminate accounts for violations.',
               ),
-              SizedBox(height: 16), // Add some vertical space between sections
+              const SizedBox(height: 16),
               Text(
                 'By using SoulNote, you agree to these terms.',
                 style: TextStyle(
+                  fontFamily: 'KantumruyPro',
                   fontSize: 16,
-                  color: Colors.black,
+                  color: ThemeColor.colorScheme.surface,
                 ),
-                textAlign: TextAlign.center, // Center-align this text
+                textAlign: TextAlign.center,
               ),
-              SizedBox(height: 16),
-              // Add more terms and conditions items here
+              const SizedBox(height: 16),
             ],
           ),
         ),
@@ -77,28 +95,33 @@ class TermsAndConditionsPage extends StatelessWidget {
     bool centerTitle = false,
   }) {
     return Column(
-      crossAxisAlignment: centerTitle
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
+      crossAxisAlignment:
+          centerTitle ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         Text(
           title,
+          maxLines: 3,
           style: TextStyle(
-            fontSize: 18,
+            fontFamily: 'KantumruyPro',
+            fontSize: 16,
+            wordSpacing: 2,
             fontWeight: FontWeight.bold,
-            color: const Color(0xFF213A5C),
+            color: ThemeColor.mainColor,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           content,
+          maxLines: 3,
           style: TextStyle(
-            fontSize: 16,
-            color: Colors.black,
+            fontFamily: 'KantumruyPro',
+            wordSpacing: 2,
+            fontSize: 14,
+            color: ThemeColor.colorScheme.surface,
           ),
           textAlign: TextAlign.justify,
         ),
-        SizedBox(height: 8), // Reduce vertical space between title and content
+        const SizedBox(height: 8),
       ],
     );
   }

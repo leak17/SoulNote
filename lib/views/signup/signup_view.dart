@@ -1,38 +1,37 @@
-import 'package:diary_journal/views/signup/signup_components/Textfield.dart';
+import 'package:diary_journal/theme/theme_color.dart';
+import 'package:diary_journal/widget/Textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'signup_controller.dart';
 import 'package:diary_journal/views/signup/signup_components/signup_button.dart';
 
 class SignUpView extends GetView<SignUpController> {
-  const SignUpView({super.key});
+  SignUpView({super.key});
+
+  final SignUpController textSignUpController = Get.put(SignUpController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffDDE1E0),
+      backgroundColor: ThemeColor.colorScheme.onSurface,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 70,
-                ),
+                const SizedBox(height: 70),
                 Container(
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(15), // Adding rounded corners
-                    color: Colors.white, // Add a background color if necessary
+                    borderRadius: BorderRadius.circular(15),
+                    color: ThemeColor.colorScheme.onSurface,
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        15), // Applying border radius to the image
+                    borderRadius: BorderRadius.circular(15),
                     child: Image.asset(
-                      'assets/images/diary_logo.png', // Replace with your logo image path
+                      'assets/images/diary_logo.png',
                       width: 100,
                       height: 100,
                       fit: BoxFit.cover,
@@ -40,86 +39,196 @@ class SignUpView extends GetView<SignUpController> {
                   ),
                 ),
                 const SizedBox(height: 25),
-                const Text(
+                Text(
                   'Sign Up',
                   style: TextStyle(
-                    color: Color(0xFF213A5C), // Set the color using Color class
+                    fontFamily: 'KantumruyPro',
+                    color: ThemeColor.mainColor,
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 15),
-                MyTextField(
-                  controller: controller.textController,
-                  hintText: 'Your Name',
-                  obscureText: false,
-                ),
-                const SizedBox(height: 15),
-                MyTextField(
-                  controller: controller.emailController,
-                  hintText: 'Email',
-                  obscureText: false,
-                ),
-                const SizedBox(height: 15),
-                MyTextField(
-                  controller: controller.passwordController,
-                  hintText: 'Your Password',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 15),
-                MyTextField(
-                  controller: controller.confirmController,
-                  hintText: 'Confirm Password',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 15),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 50),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment:
-                        CrossAxisAlignment.center, // Align children vertically
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Column(
                     children: [
-                      Checkbox(
-                        value: false, // Set the initial value as needed
-                        onChanged:
-                            null, // No callback attached, checkbox is not interactive
-                      ),
-                      Text(
-                        "I'm not a robot!",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromRGBO(33, 58, 92, 0.6),
+                      InputTextField(
+                        controller: controller.textController,
+                        obscureText: false,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          hintText: 'Your Name',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: ThemeColor.mainColor,
+                            ),
+                          ),
+                          isDense: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: ThemeColor.mainColor),
+                          ),
+                          fillColor: ThemeColor.colorScheme.onSurface,
+                          filled: true,
+                          hintStyle: TextStyle(
+                            fontFamily: 'KantumruyPro',
+                            color: ThemeColor.colorScheme.primary,
+                          ),
+                          prefixIcon: const Icon(Icons.person),
                         ),
                       ),
-                      SizedBox(
-                        width: 30,
+                      const SizedBox(height: 15),
+                      InputTextField(
+                        controller: controller.emailController,
+                        obscureText: false,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          hintText: 'Email',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: ThemeColor.mainColor,
+                            ),
+                          ),
+                          isDense: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: ThemeColor.mainColor),
+                          ),
+                          fillColor: ThemeColor.colorScheme.onSurface,
+                          filled: true,
+                          hintStyle: TextStyle(
+                            fontFamily: 'KantumruyPro',
+                            color: ThemeColor.colorScheme.primary,
+                          ),
+                          prefixIcon: const Icon(Icons.mail),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      InputTextField(
+                        controller: controller.passwordController,
+                        obscureText: true,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                          hintText: 'Your Password',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: ThemeColor.mainColor,
+                            ),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              textSignUpController.obscureText.value
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: ThemeColor.mainColor,
+                            ),
+                            onPressed: () {
+                              textSignUpController.toggleObscureText();
+                            },
+                          ),
+                          isDense: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: ThemeColor.mainColor),
+                          ),
+                          fillColor: ThemeColor.colorScheme.onSurface,
+                          filled: true,
+                          hintStyle: TextStyle(
+                            fontFamily: 'KantumruyPro',
+                            color: ThemeColor.colorScheme.primary,
+                          ),
+                          prefixIcon: const Icon(Icons.lock),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      InputTextField(
+                        controller: controller.confirmController,
+                        obscureText: true,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                          hintText: 'Confirm Password',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: ThemeColor.mainColor,
+                            ),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              textSignUpController.obscureText.value
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: ThemeColor.mainColor,
+                            ),
+                            onPressed: () {
+                              textSignUpController.toggleObscureText();
+                            },
+                          ),
+                          isDense: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: ThemeColor.mainColor),
+                          ),
+                          fillColor: ThemeColor.colorScheme.onSurface,
+                          filled: true,
+                          hintStyle: TextStyle(
+                            fontFamily: 'KantumruyPro',
+                            color: ThemeColor.colorScheme.primary,
+                          ),
+                          prefixIcon: const Icon(Icons.lock),
+                        ),
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Checkbox(
+                        value: true,
+                        onChanged: null,
+                      ),
+                      Text(
+                        "I'm not a robot!",
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'KantumruyPro',
+                            color: ThemeColor.mainColor),
+                      ),
+                      const SizedBox(width: 30),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 10),
-                Obx(() {
-                  // Check if the controller is processing
-                  if (controller.isProcessing.value) {
-                    return CircularProgressIndicator();
-                  } else {
-                    // Show the Signupbutton when not processing
-                    return Signupbutton(
-                      onTap: controller.signUserUp,
-                    );
-                  }
-                }),
+                Obx(
+                  () {
+                    if (controller.isProcessing.value) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      return Signupbutton(
+                        onTap: controller.signUserUp,
+                      );
+                    }
+                  },
+                ),
                 const SizedBox(height: 25),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: Row(
-                    children: const [
+                    children: [
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
-                          color: Color(0xff213A5C),
+                          color: ThemeColor.mainColor,
                         ),
                       ),
                     ],

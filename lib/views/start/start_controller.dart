@@ -1,5 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 
 class StartController extends GetxController {
-  StartController();
+  final pageController = PageController(initialPage: 0);
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 }
