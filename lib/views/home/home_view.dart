@@ -2,6 +2,7 @@ import 'package:diary_journal/views/home/home_controller.dart';
 import 'package:diary_journal/widget/custom_app_bar.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -71,19 +72,62 @@ class HomeView extends StatelessWidget {
                       topLeft: Radius.circular(16.0),
                       topRight: Radius.circular(16.0))),
               child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      final DateTime selectedDate =
-                          Get.find<HomeController>().selectedDate.value;
-                      final DateTime cardDate =
-                          selectedDate.add(Duration(days: index));
+                padding: const EdgeInsets.all(16),
+                child: ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    final DateTime selectedDate =
+                        Get.find<HomeController>().selectedDate.value;
+                    final DateTime cardDate =
+                        selectedDate.add(Duration(days: index));
 
-                      final formattedTime =
-                          DateFormat('EEE, MMM d').format(cardDate);
+                    final formattedTime =
+                        DateFormat('EEE, MMM d').format(cardDate);
 
-                      return Card(
+                    return Slidable(
+                      actionPane: const SlidableDrawerActionPane(),
+                      actionExtentRatio: 0.25,
+                      actions: [
+                        SizedBox(
+                          height:
+                              70.0, // You can adjust this to the height you desire.
+                          child: IconSlideAction(
+                            caption: 'Share',
+                            color: const Color(0xFF8B9299),
+                            icon: Icons.share,
+                            onTap: () {
+                              // share action
+                            },
+                          ),
+                        ),
+                      ],
+                      secondaryActions: [
+                        SizedBox(
+                          height:
+                              70.0, // Adjust this to match the height of the card.
+                          child: IconSlideAction(
+                            caption: 'Edit',
+                            color: Colors.blue,
+                            icon: Icons.edit,
+                            onTap: () {
+                              // edit action
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height:
+                              70.0, // Adjust this to match the height of the card.
+                          child: IconSlideAction(
+                            caption: 'Delete',
+                            color: Colors.red,
+                            icon: Icons.delete,
+                            onTap: () {
+                              // delete action
+                            },
+                          ),
+                        ),
+                      ],
+                      child: Card(
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(4.0)),
                         ),
@@ -106,9 +150,11 @@ class HomeView extends StatelessWidget {
                           ),
                           trailing: const Icon(Icons.emoji_emotions),
                         ),
-                      );
-                    },
-                  )),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
           ],
         ),
