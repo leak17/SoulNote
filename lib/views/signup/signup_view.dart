@@ -1,9 +1,8 @@
-// import 'package:diary_journal/views/signup/signup_components/Square_tile.dart';
 import 'package:diary_journal/views/signup/signup_components/Textfield.dart';
-import 'package:diary_journal/views/signup/signup_components/signup_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'signup_controller.dart';
+import 'package:diary_journal/views/signup/signup_components/signup_button.dart';
 
 class SignUpView extends GetView<SignUpController> {
   const SignUpView({super.key});
@@ -96,22 +95,22 @@ class SignUpView extends GetView<SignUpController> {
                       ),
                       SizedBox(
                         width: 30,
-                      ), // Add space to separate Remember Me and Forgot Password
-                      // Text(
-                      //   'Forgot Password!',
-                      //   style: TextStyle(
-                      //     color: Color(0xFF213A5C),
-                      //     fontWeight: FontWeight.w700,
-                      //     fontSize: 12,
-                      //   ),
-                      // ),
+                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 10),
-                Signupbutton(
-                  onTap: controller.signUserUp,
-                ),
+                Obx(() {
+                  // Check if the controller is processing
+                  if (controller.isProcessing.value) {
+                    return CircularProgressIndicator();
+                  } else {
+                    // Show the Signupbutton when not processing
+                    return Signupbutton(
+                      onTap: controller.signUserUp,
+                    );
+                  }
+                }),
                 const SizedBox(height: 25),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50),

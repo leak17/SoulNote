@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'signin_controller.dart';
 
 class SignInView extends GetView<SignInController> {
-  const SignInView({super.key});
+  const SignInView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +24,13 @@ class SignInView extends GetView<SignInController> {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(15), // Adding rounded corners
-                    color: Colors.white, // Add a background color if necessary
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        15), // Applying border radius to the image
+                    borderRadius: BorderRadius.circular(15),
                     child: Image.asset(
-                      'assets/images/diary_logo.png', // Replace with your logo image path
+                      'assets/images/diary_logo.png',
                       width: 100,
                       height: 100,
                       fit: BoxFit.cover,
@@ -43,7 +41,7 @@ class SignInView extends GetView<SignInController> {
                 const Text(
                   'Sign In',
                   style: TextStyle(
-                    color: Color(0xFF213A5C), // Set the color using Color class
+                    color: Color(0xFF213A5C),
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                   ),
@@ -65,9 +63,8 @@ class SignInView extends GetView<SignInController> {
                   child: Row(
                     children: const [
                       Checkbox(
-                        value: false, // Set the initial value as needed
-                        onChanged:
-                            null, // No callback attached, checkbox is not interactive
+                        value: false,
+                        onChanged: null,
                       ),
                       Text(
                         'Remember Me',
@@ -79,7 +76,7 @@ class SignInView extends GetView<SignInController> {
                       ),
                       SizedBox(
                         width: 40,
-                      ), // Add space to separate Remember Me and Forgot Password
+                      ),
                       Text(
                         'Forgot Password!',
                         style: TextStyle(
@@ -92,11 +89,12 @@ class SignInView extends GetView<SignInController> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Signinbutton(
-                  // onTap: controller.signUserIn,
-                  onTap: () {
-                    Navigator.pushNamed(context, Routes.TAB_BAR_WRAPPER);
-                  },
+                Obx(
+                  () => controller.isProcessing.value
+                      ? CircularProgressIndicator() // Show loading indicator
+                      : Signinbutton(
+                          onTap: controller.signUserIn,
+                        ),
                 ),
                 const SizedBox(height: 25),
                 Padding(
