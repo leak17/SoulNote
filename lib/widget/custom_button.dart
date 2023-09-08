@@ -1,3 +1,4 @@
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -29,18 +30,19 @@ class CustomButton extends StatelessWidget {
         child: ListTile(
           leading: Icon(
             firstIcon,
-            color: Colors.white,
+            color: ThemeColor.colorScheme.onSurface,
           ),
           title: Text(
             text,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              fontFamily: 'KantumruyPro',
+              color: ThemeColor.colorScheme.onSurface,
             ),
           ),
           trailing: Icon(
             secondIcon,
-            color: Colors.white,
+            color: ThemeColor.colorScheme.onSurface,
           ),
         ),
       ),

@@ -5,7 +5,6 @@ import 'package:diary_journal/views/home/home_view.dart';
 import 'package:diary_journal/views/create/create_view.dart';
 import 'package:diary_journal/views/mood/mood_view.dart';
 import 'package:diary_journal/views/profile/profile_view.dart';
-import 'package:diary_journal/views/share/share_view.dart';
 import 'package:flutter/material.dart';
 
 class TabBarConfig {
@@ -14,7 +13,7 @@ class TabBarConfig {
       title: 'Home',
       icon: Icons.home_outlined,
       path: Routes.HOME,
-      screen: HomeView(),
+      screen: const HomeView(),
       key: GlobalKey<NavigatorState>(),
       activeIcon: Icons.home,
     ),
@@ -22,7 +21,7 @@ class TabBarConfig {
       title: 'Mood',
       icon: Icons.child_care_outlined,
       path: Routes.MOOD,
-      screen: const MoodView(),
+      screen: MoodView(),
       key: GlobalKey<NavigatorState>(),
       activeIcon: Icons.child_care,
     ),

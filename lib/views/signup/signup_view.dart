@@ -1,38 +1,35 @@
-import 'package:diary_journal/views/signup/signup_components/Textfield.dart';
+import 'package:diary_journal/theme/theme_color.dart';
+import 'package:diary_journal/widget/Textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'signup_controller.dart';
 import 'package:diary_journal/views/signup/signup_components/signup_button.dart';
 
 class SignUpView extends GetView<SignUpController> {
-  const SignUpView({super.key});
+  const SignUpView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffDDE1E0),
+      backgroundColor: ThemeColor.colorScheme.onSurface,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 70,
-                ),
+                const SizedBox(height: 70),
                 Container(
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(15), // Adding rounded corners
-                    color: Colors.white, // Add a background color if necessary
+                    borderRadius: BorderRadius.circular(15),
+                    color: ThemeColor.colorScheme.onSurface,
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        15), // Applying border radius to the image
+                    borderRadius: BorderRadius.circular(15),
                     child: Image.asset(
-                      'assets/images/diary_logo.png', // Replace with your logo image path
+                      'assets/images/diary_logo.png',
                       width: 100,
                       height: 100,
                       fit: BoxFit.cover,
@@ -40,86 +37,117 @@ class SignUpView extends GetView<SignUpController> {
                   ),
                 ),
                 const SizedBox(height: 25),
-                const Text(
+                Text(
                   'Sign Up',
                   style: TextStyle(
-                    color: Color(0xFF213A5C), // Set the color using Color class
+                    fontFamily: 'KantumruyPro',
+                    color: ThemeColor.mainColor,
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 15),
-                MyTextField(
-                  controller: controller.textController,
-                  hintText: 'Your Name',
-                  obscureText: false,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Column(
+                    children: [
+                      buildInputTextField(
+                        controller: controller.userNameController,
+                        hintText: 'Your Name',
+                        prefixIcon: Icons.person,
+                        keyboardType: TextInputType.name,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please input your name';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      buildInputTextField(
+                        controller: controller.emailController,
+                        hintText: 'Email',
+                        prefixIcon: Icons.mail,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please input email';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      buildPasswordTextField(
+                        controller: controller,
+                        hintText: 'Your Password',
+                        prefixIcon: Icons.lock,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please input your password';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      buildConfirmPasswordTextField(
+                        controller: controller,
+                        hintText: 'Confirm Password',
+                        prefixIcon: Icons.lock,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please input your confirm password';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 15),
-                MyTextField(
-                  controller: controller.emailController,
-                  hintText: 'Email',
-                  obscureText: false,
-                ),
-                const SizedBox(height: 15),
-                MyTextField(
-                  controller: controller.passwordController,
-                  hintText: 'Your Password',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 15),
-                MyTextField(
-                  controller: controller.confirmController,
-                  hintText: 'Confirm Password',
-                  obscureText: true,
-                ),
-                const SizedBox(height: 15),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 50),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment:
-                        CrossAxisAlignment.center, // Align children vertically
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Checkbox(
-                        value: false, // Set the initial value as needed
-                        onChanged:
-                            null, // No callback attached, checkbox is not interactive
+                      const Checkbox(
+                        value: true,
+                        onChanged: null,
                       ),
                       Text(
                         "I'm not a robot!",
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Color.fromRGBO(33, 58, 92, 0.6),
+                          fontFamily: 'KantumruyPro',
+                          color: ThemeColor.mainColor,
                         ),
                       ),
-                      SizedBox(
-                        width: 30,
-                      ),
+                      const SizedBox(width: 30),
                     ],
                   ),
                 ),
                 const SizedBox(height: 10),
-                Obx(() {
-                  // Check if the controller is processing
-                  if (controller.isProcessing.value) {
-                    return CircularProgressIndicator();
-                  } else {
-                    // Show the Signupbutton when not processing
-                    return Signupbutton(
-                      onTap: controller.signUserUp,
-                    );
-                  }
-                }),
+                Obx(
+                  () {
+                    if (controller.isProcessingLoading.value) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      return Signupbutton(
+                        onTap: () => controller.userSignUp(context),
+                      );
+                    }
+                  },
+                ),
                 const SizedBox(height: 25),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: Row(
-                    children: const [
+                    children: [
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
-                          color: Color(0xff213A5C),
+                          color: ThemeColor.mainColor,
                         ),
                       ),
                     ],
@@ -130,6 +158,134 @@ class SignUpView extends GetView<SignUpController> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildInputTextField({
+    required TextEditingController controller,
+    required String hintText,
+    required IconData prefixIcon,
+    required TextInputType keyboardType,
+    required FormFieldValidator<String>? validator,
+  }) {
+    return InputTextField(
+      controller: controller,
+      obscureText: false,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        hintText: hintText,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: ThemeColor.mainColor,
+          ),
+        ),
+        isDense: true,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: ThemeColor.mainColor),
+        ),
+        fillColor: ThemeColor.colorScheme.onSurface,
+        filled: true,
+        hintStyle: TextStyle(
+          fontFamily: 'KantumruyPro',
+          color: ThemeColor.colorScheme.primary,
+        ),
+        prefixIcon: Icon(prefixIcon),
+      ),
+      validator: validator,
+    );
+  }
+
+  Widget buildPasswordTextField({
+    required SignUpController controller,
+    String? hintText,
+    IconData? prefixIcon,
+    String? Function(String?)? validator,
+  }) {
+    return Obx(
+      () {
+        final bool obscureText = controller.obscureText.value;
+
+        return InputTextField(
+          controller: controller.passwordController,
+          obscureText: obscureText,
+          keyboardType: TextInputType.visiblePassword,
+          decoration: InputDecoration(
+            hintText: hintText ?? 'Your Password',
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: ThemeColor.mainColor),
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscureText ? Icons.visibility_off : Icons.visibility,
+                color: ThemeColor.mainColor,
+              ),
+              onPressed: () => controller.togglePasswordVisibility(),
+            ),
+            isDense: true,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: ThemeColor.mainColor),
+            ),
+            fillColor: ThemeColor.colorScheme.onSurface,
+            filled: true,
+            hintStyle: TextStyle(
+              fontFamily: 'KantumruyPro',
+              color: ThemeColor.colorScheme.primary,
+            ),
+            prefixIcon: Icon(prefixIcon ?? Icons.lock),
+          ),
+          validator: validator,
+        );
+      },
+    );
+  }
+
+  Widget buildConfirmPasswordTextField({
+    required SignUpController controller,
+    String? hintText,
+    IconData? prefixIcon,
+    String? Function(String?)? validator,
+  }) {
+    return Obx(
+      () {
+        final bool obscureText = controller.confirmPassToggle.value;
+
+        return InputTextField(
+          controller: controller.confirmController,
+          obscureText: obscureText,
+          keyboardType: TextInputType.visiblePassword,
+          decoration: InputDecoration(
+            hintText: hintText ?? 'Confirm Password',
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: ThemeColor.mainColor),
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscureText ? Icons.visibility_off : Icons.visibility,
+                color: ThemeColor.mainColor,
+              ),
+              onPressed: () => controller.toggleConfirmPasswordVisibility(),
+            ),
+            isDense: true,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: ThemeColor.mainColor),
+            ),
+            fillColor: ThemeColor.colorScheme.onSurface,
+            filled: true,
+            hintStyle: TextStyle(
+              fontFamily: 'KantumruyPro',
+              color: ThemeColor.colorScheme.primary,
+            ),
+            prefixIcon: Icon(prefixIcon ?? Icons.lock),
+          ),
+          validator: validator,
+        );
+      },
     );
   }
 }

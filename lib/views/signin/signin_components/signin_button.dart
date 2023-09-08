@@ -1,10 +1,11 @@
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:flutter/material.dart';
 
 class Signinbutton extends StatelessWidget {
   final Function()? onTap;
 
   const Signinbutton({
-    super.key,
+    Key? key,
     required this.onTap,
   });
 
@@ -14,16 +15,18 @@ class Signinbutton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 40,
-        width: 290,
+        width: 310,
         margin: const EdgeInsets.symmetric(horizontal: 45),
-        decoration: const BoxDecoration(
-          color: Color(0xFF213A5C),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          color: ThemeColor.mainColor,
         ),
-        child: const Center(
+        child: Center(
           child: Text(
             "Sign In",
             style: TextStyle(
-              color: Colors.white,
+              fontFamily: 'KantumruyPro',
+              color: ThemeColor.colorScheme.onSurface,
               fontWeight: FontWeight.w700,
               fontSize: 16,
             ),

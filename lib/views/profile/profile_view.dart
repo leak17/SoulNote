@@ -1,193 +1,28 @@
 import 'package:diary_journal/core/routes/app_routes.dart';
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/views/profile/profile_controller.dart';
 import 'package:diary_journal/widget/Term&Condition.dart';
+import 'package:diary_journal/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfileView extends StatefulWidget {
-  ProfileView({Key? key}) : super(key: key);
-
-  @override
-  _ProfileViewState createState() => _ProfileViewState();
-}
-
-class _ProfileViewState extends State<ProfileView> {
+class ProfileView extends StatelessWidget {
   final ProfileController profileController = Get.put(ProfileController());
-  bool showTermsAndConditions = false;
+
+  ProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 86, 143, 170),
+      backgroundColor: ThemeColor.blueColor,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-              color: const Color(0xFF213A5C),
-              child: Column(
-                children: [
-                  const Text(
-                    'Your Profile',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      _showImagePickerDialog(context);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Stack(
-                          children: [
-                            Obx(() {
-                              if (profileController.image.value != null) {
-                                return CircleAvatar(
-                                  radius: 60,
-                                  backgroundColor: Colors.white,
-                                  backgroundImage:
-                                      FileImage(profileController.image.value!),
-                                );
-                              } else {
-                                return CircleAvatar(
-                                  radius: 60,
-                                  backgroundColor: Colors.white,
-                                  backgroundImage: NetworkImage(
-                                      profileController.profileImageUrl.value),
-                                );
-                              }
-                            }),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: const Color.fromARGB(255, 86, 143,
-                                      170), // Customize the icon background color
-                                ),
-                                child: Icon(
-                                  Icons.edit, // Customize the edit icon
-                                  color:
-                                      Colors.white, // Customize the icon color
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    profileController.userName.value,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    profileController.userRole.value,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _buildHeader(context),
             const SizedBox(height: 20),
             Expanded(
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'About Me',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF213A5C),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Obx(() => Text(
-                          profileController.aboutMeText.value,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.justify,
-                        )),
-                    const Spacer(),
-                    buildButton(
-                      'Term & Condition',
-                      const Color(0xFF213A5C),
-                      Icons.description,
-                      Icons.arrow_forward_ios,
-                      () {
-                        _showTermsAndConditions(context);
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    if (showTermsAndConditions)
-                      Container(
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'Your terms and conditions text goes here.',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.justify,
-                        ),
-                      ),
-                    const SizedBox(height: 10),
-                    buildButton(
-                      'Language',
-                      const Color(0xFF213A5C),
-                      Icons.language,
-                      Icons.arrow_forward_ios,
-                      () {
-                        _showLanguageModal(context);
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    buildButton(
-                      'Logout',
-                      const Color(0xFF213A5C),
-                      Icons.logout,
-                      Icons.arrow_forward_ios,
-                      () {
-                        _showLogoutConfirmation(context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
+              child: _buildProfileDetails(context),
             ),
           ],
         ),
@@ -195,104 +30,168 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Future<void> _showImagePickerDialog(BuildContext context) async {
-    final imageFile = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            "Select Image Source",
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+      color: ThemeColor.mainColor,
+      child: Column(
+        children: [
+          Text(
+            'Your Profile',
             style: TextStyle(
+              fontFamily: 'KantumruyPro',
+              fontSize: 24,
               fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Color(0xFF213A5C),
+              color: ThemeColor.colorScheme.onSurface,
             ),
           ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                ButtonTheme(
-                  minWidth: double.infinity, // Set the width of both buttons
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      Navigator.of(context).pop(profileController.takePhoto());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: () {
+              _showImagePickerDialog(context);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    Obx(() {
+                      if (profileController.image.value != null) {
+                        return CircleAvatar(
+                          radius: 60,
+                          backgroundColor: ThemeColor.colorScheme.onSurface,
+                          backgroundImage:
+                              FileImage(profileController.image.value!),
+                        );
+                      } else {
+                        return CircleAvatar(
+                          radius: 60,
+                          backgroundColor: ThemeColor.colorScheme.onSurface,
+                          backgroundImage: NetworkImage(
+                            profileController.profileImageUrl.value,
+                          ),
+                        );
+                      }
+                    }),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: ThemeColor.blueColor,
+                        ),
+                        child: Icon(
+                          Icons.edit,
+                          color: ThemeColor.colorScheme.onSurface,
+                        ),
                       ),
                     ),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 12),
-                        Icon(
-                          Icons.camera_alt,
-                          size: 24,
-                          color: const Color.fromARGB(255, 86, 143, 170),
-                        ),
-                        SizedBox(
-                            width:
-                                12), // Adjusted spacing between icon and text
-                        Text(
-                          "Take a picture",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: const Color.fromARGB(255, 86, 143, 170),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16), // Add space between buttons
-                ButtonTheme(
-                  minWidth: double.infinity, // Set the width of both buttons
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      Navigator.of(context)
-                          .pop(profileController.pickImageFromGallery());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 12),
-                        Icon(
-                          Icons.photo,
-                          size: 24,
-                          color: const Color.fromARGB(255, 86, 143, 170),
-                        ),
-                        SizedBox(
-                            width:
-                                12), // Adjusted spacing between icon and text
-                        Text(
-                          "Choose from gallery",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: const Color.fromARGB(255, 86, 143, 170),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
               ],
             ),
           ),
-        );
-      },
+        ],
+      ),
     );
+  }
 
-    if (imageFile != null) {
-      profileController.saveImageToStorage(imageFile);
-    }
+  Widget _buildProfileDetails(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: ThemeColor.colorScheme.onSurface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildAboutMeSection(),
+            const SizedBox(height: 56),
+            _buildCustomButtons(context),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAboutMeSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'About Me',
+          style: TextStyle(
+            fontFamily: 'KantumruyPro',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: ThemeColor.mainColor,
+          ),
+        ),
+        const Divider(),
+        const SizedBox(height: 8),
+        Obx(
+          () => Text(
+            profileController.aboutMeText.value,
+            style: TextStyle(
+              fontFamily: 'KantumruyPro',
+              fontSize: 16,
+              color: ThemeColor.colorScheme.surface,
+            ),
+            textAlign: TextAlign.justify,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCustomButtons(BuildContext context) {
+    return Column(
+      children: [
+        CustomButton(
+          text: 'Term & Condition',
+          color: ThemeColor.mainColor,
+          onTap: () => _showTermsAndConditions(context),
+          firstIcon: Icons.description,
+          secondIcon: Icons.arrow_forward_ios,
+        ),
+        const SizedBox(height: 8),
+        CustomButton(
+          text: 'Language',
+          color: ThemeColor.mainColor,
+          onTap: () => _showLanguageModal(context),
+          firstIcon: Icons.language,
+          secondIcon: Icons.arrow_forward_ios,
+        ),
+        const SizedBox(height: 8),
+        CustomButton(
+          text: 'Logout',
+          color: ThemeColor.mainColor,
+          onTap: () => _showLogoutConfirmation(context),
+          firstIcon: Icons.logout,
+          secondIcon: Icons.arrow_forward_ios,
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+
+  void _showTermsAndConditions(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const TermsAndConditionsPage(),
+      ),
+    );
   }
 
   void _showLanguageModal(BuildContext context) {
@@ -321,34 +220,45 @@ class _ProfileViewState extends State<ProfileView> {
           title: Text(
             'Confirm Logout',
             style: TextStyle(
+              fontFamily: 'KantumruyPro',
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF213A5C),
+              color: ThemeColor.mainColor,
             ),
           ),
-          content: Text('Are you sure you want to logout?'),
+          content: Text(
+            'Are you sure you want to logout?',
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: 'KantumruyPro',
+              color: ThemeColor.mainColor,
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Close the dialog
+                Navigator.pop(context);
               },
               child: Text(
                 'Cancel',
                 style: TextStyle(
-                  color: const Color.fromARGB(255, 86, 143, 170),
+                  fontSize: 16,
+                  fontFamily: 'KantumruyPro',
+                  color: ThemeColor.colorScheme.primary,
                 ),
               ),
             ),
             TextButton(
               onPressed: () {
-                // Perform logout action here
-                Navigator.pop(context); // Close the dialog
+                Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, Routes.SIGN_IN);
               },
               child: Text(
                 'Logout',
                 style: TextStyle(
-                  color: Colors.red,
+                  fontSize: 16,
+                  fontFamily: 'KantumruyPro',
+                  color: ThemeColor.colorScheme.error,
                 ),
               ),
             ),
@@ -358,33 +268,23 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  void _showTermsAndConditions(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) =>
-              TermsAndConditionsPage()), // Replace with your actual page
-    );
-  }
-
   Widget buildLanguageOption(
       String language, IconData icon, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Handle language selection here
         Navigator.pop(context);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white, // Background color
+          color: ThemeColor.colorScheme.onSurface,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: ThemeColor.colorScheme.secondary,
               spreadRadius: 2,
               blurRadius: 5,
-              offset: Offset(0, 3), // changes the position of shadow
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -393,14 +293,15 @@ class _ProfileViewState extends State<ProfileView> {
           children: [
             Icon(
               icon,
-              color: const Color(0xFF213A5C), // Icon color
+              color: ThemeColor.mainColor,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Text(
               language,
               style: TextStyle(
+                fontFamily: 'KantumruyPro',
                 fontSize: 18,
-                color: const Color(0xFF213A5C), // Text color
+                color: ThemeColor.mainColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -410,55 +311,102 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget buildButton(
-    String text,
-    Color color,
-    IconData iconData,
-    IconData rightIconData, // New parameter for the right icon
-    VoidCallback onTap,
-  ) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              iconData,
-              color: Colors.white,
+  Future<void> _showImagePickerDialog(BuildContext context) async {
+    final imageFile = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Select Image Source",
+            style: TextStyle(
+              fontFamily: 'KantumruyPro',
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: ThemeColor.mainColor,
             ),
-            const SizedBox(width: 10), // Add space between left icon and text
-            Expanded(
-              child: Align(
-                alignment: Alignment.center, // Center-align the text
-                child: Text(
-                  text,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ButtonTheme(
+                  minWidth: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop(profileController.takePhoto());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeColor.colorScheme.onSurface,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 12),
+                        Icon(
+                          Icons.camera_alt,
+                          size: 20,
+                          color: ThemeColor.blueColor,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          "Take a picture",
+                          style: TextStyle(
+                            fontFamily: 'KantumruyPro',
+                            fontSize: 14,
+                            color: ThemeColor.blueColor,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+                const SizedBox(height: 16),
+                ButtonTheme(
+                  minWidth: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context)
+                          .pop(profileController.pickImageFromGallery());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeColor.colorScheme.onSurface,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 12),
+                        Icon(
+                          Icons.photo,
+                          size: 20,
+                          color: ThemeColor.blueColor,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          "Choose from gallery",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'KantumruyPro',
+                            color: ThemeColor.blueColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Icon(
-              rightIconData,
-              color: Colors.white,
-            ), // Right icon
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
-  }
-}
 
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: ProfileView(),
-  ));
+    if (imageFile != null) {
+      profileController.saveImageToStorage(imageFile);
+    }
+  }
 }

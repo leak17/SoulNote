@@ -62,24 +62,87 @@ class JournalBoxState extends State<JournalBox> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Select Image Source"),
+          title: Text(
+            "Select Image Source",
+            style: TextStyle(
+              fontFamily: 'KantumruyPro',
+              color: ThemeColor.mainColor,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                GestureDetector(
-                  child: const Text("Take a picture"),
-                  onTap: () async {
-                    Navigator.of(context).pop(true);
-                    await createController.takePhoto();
-                  },
+                ButtonTheme(
+                  minWidth: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop(createController.takePhoto());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeColor.colorScheme.onSurface,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 12),
+                        Icon(
+                          Icons.camera_alt,
+                          size: 20,
+                          color: ThemeColor.blueColor,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          "Take a picture",
+                          style: TextStyle(
+                            fontFamily: 'KantumruyPro',
+                            fontSize: 14,
+                            color: ThemeColor.blueColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
-                GestureDetector(
-                  child: const Text("Choose from gallery"),
-                  onTap: () async {
-                    Navigator.of(context).pop(true);
-                    await createController.pickImageFromGallery();
-                  },
+                ButtonTheme(
+                  minWidth: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context)
+                          .pop(createController.pickImageFromGallery());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeColor.colorScheme.onSurface,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 12),
+                        Icon(
+                          Icons.photo,
+                          size: 20,
+                          color: ThemeColor.blueColor,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          "Choose from gallery",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'KantumruyPro',
+                            color: ThemeColor.blueColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -89,7 +152,14 @@ class JournalBoxState extends State<JournalBox> {
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text("Cancel"),
+              child: Text(
+                "Cancel",
+                style: TextStyle(
+                  fontFamily: 'KantumruyPro',
+                  color: ThemeColor.mainColor,
+                  fontSize: 14,
+                ),
+              ),
             ),
           ],
         );
@@ -169,7 +239,11 @@ class JournalBoxState extends State<JournalBox> {
                         decoration: InputDecoration(
                           hintText: 'What is your title?',
                           hintStyle: TextStyle(
-                              color: ThemeColor.colorScheme.onSurface),
+                            color: ThemeColor.colorScheme.onSurface,
+                            fontFamily: 'KantumruyPro',
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                           border: InputBorder.none,
                         ),
                       ),
@@ -230,6 +304,9 @@ class JournalBoxState extends State<JournalBox> {
                     border: InputBorder.none,
                     hintText: "What's on your mind?",
                     hintStyle: TextStyle(
+                      fontFamily: 'KantumruyPro',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                       color: ThemeColor.colorScheme.onSurface,
                     ),
                   ),

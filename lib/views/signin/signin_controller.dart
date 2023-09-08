@@ -1,21 +1,36 @@
+import 'package:connectivity/connectivity.dart';
+import 'package:diary_journal/core/api/constants/api_constant.dart';
+import 'package:diary_journal/core/api/constants/api_header_constant.dart';
+import 'package:diary_journal/core/api/utils/save_local_data.dart';
+import 'package:diary_journal/core/model/login_response.dart';
 import 'package:diary_journal/core/routes/app_routes.dart';
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class SignInController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final RxBool isProcessing = false.obs; // Observable for loading state
+  final RxBool isProcessingLoading = false.obs;
+  final RxBool obscureText = true.obs; // Observable for password visibility
 
-  Future<void> signUserIn() async {
-    // Implement your sign-in logic here
+  Future<void> userSignIn(BuildContext context) async {
     final String email = emailController.text.trim();
     final String password = passwordController.text;
 
-    // Add validation logic here to ensure email and password are filled correctly.
+    var connectivityResult = await (Connectivity().checkConnectivity());
+
+    isProcessingLoading.value = true;
+    Map<String, String> header = ApiHeaderConstant.headerWithoutToken;
+    var body = {
+      "email": emailController.text.toString(),
+      "password": passwordController.text.toString(),
+    };
+    // LoadingDialog.showLoaderDialog(context, "Loading ...");
+    var url = Uri.parse(ApiConstant.login);
+
     if (email.isEmpty || password.isEmpty) {
       Get.snackbar(
         'Error',
@@ -26,45 +41,100 @@ class SignInController extends GetxController {
       return;
     }
 
-    // Show loading animation while processing
-    isProcessing.value = true;
-
-    // Create the request body as a Map
-    final Map<String, dynamic> requestBody = {
-      'username': email,
-      'password': password,
-    };
-
-    // Send the POST request to the authentication endpoint
-    final response = await http.post(
-      Uri.parse('http://localhost:3000/auth/login'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(requestBody),
-    );
-
-    // Check the response status code
-    if (response.statusCode == 200) {
-      // Parse and store the access_token from the response (if available)
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
-      final String accessToken = responseData['access_token'];
-      GetStorage().write('access_token', accessToken);
-
-      // Successful sign-in, navigate to home screen
-      Get.offNamed(Routes.TAB_BAR_WRAPPER);
-    } else {
-      // Sign-in failed, display an error message.
-      Get.snackbar(
-        'Error',
-        'Sign-in failed. Please check your credentials.',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+    bool isEmailValid(String email) {
+      final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+      return emailRegex.hasMatch(email);
     }
 
-    // Hide loading animation after processing
-    isProcessing.value = false;
+    // Inside your userSignIn method:
+    if (!isEmailValid(email)) {
+      Get.snackbar(
+        'Error',
+        'Please enter a valid email address',
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
+      );
+      return;
+    }
+
+    if (password.length < 6) {
+      Get.snackbar(
+        'Error',
+        'Password must be at least 6 characters long',
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
+      );
+      return;
+    }
+
+    if (connectivityResult == ConnectivityResult.none) {
+      Get.snackbar(
+        'Error',
+        'No internet connection. Please check your network settings',
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
+      );
+      return;
+    }
+
+    try {
+      var response =
+          await http.post(url, headers: header, body: json.encode(body));
+      print(response.body);
+      var data = LoginResponse.fromJson(jsonDecode(response.body));
+
+      if (response.statusCode == 200) {
+        if (data != null && data.data != null) {
+          // Check if data and data.data are not null
+          print(data.data!.token.toString());
+          await SaveLocalData.setToken(data.data!.token.toString());
+          await SaveLocalData.setIsLogin(true);
+          await SaveLocalData.setUserId(data.data!.userid!.toInt());
+          handleSuccessfulSignUp(data);
+        } else {
+          Get.snackbar(
+            'Error',
+            'Invalid response data',
+            backgroundColor: ThemeColor.colorScheme.error,
+            colorText: ThemeColor.colorScheme.onSurface,
+          );
+        }
+      } else {
+        Get.snackbar(
+          'Error',
+          'Sign-in failed. Please check your credentials.',
+          backgroundColor: ThemeColor.colorScheme.error,
+          colorText: ThemeColor.colorScheme.onSurface,
+        );
+      }
+    } catch (e) {
+      Get.back();
+      print(e);
+    }
+
+    isProcessingLoading.value = false;
+  }
+
+  void handleSuccessfulSignUp(LoginResponse data) {
+    Get.snackbar(
+      'Success',
+      'Sign-up successful',
+      backgroundColor: ThemeColor.successColor,
+      colorText: ThemeColor.colorScheme.onSurface,
+    );
+
+    final String accessToken = data.data!.token.toString();
+
+    SaveLocalData.setToken(accessToken);
+    emailController.clear();
+    passwordController.clear();
+    isProcessingLoading.value = false;
+
+    Get.offNamed(Routes.TAB_BAR_WRAPPER);
+  }
+
+  void toggleObscureText() {
+    obscureText.value = !obscureText.value;
   }
 
   @override

@@ -92,6 +92,7 @@ class CreateView extends StatelessWidget {
                       child: Text(
                         "Save",
                         style: TextStyle(
+                          fontFamily: 'KantumruyPro',
                           color: ThemeColor.colorScheme.onSurface,
                         ),
                       ),

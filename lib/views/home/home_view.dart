@@ -1,3 +1,4 @@
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/views/home/home_controller.dart';
 import 'package:diary_journal/widget/custom_app_bar.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
@@ -55,22 +56,22 @@ class HomeView extends StatelessWidget {
               onDateChange: (selectedDate) {
                 Get.find<HomeController>().updateSelectedDate(selectedDate);
               },
-              activeColor: const Color(0xff85A389),
-              dayProps: const EasyDayProps(
+              activeColor: ThemeColor.colorScheme.primary,
+              dayProps: EasyDayProps(
                 todayHighlightStyle: TodayHighlightStyle.withBackground,
-                todayHighlightColor: Color.fromARGB(255, 69, 84, 172),
+                todayHighlightColor: ThemeColor.mainColor,
               ),
             ),
-            const SizedBox(
-              height: 20.0,
-            ),
+            const SizedBox(height: 20.0),
             Container(
               height: (MediaQuery.of(context).size.height),
-              decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 86, 143, 170),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.circular(16.0))),
+              decoration: BoxDecoration(
+                color: ThemeColor.mainColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: ListView.builder(
@@ -88,43 +89,25 @@ class HomeView extends StatelessWidget {
                       actionPane: const SlidableDrawerActionPane(),
                       actionExtentRatio: 0.25,
                       actions: [
-                        SizedBox(
-                          height:
-                              70.0, // You can adjust this to the height you desire.
-                          child: IconSlideAction(
-                            caption: 'Share',
-                            color: const Color(0xFF8B9299),
-                            icon: Icons.share,
-                            onTap: () {
-                              // share action
-                            },
-                          ),
+                        IconSlideAction(
+                          caption: 'Share',
+                          color: ThemeColor.colorScheme.primary,
+                          icon: Icons.share,
+                          onTap: () {},
                         ),
                       ],
                       secondaryActions: [
-                        SizedBox(
-                          height:
-                              70.0, // Adjust this to match the height of the card.
-                          child: IconSlideAction(
-                            caption: 'Edit',
-                            color: Colors.blue,
-                            icon: Icons.edit,
-                            onTap: () {
-                              // edit action
-                            },
-                          ),
+                        IconSlideAction(
+                          caption: 'Edit',
+                          color: ThemeColor.blueColor,
+                          icon: Icons.edit,
+                          onTap: () {},
                         ),
-                        SizedBox(
-                          height:
-                              70.0, // Adjust this to match the height of the card.
-                          child: IconSlideAction(
-                            caption: 'Delete',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () {
-                              // delete action
-                            },
-                          ),
+                        IconSlideAction(
+                          caption: 'Delete',
+                          color: ThemeColor.colorScheme.error,
+                          icon: Icons.delete,
+                          onTap: () {},
                         ),
                       ],
                       child: Card(
@@ -135,7 +118,8 @@ class HomeView extends StatelessWidget {
                           leading: Container(
                             padding: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
+                              border: Border.all(
+                                  color: ThemeColor.colorScheme.primary),
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Text(
@@ -143,10 +127,23 @@ class HomeView extends StatelessWidget {
                               textAlign: TextAlign.center,
                             ),
                           ),
-                          title: const Text('Koh Kong Trip'),
-                          subtitle: const Text(
+                          title: Text(
+                            'Koh Kong Trip',
+                            style: TextStyle(
+                              fontFamily: 'KantumruyPro',
+                              color: ThemeColor.colorScheme.background,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
                             'Notice your mood and track output everyday. Find your strength and weakness to improve to gain more...',
                             maxLines: 3,
+                            style: TextStyle(
+                              fontFamily: 'KantumruyPro',
+                              color: ThemeColor.colorScheme.background,
+                              fontSize: 14,
+                            ),
                           ),
                           trailing: const Icon(Icons.emoji_emotions),
                         ),

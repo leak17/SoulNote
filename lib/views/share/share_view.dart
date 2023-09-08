@@ -1,3 +1,4 @@
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +9,7 @@ class ShareView extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +57,7 @@ class ShareView extends StatelessWidget {
                 itemCount: 10,
                 itemBuilder: (context, index) {
                   final formattedTime = DateFormat('kk:mm:ss \n EEE d MMM')
-                      .format(DateTime.now()); // Call format() here
+                      .format(DateTime.now());
 
                   return Card(
                     shape: const RoundedRectangleBorder(
@@ -65,7 +67,7 @@ class ShareView extends StatelessWidget {
                       leading: Container(
                         padding: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xFF213A5C)),
+                          border: Border.all(color: ThemeColor.mainColor),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Text(
@@ -74,9 +76,13 @@ class ShareView extends StatelessWidget {
                         ),
                       ),
                       title: const Text('Koh Kong Trip'),
-                      subtitle: const Text(
+                      subtitle: Text(
                         'Notice your mood and track output everyday. Find your strength and weakness to improve to gain more...',
                         maxLines: 3,
+                        style: TextStyle(
+                          fontFamily: 'KantumruyPro',
+                          color: ThemeColor.colorScheme.background,
+                        ),
                       ),
                       trailing: const Icon(Icons.emoji_emotions),
                     ),

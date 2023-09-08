@@ -17,7 +17,6 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: Routes.SPLASH,
       getPages: AppPages.routes,
-      // theme: ThemeConfig(false).themeData,
       builder: (context, child) {
         child = botToastBuilder(context, child);
         return GestureDetector(

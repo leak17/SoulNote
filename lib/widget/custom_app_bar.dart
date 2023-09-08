@@ -1,3 +1,4 @@
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -7,7 +8,7 @@ class CustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        color: const Color(0xFF213A5C),
+        color: ThemeColor.mainColor,
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -18,11 +19,12 @@ class CustomAppBar extends StatelessWidget {
               width: 40,
               height: 40,
             ),
-            const Text(
+            Text(
               'Sak Lysem',
               style: TextStyle(
                 fontSize: 14,
-                color: Color(0xffDDE1E0),
+                fontFamily: 'KantumruyPro',
+                color: ThemeColor.colorScheme.onSurface,
               ),
             ),
             const CircleAvatar(

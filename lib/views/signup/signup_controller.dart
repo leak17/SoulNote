@@ -1,4 +1,8 @@
+import 'package:connectivity/connectivity.dart';
+import 'package:diary_journal/core/api/constants/api_constant.dart';
+import 'package:diary_journal/core/api/constants/api_header_constant.dart';
 import 'package:diary_journal/core/routes/app_routes.dart';
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter/material.dart';
@@ -6,135 +10,205 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class SignUpController extends GetxController {
-  final TextEditingController textController = TextEditingController();
+  final TextEditingController userNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmController = TextEditingController();
-
+  final RxBool obscureText = true.obs;
+  final RxBool confirmPassToggle = true.obs;
+  final emailRegex = RegExp(
+    r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$',
+  );
   // Add an RxBool to track sign-up processing state
-  final RxBool isProcessing = false.obs;
+  final RxBool isProcessingLoading = false.obs;
 
-  Future<void> signUserUp() async {
+  Future<void> userSignUp(BuildContext context) async {
     // Set isProcessing to true to show the loading animation
-    isProcessing.value = true;
+    isProcessingLoading.value = true;
+    var connectivityResult = await (Connectivity().checkConnectivity());
 
-    final String username = textController.text.trim();
+    final String username = userNameController.text.trim();
     final String email = emailController.text.trim();
     final String password = passwordController.text;
     final String confirmPassword = confirmController.text;
 
     // Add email validation using a regular expression.
-    final emailRegex = RegExp(
-      r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$',
-    );
 
-    // Add validation logic here to ensure all fields are filled correctly.
-    if (username.isEmpty ||
-        email.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'All fields are required',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      isProcessing.value = false; // Set isProcessing back to false
+    // Check if any field is empty
+    if (isEmptyField(username, 'Username') ||
+        isEmptyField(email, 'Email') ||
+        isEmptyField(password, 'Password') ||
+        isEmptyField(confirmPassword, 'Confirm password')) {
+      isProcessingLoading.value = false;
       return;
     }
 
+    if (password.length < 6) {
+      Get.snackbar(
+        'Error',
+        'Password must be at least 6 characters long',
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
+      );
+      return;
+    }
+
+    if (connectivityResult == ConnectivityResult.none) {
+      Get.snackbar(
+        'Error',
+        'No internet connection. Please check your network settings',
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
+      );
+      return;
+    }
+    // Check if the email is valid
+    if (!isValidEmail(email)) {
+      isProcessingLoading.value = false;
+      return;
+    }
+
+    // Check if password and confirm password match
+    if (!doPasswordsMatch(password, confirmPassword)) {
+      isProcessingLoading.value = false;
+      return;
+    }
+
+    // If all validations pass, proceed with sign-up logic here.
+    try {
+      final response = await performSignUp(username, email, password);
+
+      if (response.statusCode == 201) {
+        // Successful sign-up
+        handleSuccessfulSignUp(response);
+      } else {
+        // Sign-up failed, display an error message.
+        handleFailedSignUp();
+      }
+    } catch (e) {
+      // Handle any exceptions here
+      handleException();
+    }
+  }
+
+  bool isEmptyField(String fieldValue, String fieldName) {
+    if (fieldValue.isEmpty) {
+      Get.snackbar(
+        'Error',
+        '$fieldName is required',
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
+      );
+      return true;
+    }
+    return false;
+  }
+
+  bool isValidEmail(String email) {
     if (!emailRegex.hasMatch(email)) {
       Get.snackbar(
         'Error',
         'Please enter a valid email',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
       );
-      isProcessing.value = false; // Set isProcessing back to false
-      return;
+      return false;
     }
+    return true;
+  }
 
-    // Check if the password and confirm password match.
+  bool doPasswordsMatch(String password, String confirmPassword) {
     if (password != confirmPassword) {
       Get.snackbar(
         'Error',
         'Password and Confirm Password do not match',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
       );
-      isProcessing.value = false; // Set isProcessing back to false
-      return;
+      return false;
     }
+    return true;
+  }
 
-    // Perform the sign-up HTTP request.
-    final url = Uri.parse('http://localhost:3000/auth/signup');
-    final body = jsonEncode({
-      'username': username,
-      'password': password,
-      'email': email,
-    });
+  Future<http.Response> performSignUp(
+    String username,
+    String email,
+    String password,
+  ) async {
+    Map<String, String> header = ApiHeaderConstant.headerWithoutToken;
+    var body = {
+      "username": username,
+      "email": email,
+      "password": password,
+      "confirmPassword": password, // Should this be confirmPassword?
+    };
 
-    try {
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body,
-      );
+    var url = Uri.parse(ApiConstant.signup);
+    return await http.post(
+      url,
+      headers: header,
+      body: json.encode(body),
+    );
+  }
 
-      if (response.statusCode == 201) {
-        // Successful sign-up
-        Get.snackbar(
-          'Success',
-          'Sign-up successful',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+  void handleSuccessfulSignUp(http.Response response) {
+    Get.snackbar(
+      'Success',
+      'Sign-up successful',
+      backgroundColor: ThemeColor.successColor,
+      colorText: ThemeColor.colorScheme.onSurface,
+    );
 
-        // Parse the access_token from the response JSON
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
-        final String accessToken = responseData['access_token'];
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    final String accessToken = responseData['access_token'];
 
-        // Store the access_token in GetStorage
-        GetStorage().write('access_token', accessToken);
+    GetStorage().write('access_token', accessToken);
 
-        // Clear all input fields
-        textController.clear();
-        emailController.clear();
-        passwordController.clear();
-        confirmController.clear();
+    userNameController.clear();
+    emailController.clear();
+    passwordController.clear();
+    confirmController.clear();
 
-        // Set isProcessing back to false
-        isProcessing.value = false;
+    isProcessingLoading.value = false;
 
-        // Successful sign-up.
-        Get.offNamed(Routes.TAB_BAR_WRAPPER);
-      } else {
-        // Sign-up failed, display an error message.
-        Get.snackbar(
-          'Error',
-          'Sign-up failed. Please try again later.',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-        isProcessing.value = false; // Set isProcessing back to false
-      }
-    } catch (e) {
-      // Handle any exceptions here
-      Get.snackbar(
-        'Error',
-        'An error occurred. Please try again later.',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      isProcessing.value = false; // Set isProcessing back to false
-    }
+    Get.offNamed(Routes.TAB_BAR_WRAPPER);
+  }
+
+  void handleFailedSignUp() {
+    Get.snackbar(
+      'Error',
+      'Sign-up failed. Please try again later.',
+      backgroundColor: ThemeColor.colorScheme.error,
+      colorText: ThemeColor.colorScheme.onSurface,
+    );
+
+    isProcessingLoading.value = false;
+  }
+
+  void handleException() {
+    Get.snackbar(
+      'Error',
+      'An error occurred. Please try again later.',
+      backgroundColor: ThemeColor.colorScheme.error,
+      colorText: ThemeColor.colorScheme.onSurface,
+    );
+
+    isProcessingLoading.value = false;
+  }
+
+  // Method to toggle the password visibility
+  void togglePasswordVisibility() {
+    obscureText.value = !obscureText.value;
+  }
+
+  // Method to toggle the confirm password visibility
+  void toggleConfirmPasswordVisibility() {
+    confirmPassToggle.value = !confirmPassToggle.value;
   }
 
   @override
   void dispose() {
-    textController.dispose();
+    userNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     confirmController.dispose();
