@@ -15,6 +15,7 @@ class JournalBox extends StatefulWidget {
 
 class JournalBoxState extends State<JournalBox> {
   final CreateController createController = Get.put(CreateController());
+
   String? selectedEmojiName;
   Map<String, Emoji> emojiMap = {};
 
@@ -195,6 +196,7 @@ class JournalBoxState extends State<JournalBox> {
                           fontWeight: FontWeight.bold,
                           color: ThemeColor.colorScheme.onSurface,
                         ),
+                        onChanged: (value) => createController.setTitle(value),
                         decoration: InputDecoration(
                           hintText: 'What is your title?',
                           hintStyle: TextStyle(
@@ -259,6 +261,7 @@ class JournalBoxState extends State<JournalBox> {
                     color: ThemeColor.colorScheme.onSurface,
                   ),
                   maxLines: null,
+                  onChanged: (value) => createController.setDescription(value),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "What's on your mind?",

@@ -20,51 +20,50 @@ class HomeView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: InkWell(
-                onTap: () {},
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
                 child: Row(
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.share),
-                      onPressed: () {},
-                    ),
                     Expanded(
                       child: TextField(
                         focusNode: Get.find<HomeController>().searchFocusNode,
                         controller: Get.find<HomeController>().searchController,
                         decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.search),
                           hintText: 'Search...',
-                          border: OutlineInputBorder(),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12.0),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {},
                     ),
                   ],
                 ),
               ),
             ),
-            EasyDateTimeLine(
-              initialDate: Get.find<HomeController>().selectedDate.value,
-              onDateChange: (selectedDate) {
-                Get.find<HomeController>().updateSelectedDate(selectedDate);
-              },
-              activeColor: ThemeColor.colorScheme.primary,
-              dayProps: EasyDayProps(
-                todayHighlightStyle: TodayHighlightStyle.withBackground,
-                todayHighlightColor: ThemeColor.mainColor,
-              ),
+          ),
+          EasyDateTimeLine(
+            initialDate: Get.find<HomeController>().selectedDate.value,
+            onDateChange: (selectedDate) {
+              Get.find<HomeController>().updateSelectedDate(selectedDate);
+            },
+            activeColor: ThemeColor.colorScheme.primary,
+            dayProps: EasyDayProps(
+              todayHighlightStyle: TodayHighlightStyle.withBackground,
+              todayHighlightColor: ThemeColor.mainColor,
             ),
-            const SizedBox(height: 20.0),
-            Container(
-              height: (MediaQuery.of(context).size.height),
+          ),
+          Expanded(
+            child: Container(
               decoration: BoxDecoration(
                 color: ThemeColor.mainColor,
                 borderRadius: const BorderRadius.only(
@@ -75,39 +74,47 @@ class HomeView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: ListView.builder(
-                  itemCount: 10,
+                  itemCount: Get.find<HomeController>().notes.length,
                   itemBuilder: (context, index) {
+                    final note = Get.find<HomeController>().notes[index];
                     final DateTime selectedDate =
                         Get.find<HomeController>().selectedDate.value;
                     final DateTime cardDate =
                         selectedDate.add(Duration(days: index));
-
                     final formattedTime =
                         DateFormat('EEE, MMM d').format(cardDate);
-
                     return Slidable(
                       actionPane: const SlidableDrawerActionPane(),
                       actionExtentRatio: 0.25,
                       actions: [
-                        IconSlideAction(
-                          caption: 'Share',
-                          color: ThemeColor.colorScheme.primary,
-                          icon: Icons.share,
-                          onTap: () {},
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: IconSlideAction(
+                            caption: 'Share',
+                            color: ThemeColor.colorScheme.primary,
+                            icon: Icons.share,
+                            onTap: () {},
+                          ),
                         ),
                       ],
                       secondaryActions: [
-                        IconSlideAction(
-                          caption: 'Edit',
-                          color: ThemeColor.blueColor,
-                          icon: Icons.edit,
-                          onTap: () {},
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: IconSlideAction(
+                            caption: 'Edit',
+                            color: ThemeColor.blueColor,
+                            icon: Icons.edit,
+                            onTap: () {},
+                          ),
                         ),
-                        IconSlideAction(
-                          caption: 'Delete',
-                          color: ThemeColor.colorScheme.error,
-                          icon: Icons.delete,
-                          onTap: () {},
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: IconSlideAction(
+                            caption: 'Delete',
+                            color: ThemeColor.colorScheme.error,
+                            icon: Icons.delete,
+                            onTap: () {},
+                          ),
                         ),
                       ],
                       child: Card(
@@ -116,19 +123,19 @@ class HomeView extends StatelessWidget {
                         ),
                         child: ListTile(
                           leading: Container(
-                            padding: const EdgeInsets.all(8.0),
+                            width: 80,
+                            height: 50,
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: ThemeColor.colorScheme.primary),
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Text(
-                              formattedTime,
-                              textAlign: TextAlign.center,
+                              borderRadius: BorderRadius.circular(8.0),
+                              image: const DecorationImage(
+                                image: AssetImage(
+                                    'assets/images/default_image.jpg'),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                           title: Text(
-                            'Koh Kong Trip',
+                            note.title,
                             style: TextStyle(
                               fontFamily: 'KantumruyPro',
                               color: ThemeColor.colorScheme.background,
@@ -137,7 +144,7 @@ class HomeView extends StatelessWidget {
                             ),
                           ),
                           subtitle: Text(
-                            'Notice your mood and track output everyday. Find your strength and weakness to improve to gain more...',
+                            note.description,
                             maxLines: 3,
                             style: TextStyle(
                               fontFamily: 'KantumruyPro',
@@ -153,8 +160,8 @@ class HomeView extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
