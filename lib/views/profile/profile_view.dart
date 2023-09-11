@@ -321,7 +321,7 @@ class ProfileView extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'KantumruyPro',
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 16,
               color: ThemeColor.mainColor,
             ),
           ),
@@ -346,7 +346,7 @@ class ProfileView extends StatelessWidget {
                         const SizedBox(width: 12),
                         Icon(
                           Icons.camera_alt,
-                          size: 24,
+                          size: 20,
                           color: ThemeColor.blueColor,
                         ),
                         const SizedBox(width: 12),
@@ -354,7 +354,7 @@ class ProfileView extends StatelessWidget {
                           "Take a picture",
                           style: TextStyle(
                             fontFamily: 'KantumruyPro',
-                            fontSize: 18,
+                            fontSize: 14,
                             color: ThemeColor.blueColor,
                           ),
                         ),
@@ -382,14 +382,14 @@ class ProfileView extends StatelessWidget {
                         const SizedBox(width: 12),
                         Icon(
                           Icons.photo,
-                          size: 24,
+                          size: 20,
                           color: ThemeColor.blueColor,
                         ),
                         const SizedBox(width: 12),
                         Text(
                           "Choose from gallery",
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 14,
                             fontFamily: 'KantumruyPro',
                             color: ThemeColor.blueColor,
                           ),

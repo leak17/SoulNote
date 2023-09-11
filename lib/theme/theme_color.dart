@@ -20,4 +20,9 @@ class ThemeColor {
   static Color yealowColor = const Color.fromARGB(255, 230, 176, 0);
   static Color successColor = const Color.fromARGB(255, 16, 139, 0);
   static Color transparentColor = Colors.transparent;
+  static Color awesomeColor = Colors.green;
+  static Color happyColor = Colors.blue;
+  static Color nautralColor = Colors.yellow;
+  static Color badColor = Colors.orange;
+  static Color awfulColor = Colors.red;
 }

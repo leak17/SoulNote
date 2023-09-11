@@ -7,7 +7,7 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -82,12 +82,12 @@ class HomeView extends StatelessWidget {
                     itemCount: controller.notes.length,
                     itemBuilder: (context, index) {
                       final note = controller.notes[index];
-                      final DateTime selectedDate =
-                          controller.selectedDate.value;
-                      final DateTime cardDate =
-                          selectedDate.add(Duration(days: index));
-                      final formattedTime =
-                          DateFormat('EEE, MMM d').format(cardDate);
+                      // final DateTime selectedDate =
+                      //     controller.selectedDate.value;
+                      // final DateTime cardDate =
+                      //     selectedDate.add(Duration(days: index));
+                      // final formattedTime =
+                      //     DateFormat('EEE, MMM d').format(cardDate);
 
                       // Check if note has an imagePath
                       ImageProvider imageProvider;

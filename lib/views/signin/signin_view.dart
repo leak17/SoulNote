@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 
 class SignInView extends GetView<SignInController> {
   SignInView({Key? key}) : super(key: key);
-  final SignInController textsignInController = Get.put(SignInController());
 
   @override
   Widget build(BuildContext context) {
@@ -56,69 +55,29 @@ class SignInView extends GetView<SignInController> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      InputTextField(
+                      buildInputTextField(
                         controller: controller.emailController,
+                        hintText: 'Email',
+                        prefixIcon: Icons.mail,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: 'Your Email',
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: ThemeColor.mainColor,
-                            ),
-                          ),
-                          isDense: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: ThemeColor.mainColor),
-                          ),
-                          fillColor: ThemeColor.colorScheme.onSurface,
-                          filled: true,
-                          hintStyle: TextStyle(
-                            fontFamily: 'KantumruyPro',
-                            color: ThemeColor.colorScheme.primary,
-                          ),
-                          prefixIcon: const Icon(Icons.mail),
-                        ),
-                        obscureText: textsignInController.obscureText.value,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please input email';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 24),
-                      InputTextField(
-                        controller: controller.passwordController,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          hintText: 'Your Password',
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: ThemeColor.mainColor,
-                            ),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              textsignInController.obscureText.value
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: ThemeColor.mainColor,
-                            ),
-                            onPressed: () {
-                              textsignInController.toggleObscureText();
-                            },
-                          ),
-                          isDense: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: ThemeColor.mainColor),
-                          ),
-                          fillColor: ThemeColor.colorScheme.onSurface,
-                          filled: true,
-                          hintStyle: TextStyle(
-                            fontFamily: 'KantumruyPro',
-                            color: ThemeColor.colorScheme.primary,
-                          ),
-                          prefixIcon: const Icon(Icons.lock),
-                        ),
-                        obscureText: textsignInController.obscureText.value,
+                      buildPasswordTextField(
+                        controller: controller,
+                        hintText: 'Your Password',
+                        prefixIcon: Icons.lock,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please input your password';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 16.0),
                       Row(
@@ -157,19 +116,13 @@ class SignInView extends GetView<SignInController> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Signinbutton(
-                  // onTap: controller.signUserIn,
-                  onTap: () {
-                    Navigator.pushNamed(context, Routes.TAB_BAR_WRAPPER);
-                  },
+                Obx(
+                  () => controller.isProcessingLoading.value
+                      ? const CircularProgressIndicator()
+                      : Signinbutton(
+                          onTap: () => controller.userSignIn(context),
+                        ),
                 ),
-                // Obx(
-                //   () => controller.isProcessing.value
-                //       ? const CircularProgressIndicator()
-                //       : Signinbutton(
-                //           onTap: controller.signUserIn,
-                //         ),
-                // ),
                 const SizedBox(height: 25),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -251,6 +204,86 @@ class SignInView extends GetView<SignInController> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildInputTextField({
+    required TextEditingController controller,
+    required String hintText,
+    required IconData prefixIcon,
+    required TextInputType keyboardType,
+    required FormFieldValidator<String>? validator,
+  }) {
+    return InputTextField(
+      controller: controller,
+      obscureText: false,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        hintText: hintText,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: ThemeColor.mainColor,
+          ),
+        ),
+        isDense: true,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: ThemeColor.mainColor),
+        ),
+        fillColor: ThemeColor.colorScheme.onSurface,
+        filled: true,
+        hintStyle: TextStyle(
+          fontFamily: 'KantumruyPro',
+          color: ThemeColor.colorScheme.primary,
+        ),
+        prefixIcon: Icon(prefixIcon),
+      ),
+    );
+  }
+
+  Widget buildPasswordTextField({
+    required SignInController controller,
+    String? hintText,
+    IconData? prefixIcon,
+    String? Function(String?)? validator,
+  }) {
+    return Obx(
+      () {
+        final bool obscureText = controller.obscureText.value;
+
+        return InputTextField(
+          controller: controller.passwordController,
+          obscureText: obscureText,
+          keyboardType: TextInputType.visiblePassword,
+          decoration: InputDecoration(
+            hintText: hintText ?? 'Your Password',
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: ThemeColor.mainColor),
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscureText ? Icons.visibility_off : Icons.visibility,
+                color: ThemeColor.mainColor,
+              ),
+              onPressed: () => controller.toggleObscureText(),
+            ),
+            isDense: true,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: ThemeColor.mainColor),
+            ),
+            fillColor: ThemeColor.colorScheme.onSurface,
+            filled: true,
+            hintStyle: TextStyle(
+              fontFamily: 'KantumruyPro',
+              color: ThemeColor.colorScheme.primary,
+            ),
+            prefixIcon: Icon(prefixIcon ?? Icons.lock),
+          ),
+        );
+      },
     );
   }
 }

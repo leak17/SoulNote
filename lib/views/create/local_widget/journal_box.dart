@@ -58,7 +58,7 @@ class JournalBoxState extends State<JournalBox> {
     }
   }
 
-  Future<void> _showImagePickerDialog(BuildContext context) async {
+  Future<void> showImagePickerDialog(BuildContext context) async {
     final shouldUpdateImage = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -67,42 +67,84 @@ class JournalBoxState extends State<JournalBox> {
             "Select Image Source",
             style: TextStyle(
               fontFamily: 'KantumruyPro',
-              color: ThemeColor.mainColor,
-              fontSize: 16,
               fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: ThemeColor.mainColor,
             ),
           ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                GestureDetector(
-                  child: Text(
-                    "Take a picture",
-                    style: TextStyle(
-                      fontFamily: 'KantumruyPro',
-                      color: ThemeColor.colorScheme.background,
-                      fontSize: 14,
+                ButtonTheme(
+                  minWidth: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop(true);
+                      await createController.takePhoto();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeColor.colorScheme.onSurface,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 12),
+                        Icon(
+                          Icons.camera_alt,
+                          size: 20,
+                          color: ThemeColor.blueColor,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          "Take a picture",
+                          style: TextStyle(
+                            fontFamily: 'KantumruyPro',
+                            fontSize: 14,
+                            color: ThemeColor.blueColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  onTap: () async {
-                    Navigator.of(context).pop(true);
-                    await createController.takePhoto();
-                  },
                 ),
                 const SizedBox(height: 16),
-                GestureDetector(
-                  child: Text(
-                    "Choose from gallery",
-                    style: TextStyle(
-                      fontFamily: 'KantumruyPro',
-                      color: ThemeColor.colorScheme.background,
-                      fontSize: 14,
+                ButtonTheme(
+                  minWidth: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop(true);
+                      await createController.pickImageFromGallery();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeColor.colorScheme.onSurface,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 12),
+                        Icon(
+                          Icons.photo,
+                          size: 20,
+                          color: ThemeColor.blueColor,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          "Choose from gallery",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'KantumruyPro',
+                            color: ThemeColor.blueColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  onTap: () async {
-                    Navigator.of(context).pop(true);
-                    await createController.pickImageFromGallery();
-                  },
                 ),
               ],
             ),
@@ -112,14 +154,7 @@ class JournalBoxState extends State<JournalBox> {
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text(
-                "Cancel",
-                style: TextStyle(
-                  fontFamily: 'KantumruyPro',
-                  color: ThemeColor.colorScheme.primary,
-                  fontSize: 14,
-                ),
-              ),
+              child: const Text("Cancel"),
             ),
           ],
         );
@@ -135,7 +170,7 @@ class JournalBoxState extends State<JournalBox> {
     }
   }
 
-  Future<void> _showEmojiPicker(BuildContext context) async {
+  Future<void> showEmojiPicker(BuildContext context) async {
     final emoji = await showModalBottomSheet<Emoji>(
       context: context,
       builder: (BuildContext context) {
@@ -218,7 +253,7 @@ class JournalBoxState extends State<JournalBox> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              _showImagePickerDialog(context);
+                              showImagePickerDialog(context);
                             },
                             icon: Icon(
                               Icons.photo,
@@ -228,7 +263,7 @@ class JournalBoxState extends State<JournalBox> {
                           ),
                           IconButton(
                             onPressed: () {
-                              _showEmojiPicker(context);
+                              showEmojiPicker(context);
                             },
                             icon: selectedEmojiName != null
                                 ? Text(

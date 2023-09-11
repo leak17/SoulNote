@@ -21,7 +21,7 @@ class TabBarConfig {
       title: 'Mood',
       icon: Icons.child_care_outlined,
       path: Routes.MOOD,
-      screen: const MoodView(),
+      screen: MoodView(),
       key: GlobalKey<NavigatorState>(),
       activeIcon: Icons.child_care,
     ),

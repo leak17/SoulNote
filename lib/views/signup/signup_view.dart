@@ -6,9 +6,7 @@ import 'signup_controller.dart';
 import 'package:diary_journal/views/signup/signup_components/signup_button.dart';
 
 class SignUpView extends GetView<SignUpController> {
-  SignUpView({super.key});
-
-  final SignUpController textSignUpController = Get.put(SignUpController());
+  const SignUpView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,134 +51,54 @@ class SignUpView extends GetView<SignUpController> {
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
                     children: [
-                      InputTextField(
-                        controller: controller.textController,
-                        obscureText: false,
+                      buildInputTextField(
+                        controller: controller.userNameController,
+                        hintText: 'Your Name',
+                        prefixIcon: Icons.person,
                         keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                          hintText: 'Your Name',
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: ThemeColor.mainColor,
-                            ),
-                          ),
-                          isDense: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: ThemeColor.mainColor),
-                          ),
-                          fillColor: ThemeColor.colorScheme.onSurface,
-                          filled: true,
-                          hintStyle: TextStyle(
-                            fontFamily: 'KantumruyPro',
-                            color: ThemeColor.colorScheme.primary,
-                          ),
-                          prefixIcon: const Icon(Icons.person),
-                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please input your name';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 15),
-                      InputTextField(
+                      buildInputTextField(
                         controller: controller.emailController,
-                        obscureText: false,
+                        hintText: 'Email',
+                        prefixIcon: Icons.mail,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: ThemeColor.mainColor,
-                            ),
-                          ),
-                          isDense: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: ThemeColor.mainColor),
-                          ),
-                          fillColor: ThemeColor.colorScheme.onSurface,
-                          filled: true,
-                          hintStyle: TextStyle(
-                            fontFamily: 'KantumruyPro',
-                            color: ThemeColor.colorScheme.primary,
-                          ),
-                          prefixIcon: const Icon(Icons.mail),
-                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please input email';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 15),
-                      InputTextField(
-                        controller: controller.passwordController,
-                        obscureText: true,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          hintText: 'Your Password',
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: ThemeColor.mainColor,
-                            ),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              textSignUpController.obscureText.value
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: ThemeColor.mainColor,
-                            ),
-                            onPressed: () {
-                              textSignUpController.toggleObscureText();
-                            },
-                          ),
-                          isDense: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: ThemeColor.mainColor),
-                          ),
-                          fillColor: ThemeColor.colorScheme.onSurface,
-                          filled: true,
-                          hintStyle: TextStyle(
-                            fontFamily: 'KantumruyPro',
-                            color: ThemeColor.colorScheme.primary,
-                          ),
-                          prefixIcon: const Icon(Icons.lock),
-                        ),
+                      buildPasswordTextField(
+                        controller: controller,
+                        hintText: 'Your Password',
+                        prefixIcon: Icons.lock,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please input your password';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 15),
-                      InputTextField(
-                        controller: controller.confirmController,
-                        obscureText: true,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          hintText: 'Confirm Password',
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: ThemeColor.mainColor,
-                            ),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              textSignUpController.obscureText.value
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: ThemeColor.mainColor,
-                            ),
-                            onPressed: () {
-                              textSignUpController.toggleObscureText();
-                            },
-                          ),
-                          isDense: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: ThemeColor.mainColor),
-                          ),
-                          fillColor: ThemeColor.colorScheme.onSurface,
-                          filled: true,
-                          hintStyle: TextStyle(
-                            fontFamily: 'KantumruyPro',
-                            color: ThemeColor.colorScheme.primary,
-                          ),
-                          prefixIcon: const Icon(Icons.lock),
-                        ),
+                      buildConfirmPasswordTextField(
+                        controller: controller,
+                        hintText: 'Confirm Password',
+                        prefixIcon: Icons.lock,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please input your confirm password';
+                          }
+                          return null;
+                        },
                       ),
                     ],
                   ),
@@ -199,10 +117,11 @@ class SignUpView extends GetView<SignUpController> {
                       Text(
                         "I'm not a robot!",
                         style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'KantumruyPro',
-                            color: ThemeColor.mainColor),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'KantumruyPro',
+                          color: ThemeColor.mainColor,
+                        ),
                       ),
                       const SizedBox(width: 30),
                     ],
@@ -211,11 +130,11 @@ class SignUpView extends GetView<SignUpController> {
                 const SizedBox(height: 10),
                 Obx(
                   () {
-                    if (controller.isProcessing.value) {
+                    if (controller.isProcessingLoading.value) {
                       return const CircularProgressIndicator();
                     } else {
                       return Signupbutton(
-                        onTap: controller.signUserUp,
+                        onTap: () => controller.userSignUp(context),
                       );
                     }
                   },
@@ -239,6 +158,131 @@ class SignUpView extends GetView<SignUpController> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildInputTextField({
+    required TextEditingController controller,
+    required String hintText,
+    required IconData prefixIcon,
+    required TextInputType keyboardType,
+    required FormFieldValidator<String>? validator,
+  }) {
+    return InputTextField(
+      controller: controller,
+      obscureText: false,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        hintText: hintText,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: ThemeColor.mainColor,
+          ),
+        ),
+        isDense: true,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: ThemeColor.mainColor),
+        ),
+        fillColor: ThemeColor.colorScheme.onSurface,
+        filled: true,
+        hintStyle: TextStyle(
+          fontFamily: 'KantumruyPro',
+          color: ThemeColor.colorScheme.primary,
+        ),
+        prefixIcon: Icon(prefixIcon),
+      ),
+    );
+  }
+
+  Widget buildPasswordTextField({
+    required SignUpController controller,
+    String? hintText,
+    IconData? prefixIcon,
+    String? Function(String?)? validator,
+  }) {
+    return Obx(
+      () {
+        final bool obscureText = controller.obscureText.value;
+
+        return InputTextField(
+          controller: controller.passwordController,
+          obscureText: obscureText,
+          keyboardType: TextInputType.visiblePassword,
+          decoration: InputDecoration(
+            hintText: hintText ?? 'Your Password',
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: ThemeColor.mainColor),
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscureText ? Icons.visibility_off : Icons.visibility,
+                color: ThemeColor.mainColor,
+              ),
+              onPressed: () => controller.togglePasswordVisibility(),
+            ),
+            isDense: true,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: ThemeColor.mainColor),
+            ),
+            fillColor: ThemeColor.colorScheme.onSurface,
+            filled: true,
+            hintStyle: TextStyle(
+              fontFamily: 'KantumruyPro',
+              color: ThemeColor.colorScheme.primary,
+            ),
+            prefixIcon: Icon(prefixIcon ?? Icons.lock),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildConfirmPasswordTextField({
+    required SignUpController controller,
+    String? hintText,
+    IconData? prefixIcon,
+    String? Function(String?)? validator,
+  }) {
+    return Obx(
+      () {
+        final bool obscureText = controller.confirmPassToggle.value;
+
+        return InputTextField(
+          controller: controller.confirmController,
+          obscureText: obscureText,
+          keyboardType: TextInputType.visiblePassword,
+          decoration: InputDecoration(
+            hintText: hintText ?? 'Confirm Password',
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: ThemeColor.mainColor),
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscureText ? Icons.visibility_off : Icons.visibility,
+                color: ThemeColor.mainColor,
+              ),
+              onPressed: () => controller.toggleConfirmPasswordVisibility(),
+            ),
+            isDense: true,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: ThemeColor.mainColor),
+            ),
+            fillColor: ThemeColor.colorScheme.onSurface,
+            filled: true,
+            hintStyle: TextStyle(
+              fontFamily: 'KantumruyPro',
+              color: ThemeColor.colorScheme.primary,
+            ),
+            prefixIcon: Icon(prefixIcon ?? Icons.lock),
+          ),
+        );
+      },
     );
   }
 }
