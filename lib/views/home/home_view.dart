@@ -64,6 +64,7 @@ class HomeView extends StatelessWidget {
               todayHighlightColor: ThemeColor.mainColor,
             ),
           ),
+          const SizedBox(height: 20.0),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
