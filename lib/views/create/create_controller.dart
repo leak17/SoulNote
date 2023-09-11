@@ -38,18 +38,35 @@ class CreateController extends GetxController {
     }
   }
 
-  Future<void> saveImageToStorage(File imageFile) async {
+  // Future<void> saveImageToStorage(File imageFile) async {
+  //   try {
+  //     final appDir = await getApplicationDocumentsDirectory();
+  //     final localPath = appDir.path;
+  //     final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+  //     final localFile = File('$localPath/$fileName');
+  //     await imageFile.copy(localFile.path);
+
+  //     print('Image saved to: ${localFile.path}');
+  //   } catch (error) {
+  //     print('Error saving image: $error');
+  //   }
+  // }
+
+  Future<String?> saveImageToStorage(File imageFile) async {
     try {
       final appDir = await getApplicationDocumentsDirectory();
       final localPath = appDir.path;
-      const fileName = '';
+      final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
 
       final localFile = File('$localPath/$fileName');
       await imageFile.copy(localFile.path);
 
       print('Image saved to: ${localFile.path}');
+      return localFile.path;
     } catch (error) {
       print('Error saving image: $error');
+      return null;
     }
   }
 
@@ -66,8 +83,17 @@ class CreateController extends GetxController {
   }
 
   Future<void> saveJournalEntry() async {
-    // Create the Note instance
-    Note newNote = Note(title: title.value, description: description.value);
+    // Save the image to storage and get the path
+    String? imagePath;
+    if (imageFile.value != null) {
+      imagePath = await saveImageToStorage(imageFile.value!);
+    }
+
+    // Create the Note instance with the imagePath
+    Note newNote = Note(
+        title: title.value,
+        description: description.value,
+        imagePath: imagePath);
 
     final prefs = await SharedPreferences.getInstance();
     final List<String> entries = prefs.getStringList('journal_entries') ?? [];

@@ -129,7 +129,8 @@ class JournalBoxState extends State<JournalBox> {
     if (shouldUpdateImage != null && shouldUpdateImage) {
       final File? imageFile = createController.imageFile.value;
       if (imageFile != null) {
-        createController.saveImageToStorage(imageFile);
+        await createController.saveImageToStorage(imageFile);
+        setState(() {});
       }
     }
   }
@@ -175,8 +176,9 @@ class JournalBoxState extends State<JournalBox> {
               verticalDirection: VerticalDirection.down,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Positioned(
-                  child: createController.imageFile.value != null &&
+                Obx(() {
+                  // Obx will rebuild the widget whenever imageFile changes
+                  return createController.imageFile.value != null &&
                           createController.imageFile.value!.existsSync()
                       ? SizedBox(
                           height: 200,
@@ -185,8 +187,8 @@ class JournalBoxState extends State<JournalBox> {
                             fit: BoxFit.cover,
                           ),
                         )
-                      : Container(),
-                ),
+                      : Container();
+                }),
                 Row(
                   children: [
                     Expanded(

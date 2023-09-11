@@ -6,21 +6,19 @@ import 'dart:convert';
 class Note {
   final String title;
   final String description;
+  final String? imagePath;
 
-  Note({required this.title, required this.description});
+  Note({required this.title, required this.description, this.imagePath});
 
   Map<String, dynamic> toMap() {
-    return {
-      'title': title,
-      'description': description,
-    };
+    return {'title': title, 'description': description, 'imagePath': imagePath};
   }
 
   static Note fromMap(Map<String, dynamic> map) {
     return Note(
-      title: map['title'],
-      description: map['description'],
-    );
+        title: map['title'],
+        description: map['description'],
+        imagePath: map['imagePath']);
   }
 }
 
@@ -46,6 +44,12 @@ class HomeController extends GetxController {
   void addNote(Note note) {
     notes.add(note);
     saveNotes();
+  }
+
+  void createNote(String title, String description, [String? imagePath]) {
+    Note note =
+        Note(title: title, description: description, imagePath: imagePath);
+    addNote(note);
   }
 
   Future<void> loadNotes() async {
