@@ -88,7 +88,7 @@ class CreateView extends StatelessWidget {
                       onPressed: () {
                         createController.saveJournalEntry();
                         Get.snackbar(
-                          'Saved Entry',
+                          'Saved Note',
                           'Title: ${createController.title.value}\nDescription: ${createController.description.value}',
                           snackPosition: SnackPosition.TOP,
                           duration: Duration(seconds: 5),
