@@ -154,7 +154,7 @@ class SignInView extends GetView<SignInController> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InkWell(
