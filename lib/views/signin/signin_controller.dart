@@ -7,8 +7,10 @@ import 'package:diary_journal/core/routes/app_routes.dart';
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 class SignInController extends GetxController {
   final TextEditingController emailController = TextEditingController();
@@ -135,6 +137,37 @@ class SignInController extends GetxController {
 
   void toggleObscureText() {
     obscureText.value = !obscureText.value;
+  }
+
+  Future<void> initiateOAuth(String provider) async {
+    const baseUrl = ApiConstant.baseUrl;
+
+    try {
+      final result = await FlutterWebAuth.authenticate(
+        url: '$baseUrl/auth/$provider/login',
+        callbackUrlScheme:
+            'com.example.soulnote', // Replace with your app's URL scheme
+      );
+
+      final uri = Uri.parse(result);
+
+      if (uri.queryParameters.containsKey('access_token')) {
+        final accessToken = uri.queryParameters['access_token'];
+
+        // Store the access token
+        GetStorage().write('access_token', accessToken);
+
+        // Redirect to the home screen
+        Get.offNamed(Routes.TAB_BAR_WRAPPER);
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Sign-in failed. Please try again later.',
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
+      );
+    }
   }
 
   @override

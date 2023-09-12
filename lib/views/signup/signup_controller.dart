@@ -87,6 +87,7 @@ class SignUpController extends GetxController {
       }
     } catch (e) {
       // Handle any exceptions here
+      print(e);
       handleException();
     }
   }

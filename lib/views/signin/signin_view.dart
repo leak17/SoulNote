@@ -154,12 +154,22 @@ class SignInView extends GetView<SignInController> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SquareTile(imagePath: 'assets/images/google.png'),
-                    SquareTile(imagePath: 'assets/images/apple.png'),
-                    SquareTile(imagePath: 'assets/images/facebook.png'),
+                    InkWell(
+                      onTap: () {
+                        controller.initiateOAuth('google');
+                      },
+                      child: SquareTile(imagePath: 'assets/images/google.png'),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        controller.initiateOAuth('facebook');
+                      },
+                      child:
+                          SquareTile(imagePath: 'assets/images/facebook.png'),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 30),
