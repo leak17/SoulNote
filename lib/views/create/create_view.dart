@@ -85,7 +85,15 @@ class CreateView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 25),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        createController.saveJournalEntry();
+                        Get.snackbar(
+                          'Saved Note',
+                          'Title: ${createController.title.value}\nDescription: ${createController.description.value}',
+                          snackPosition: SnackPosition.TOP,
+                          duration: Duration(seconds: 5),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ThemeColor.mainColor,
                       ),

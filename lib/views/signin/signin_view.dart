@@ -154,7 +154,7 @@ class SignInView extends GetView<SignInController> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InkWell(
@@ -249,7 +249,6 @@ class SignInView extends GetView<SignInController> {
         ),
         prefixIcon: Icon(prefixIcon),
       ),
-      validator: validator,
     );
   }
 
@@ -293,7 +292,6 @@ class SignInView extends GetView<SignInController> {
             ),
             prefixIcon: Icon(prefixIcon ?? Icons.lock),
           ),
-          validator: validator,
         );
       },
     );

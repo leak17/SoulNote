@@ -193,7 +193,6 @@ class SignUpView extends GetView<SignUpController> {
         ),
         prefixIcon: Icon(prefixIcon),
       ),
-      validator: validator,
     );
   }
 
@@ -237,7 +236,6 @@ class SignUpView extends GetView<SignUpController> {
             ),
             prefixIcon: Icon(prefixIcon ?? Icons.lock),
           ),
-          validator: validator,
         );
       },
     );
@@ -283,7 +281,6 @@ class SignUpView extends GetView<SignUpController> {
             ),
             prefixIcon: Icon(prefixIcon ?? Icons.lock),
           ),
-          validator: validator,
         );
       },
     );

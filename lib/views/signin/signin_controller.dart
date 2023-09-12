@@ -7,7 +7,6 @@ import 'package:diary_journal/core/routes/app_routes.dart';
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_web_auth/flutter_web_auth.dart';
@@ -37,8 +36,8 @@ class SignInController extends GetxController {
       Get.snackbar(
         'Error',
         'Both email and password are required',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        backgroundColor: ThemeColor.colorScheme.error,
+        colorText: ThemeColor.colorScheme.onSurface,
       );
       return;
     }

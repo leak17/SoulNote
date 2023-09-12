@@ -15,6 +15,7 @@ class JournalBox extends StatefulWidget {
 
 class JournalBoxState extends State<JournalBox> {
   final CreateController createController = Get.put(CreateController());
+
   String? selectedEmojiName;
   Map<String, Emoji> emojiMap = {};
 
@@ -57,7 +58,7 @@ class JournalBoxState extends State<JournalBox> {
     }
   }
 
-  Future<void> _showImagePickerDialog(BuildContext context) async {
+  Future<void> showImagePickerDialog(BuildContext context) async {
     final shouldUpdateImage = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -66,9 +67,9 @@ class JournalBoxState extends State<JournalBox> {
             "Select Image Source",
             style: TextStyle(
               fontFamily: 'KantumruyPro',
-              color: ThemeColor.mainColor,
-              fontSize: 16,
               fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: ThemeColor.mainColor,
             ),
           ),
           content: SingleChildScrollView(
@@ -78,7 +79,8 @@ class JournalBoxState extends State<JournalBox> {
                   minWidth: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Navigator.of(context).pop(createController.takePhoto());
+                      Navigator.of(context).pop(true);
+                      await createController.takePhoto();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ThemeColor.colorScheme.onSurface,
@@ -113,8 +115,8 @@ class JournalBoxState extends State<JournalBox> {
                   minWidth: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Navigator.of(context)
-                          .pop(createController.pickImageFromGallery());
+                      Navigator.of(context).pop(true);
+                      await createController.pickImageFromGallery();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ThemeColor.colorScheme.onSurface,
@@ -169,12 +171,13 @@ class JournalBoxState extends State<JournalBox> {
     if (shouldUpdateImage != null && shouldUpdateImage) {
       final File? imageFile = createController.imageFile.value;
       if (imageFile != null) {
-        createController.saveImageToStorage(imageFile);
+        await createController.saveImageToStorage(imageFile);
+        setState(() {});
       }
     }
   }
 
-  Future<void> _showEmojiPicker(BuildContext context) async {
+  Future<void> showEmojiPicker(BuildContext context) async {
     final emoji = await showModalBottomSheet<Emoji>(
       context: context,
       builder: (BuildContext context) {
@@ -215,8 +218,9 @@ class JournalBoxState extends State<JournalBox> {
               verticalDirection: VerticalDirection.down,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Positioned(
-                  child: createController.imageFile.value != null &&
+                Obx(() {
+                  // Obx will rebuild the widget whenever imageFile changes
+                  return createController.imageFile.value != null &&
                           createController.imageFile.value!.existsSync()
                       ? SizedBox(
                           height: 200,
@@ -225,8 +229,8 @@ class JournalBoxState extends State<JournalBox> {
                             fit: BoxFit.cover,
                           ),
                         )
-                      : Container(),
-                ),
+                      : Container();
+                }),
                 Row(
                   children: [
                     Expanded(
@@ -236,6 +240,7 @@ class JournalBoxState extends State<JournalBox> {
                           fontWeight: FontWeight.bold,
                           color: ThemeColor.colorScheme.onSurface,
                         ),
+                        onChanged: (value) => createController.setTitle(value),
                         decoration: InputDecoration(
                           hintText: 'What is your title?',
                           hintStyle: TextStyle(
@@ -255,7 +260,7 @@ class JournalBoxState extends State<JournalBox> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              _showImagePickerDialog(context);
+                              showImagePickerDialog(context);
                             },
                             icon: Icon(
                               Icons.photo,
@@ -265,7 +270,7 @@ class JournalBoxState extends State<JournalBox> {
                           ),
                           IconButton(
                             onPressed: () {
-                              _showEmojiPicker(context);
+                              showEmojiPicker(context);
                             },
                             icon: selectedEmojiName != null
                                 ? Text(
@@ -300,6 +305,7 @@ class JournalBoxState extends State<JournalBox> {
                     color: ThemeColor.colorScheme.onSurface,
                   ),
                   maxLines: null,
+                  onChanged: (value) => createController.setDescription(value),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "What's on your mind?",

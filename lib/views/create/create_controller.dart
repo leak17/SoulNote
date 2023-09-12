@@ -1,7 +1,10 @@
 import 'dart:io';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../home/home_controller.dart';
+import 'dart:convert';
 
 class CreateController extends GetxController {
   Rx<DateTime> date = DateTime.now().obs;
@@ -35,18 +38,71 @@ class CreateController extends GetxController {
     }
   }
 
-  Future<void> saveImageToStorage(File imageFile) async {
+  // Future<void> saveImageToStorage(File imageFile) async {
+  //   try {
+  //     final appDir = await getApplicationDocumentsDirectory();
+  //     final localPath = appDir.path;
+  //     final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+  //     final localFile = File('$localPath/$fileName');
+  //     await imageFile.copy(localFile.path);
+
+  //     print('Image saved to: ${localFile.path}');
+  //   } catch (error) {
+  //     print('Error saving image: $error');
+  //   }
+  // }
+
+  Future<String?> saveImageToStorage(File imageFile) async {
     try {
       final appDir = await getApplicationDocumentsDirectory();
       final localPath = appDir.path;
-      const fileName = '';
+      final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
 
       final localFile = File('$localPath/$fileName');
       await imageFile.copy(localFile.path);
 
       print('Image saved to: ${localFile.path}');
+      return localFile.path;
     } catch (error) {
       print('Error saving image: $error');
+      return null;
     }
+  }
+
+  // note new properties
+  RxString title = ''.obs;
+  RxString description = ''.obs;
+
+  void setTitle(String newTitle) {
+    title.value = newTitle;
+  }
+
+  void setDescription(String newDescription) {
+    description.value = newDescription;
+  }
+
+  Future<void> saveJournalEntry() async {
+    // Save the image to storage and get the path
+    String? imagePath;
+    if (imageFile.value != null) {
+      imagePath = await saveImageToStorage(imageFile.value!);
+    }
+
+    // Create the Note instance with the imagePath
+    Note newNote = Note(
+        title: title.value,
+        description: description.value,
+        imagePath: imagePath);
+
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> entries = prefs.getStringList('journal_entries') ?? [];
+
+    // Add the newNote as a string
+    entries.add(json.encode(newNote.toMap()));
+    prefs.setStringList('journal_entries', entries);
+
+    // Add the newNote to the notes list in HomeController
+    Get.find<HomeController>().addNote(newNote);
   }
 }

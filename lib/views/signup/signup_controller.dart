@@ -87,7 +87,6 @@ class SignUpController extends GetxController {
       }
     } catch (e) {
       // Handle any exceptions here
-      print(e);
       handleException();
     }
   }
@@ -205,6 +204,10 @@ class SignUpController extends GetxController {
   // Method to toggle the confirm password visibility
   void toggleConfirmPasswordVisibility() {
     confirmPassToggle.value = !confirmPassToggle.value;
+  }
+
+  void toggleObscureText() {
+    obscureText.value = !obscureText.value;
   }
 
   @override

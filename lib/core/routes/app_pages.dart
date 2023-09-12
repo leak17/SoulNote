@@ -42,7 +42,7 @@ class AppPages {
     ),
     GetPage(
       name: Paths.SIGN_UP,
-      page: () => SignUpView(),
+      page: () => const SignUpView(),
       binding: SignUpBinding(),
     ),
     GetPage(
