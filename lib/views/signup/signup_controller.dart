@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:diary_journal/core/api/constants/api_constant.dart';
 import 'package:diary_journal/core/api/constants/api_header_constant.dart';
@@ -28,8 +30,8 @@ class SignUpController extends GetxController {
     var connectivityResult = await (Connectivity().checkConnectivity());
 
     final String username = userNameController.text.trim();
-    final String email = emailController.text.trim();
-    final String password = passwordController.text;
+    final String email = emailController.text;
+    final String password = passwordController.text.trim();
     final String confirmPassword = confirmController.text;
 
     // Add email validation using a regular expression.
@@ -71,22 +73,22 @@ class SignUpController extends GetxController {
     // Check if password and confirm password match
     if (!doPasswordsMatch(password, confirmPassword)) {
       isProcessingLoading.value = false;
+      dispose();
       return;
     }
 
     // If all validations pass, proceed with sign-up logic here.
     try {
-      final response = await performSignUp(username, email, password);
+      final response =
+          await performSignUp(username, email, password, confirmPassword);
 
       if (response.statusCode == 201) {
-        // Successful sign-up
         handleSuccessfulSignUp(response);
       } else {
-        // Sign-up failed, display an error message.
         handleFailedSignUp();
       }
     } catch (e) {
-      // Handle any exceptions here
+      print(e);
       handleException();
     }
   }
@@ -130,20 +132,18 @@ class SignUpController extends GetxController {
     return true;
   }
 
-  Future<http.Response> performSignUp(
-    String username,
-    String email,
-    String password,
-  ) async {
+  Future<http.Response> performSignUp(String username, String email,
+      String password, String confirmPassword) async {
     Map<String, String> header = ApiHeaderConstant.headerWithoutToken;
     var body = {
       "username": username,
       "email": email,
       "password": password,
-      "confirmPassword": password, // Should this be confirmPassword?
+      "confirmPassword": confirmPassword,
     };
 
     var url = Uri.parse(ApiConstant.signup);
+    print(body);
     return await http.post(
       url,
       headers: header,
@@ -196,18 +196,23 @@ class SignUpController extends GetxController {
     isProcessingLoading.value = false;
   }
 
-  // Method to toggle the password visibility
   void togglePasswordVisibility() {
     obscureText.value = !obscureText.value;
   }
 
-  // Method to toggle the confirm password visibility
   void toggleConfirmPasswordVisibility() {
     confirmPassToggle.value = !confirmPassToggle.value;
   }
 
   void toggleObscureText() {
     obscureText.value = !obscureText.value;
+  }
+
+  void setLoadingStateForDuration(Duration duration) {
+    isProcessingLoading.value = true;
+    Timer(duration, () {
+      isProcessingLoading.value = false;
+    });
   }
 
   @override

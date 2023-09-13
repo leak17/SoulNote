@@ -37,7 +37,7 @@ class SplashView extends StatelessWidget {
                     'Your Digital DiaryNote, Your \nTrusted Best Friend!',
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w500,
                       color: ThemeColor.mainColor,
                       fontFamily: 'KantumruyPro',
                     ),

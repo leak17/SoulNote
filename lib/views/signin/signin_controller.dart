@@ -1,137 +1,82 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:diary_journal/core/api/constants/api_constant.dart';
 import 'package:diary_journal/core/api/constants/api_header_constant.dart';
-import 'package:diary_journal/core/api/utils/save_local_data.dart';
-import 'package:diary_journal/core/model/login_response.dart';
 import 'package:diary_journal/core/routes/app_routes.dart';
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 class SignInController extends GetxController {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController emailOrUsernameController =
+      TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final RxBool isProcessingLoading = false.obs;
-  final RxBool obscureText = true.obs; // Observable for password visibility
+  final RxBool obscureText = true.obs;
 
   Future<void> userSignIn(BuildContext context) async {
-    final String email = emailController.text.trim();
-    final String password = passwordController.text;
+    final String emailOrUsername = emailOrUsernameController.text.trim();
+    final String password = passwordController.text.trim();
 
-    var connectivityResult = await (Connectivity().checkConnectivity());
+    final connectivityResult = await Connectivity().checkConnectivity();
 
     isProcessingLoading.value = true;
-    Map<String, String> header = ApiHeaderConstant.headerWithoutToken;
-    var body = {
-      "email": emailController.text.toString(),
-      "password": passwordController.text.toString(),
+    const header = ApiHeaderConstant.headerWithoutToken;
+    final body = {
+      "username": emailOrUsername,
+      "password": password,
     };
-    // LoadingDialog.showLoaderDialog(context, "Loading ...");
-    var url = Uri.parse(ApiConstant.login);
+    final url = Uri.parse(ApiConstant.login);
 
-    if (email.isEmpty || password.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Both email and password are required',
-        backgroundColor: ThemeColor.colorScheme.error,
-        colorText: ThemeColor.colorScheme.onSurface,
-      );
-      return;
-    }
-
-    bool isEmailValid(String email) {
-      final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-      return emailRegex.hasMatch(email);
-    }
-
-    // Inside your userSignIn method:
-    if (!isEmailValid(email)) {
-      Get.snackbar(
-        'Error',
-        'Please enter a valid email address',
-        backgroundColor: ThemeColor.colorScheme.error,
-        colorText: ThemeColor.colorScheme.onSurface,
-      );
+    if (emailOrUsername.isEmpty || password.isEmpty) {
+      _showErrorSnackbar(
+          'Error', 'Both email/username and password are required');
       return;
     }
 
     if (password.length < 6) {
-      Get.snackbar(
-        'Error',
-        'Password must be at least 6 characters long',
-        backgroundColor: ThemeColor.colorScheme.error,
-        colorText: ThemeColor.colorScheme.onSurface,
-      );
+      _showErrorSnackbar(
+          'Error', 'Password must be at least 6 characters long');
       return;
     }
 
     if (connectivityResult == ConnectivityResult.none) {
-      Get.snackbar(
-        'Error',
-        'No internet connection. Please check your network settings',
-        backgroundColor: ThemeColor.colorScheme.error,
-        colorText: ThemeColor.colorScheme.onSurface,
-      );
+      _showErrorSnackbar('Error',
+          'No internet connection. Please check your network settings');
       return;
     }
 
     try {
-      var response =
+      final response =
           await http.post(url, headers: header, body: json.encode(body));
-      print(response.body);
-      var data = LoginResponse.fromJson(jsonDecode(response.body));
-
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
       if (response.statusCode == 200) {
-        if (data != null && data.data != null) {
-          // Check if data and data.data are not null
-          print(data.data!.token.toString());
-          await SaveLocalData.setToken(data.data!.token.toString());
-          await SaveLocalData.setIsLogin(true);
-          await SaveLocalData.setUserId(data.data!.userid!.toInt());
-          handleSuccessfulSignUp(data);
-        } else {
-          Get.snackbar(
-            'Error',
-            'Invalid response data',
-            backgroundColor: ThemeColor.colorScheme.error,
-            colorText: ThemeColor.colorScheme.onSurface,
-          );
-        }
+        handleSuccessfulSignIn();
       } else {
-        Get.snackbar(
-          'Error',
-          'Sign-in failed. Please check your credentials.',
-          backgroundColor: ThemeColor.colorScheme.error,
-          colorText: ThemeColor.colorScheme.onSurface,
-        );
+        _showErrorSnackbar(
+            'Error', 'Sign-in failed. Please check your credentials.');
       }
     } catch (e) {
       Get.back();
       print(e);
+      _showErrorSnackbar(
+          'Error', 'Sign-in failed. An error occurred, please try again.');
     }
 
     isProcessingLoading.value = false;
   }
 
-  void handleSuccessfulSignUp(LoginResponse data) {
-    Get.snackbar(
-      'Success',
-      'Sign-up successful',
-      backgroundColor: ThemeColor.successColor,
-      colorText: ThemeColor.colorScheme.onSurface,
-    );
-
-    final String accessToken = data.data!.token.toString();
-
-    SaveLocalData.setToken(accessToken);
-    emailController.clear();
+  void handleSuccessfulSignIn() {
+    _showSuccessSnackbar('Success', 'Sign-in successful');
+    emailOrUsernameController.clear();
     passwordController.clear();
     isProcessingLoading.value = false;
-
     Get.offNamed(Routes.TAB_BAR_WRAPPER);
   }
 
@@ -145,34 +90,49 @@ class SignInController extends GetxController {
     try {
       final result = await FlutterWebAuth.authenticate(
         url: '$baseUrl/auth/$provider/login',
-        callbackUrlScheme:
-            'com.example.soulnote', // Replace with your app's URL scheme
+        callbackUrlScheme: 'com.example.soulnote',
       );
 
       final uri = Uri.parse(result);
 
       if (uri.queryParameters.containsKey('access_token')) {
         final accessToken = uri.queryParameters['access_token'];
-
-        // Store the access token
         GetStorage().write('access_token', accessToken);
-
-        // Redirect to the home screen
         Get.offNamed(Routes.TAB_BAR_WRAPPER);
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Sign-in failed. Please try again later.',
-        backgroundColor: ThemeColor.colorScheme.error,
-        colorText: ThemeColor.colorScheme.onSurface,
-      );
+      _showErrorSnackbar('Error', 'Sign-in failed. Please try again later.');
     }
+  }
+
+  void setLoadingStateForDuration(Duration duration) {
+    isProcessingLoading.value = true;
+    Timer(duration, () {
+      isProcessingLoading.value = false;
+    });
+  }
+
+  void _showErrorSnackbar(String title, String message) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: ThemeColor.colorScheme.error,
+      colorText: ThemeColor.colorScheme.onSurface,
+    );
+  }
+
+  void _showSuccessSnackbar(String title, String message) {
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: ThemeColor.successColor,
+      colorText: ThemeColor.colorScheme.onSurface,
+    );
   }
 
   @override
   void dispose() {
-    emailController.dispose();
+    emailOrUsernameController.dispose();
     passwordController.dispose();
     super.dispose();
   }

@@ -1,14 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class Note {
   final String title;
   final String description;
   final String? imagePath;
+  final ImageProvider? imageProvider;
 
-  Note({required this.title, required this.description, this.imagePath});
+  Note(
+      {required this.title,
+      required this.description,
+      this.imagePath,
+      this.imageProvider});
 
   Map<String, dynamic> toMap() {
     return {'title': title, 'description': description, 'imagePath': imagePath};
@@ -16,9 +22,10 @@ class Note {
 
   static Note fromMap(Map<String, dynamic> map) {
     return Note(
-        title: map['title'],
-        description: map['description'],
-        imagePath: map['imagePath']);
+      title: map['title'],
+      description: map['description'],
+      imagePath: map['imagePath'],
+    );
   }
 }
 
@@ -31,8 +38,14 @@ class HomeController extends GetxController {
     selectedDate.value = newDate;
   }
 
-  // note
+  void deleteJournalEntry(int index) {
+    if (index >= 0 && index < notes.length) {
+      notes.removeAt(index);
+      // You may want to save the updated notes list to persistent storage here
+    }
+  }
 
+  // Notes
   var notes = <Note>[].obs;
 
   @override
@@ -47,15 +60,17 @@ class HomeController extends GetxController {
   }
 
   void createNote(String title, String description, [String? imagePath]) {
-    Note note =
-        Note(title: title, description: description, imagePath: imagePath);
+    Note note = Note(
+      title: title,
+      description: description,
+      imagePath: imagePath,
+    );
     addNote(note);
   }
 
   Future<void> loadNotes() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? savedNotes = prefs
-        .getStringList('journal_entries'); // Ensure you use 'journal_entries'
+    List<String>? savedNotes = prefs.getStringList('journal_entries');
     if (savedNotes != null) {
       notes.value =
           savedNotes.map((e) => Note.fromMap(json.decode(e))).toList();
@@ -71,5 +86,17 @@ class HomeController extends GetxController {
 
   void fetchNotes() {
     loadNotes();
+  }
+
+  Future<void> updateNoteContent(
+      int index, String newTitle, String newDescription) async {
+    if (index >= 0 && index < notes.length) {
+      notes[index] = Note(
+        title: newTitle,
+        description: newDescription,
+        imagePath: notes[index].imagePath,
+      );
+      saveNotes();
+    }
   }
 }

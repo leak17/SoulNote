@@ -1,7 +1,6 @@
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/views/profile/profile_controller.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:get/get.dart';
 
 class CustomAppBar extends StatelessWidget {

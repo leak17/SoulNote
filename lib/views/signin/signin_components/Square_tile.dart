@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class SquareTile extends StatelessWidget {
   final String imagePath;
   const SquareTile({
-    Key? key,
+    super.key,
     required this.imagePath,
   });
 

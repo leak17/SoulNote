@@ -1,14 +1,16 @@
 import 'package:diary_journal/core/routes/app_routes.dart';
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/views/signin/signin_components/Square_tile.dart';
-import 'package:diary_journal/widget/Textfield.dart';
 import 'package:diary_journal/views/signin/signin_components/signin_button.dart';
 import 'package:diary_journal/views/signin/signin_controller.dart';
+import 'package:diary_journal/widget/Textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignInView extends GetView<SignInController> {
-  SignInView({Key? key}) : super(key: key);
+  const SignInView({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +58,13 @@ class SignInView extends GetView<SignInController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       buildInputTextField(
-                        controller: controller.emailController,
-                        hintText: 'Email',
+                        controller: controller.emailOrUsernameController,
+                        hintText: 'Username',
                         prefixIcon: Icons.mail,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.name,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please input email';
+                            return 'Please input email/username';
                           }
                           return null;
                         },
@@ -120,7 +122,11 @@ class SignInView extends GetView<SignInController> {
                   () => controller.isProcessingLoading.value
                       ? const CircularProgressIndicator()
                       : Signinbutton(
-                          onTap: () => controller.userSignIn(context),
+                          onTap: () {
+                            controller.userSignIn(context);
+                            controller.setLoadingStateForDuration(
+                                const Duration(seconds: 2));
+                          },
                         ),
                 ),
                 const SizedBox(height: 25),
@@ -161,14 +167,15 @@ class SignInView extends GetView<SignInController> {
                       onTap: () {
                         controller.initiateOAuth('google');
                       },
-                      child: SquareTile(imagePath: 'assets/images/google.png'),
+                      child: const SquareTile(
+                          imagePath: 'assets/images/google.png'),
                     ),
                     InkWell(
                       onTap: () {
                         controller.initiateOAuth('facebook');
                       },
-                      child:
-                          SquareTile(imagePath: 'assets/images/facebook.png'),
+                      child: const SquareTile(
+                          imagePath: 'assets/images/facebook.png'),
                     ),
                   ],
                 ),

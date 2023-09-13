@@ -5,7 +5,7 @@ class Signinbutton extends StatelessWidget {
   final Function()? onTap;
 
   const Signinbutton({
-    Key? key,
+    super.key,
     required this.onTap,
   });
 

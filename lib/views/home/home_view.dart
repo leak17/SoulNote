@@ -1,16 +1,16 @@
 import 'dart:io';
 
 import 'package:diary_journal/theme/theme_color.dart';
+import 'package:diary_journal/views/home/details_screen/details_view.dart';
 import 'package:diary_journal/views/home/home_controller.dart';
 import 'package:diary_journal/widget/custom_app_bar.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-// import 'package:intl/intl.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,20 +33,12 @@ class HomeView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(color: Colors.grey.shade300),
                 ),
-                child: Row(
+                child: const Row(
                   children: [
                     Expanded(
                       child: TextField(
-                        focusNode: Get.find<HomeController>().searchFocusNode,
-                        controller: Get.find<HomeController>().searchController,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.search),
-                          hintText: 'Search...',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12.0),
-                        ),
-                      ),
+                          // ... (your text field code)
+                          ),
                     ),
                   ],
                 ),
@@ -82,23 +74,26 @@ class HomeView extends StatelessWidget {
                     itemCount: controller.notes.length,
                     itemBuilder: (context, index) {
                       final note = controller.notes[index];
-                      // final DateTime selectedDate =
-                      //     controller.selectedDate.value;
-                      // final DateTime cardDate =
-                      //     selectedDate.add(Duration(days: index));
-                      // final formattedTime =
-                      //     DateFormat('EEE, MMM d').format(cardDate);
 
                       // Check if note has an imagePath
-                      ImageProvider imageProvider;
+                      Widget imageWidget =
+                          const SizedBox(); // Default empty widget
                       if (note.imagePath != null &&
                           note.imagePath!.isNotEmpty) {
-                        imageProvider = FileImage(File(note.imagePath!));
+                        imageWidget = Image.file(
+                          File(note.imagePath!),
+                          width: 80,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        );
                       } else {
-                        imageProvider =
-                            const AssetImage('assets/images/default_image.jpg');
+                        imageWidget = Image.asset(
+                          'assets/images/default_image.jpg',
+                          width: 80,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        );
                       }
-
                       return Slidable(
                         actionPane: const SlidableDrawerActionPane(),
                         actionExtentRatio: 0.25,
@@ -120,7 +115,10 @@ class HomeView extends StatelessWidget {
                               caption: 'Edit',
                               color: ThemeColor.blueColor,
                               icon: Icons.edit,
-                              onTap: () {},
+                              onTap: () {
+                                Get.to(
+                                    DetailsView(note: note, noteIndex: index));
+                              },
                             ),
                           ),
                           Padding(
@@ -129,7 +127,12 @@ class HomeView extends StatelessWidget {
                               caption: 'Delete',
                               color: ThemeColor.colorScheme.error,
                               icon: Icons.delete,
-                              onTap: () {},
+                              onTap: () {
+                                // Call the delete function when the "Delete" action is triggered
+                                controller.deleteJournalEntry(index);
+                                // Refresh the UI to reflect the updated list
+                                controller.update();
+                              },
                             ),
                           ),
                         ],
@@ -139,16 +142,10 @@ class HomeView extends StatelessWidget {
                                 BorderRadius.all(Radius.circular(4.0)),
                           ),
                           child: ListTile(
-                            leading: Container(
+                            leading: SizedBox(
                               width: 80,
                               height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              child: imageWidget, // Use the image widget here
                             ),
                             title: Text(
                               note.title,

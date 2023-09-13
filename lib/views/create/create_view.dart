@@ -87,11 +87,12 @@ class CreateView extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         createController.saveJournalEntry();
+
                         Get.snackbar(
                           'Saved Note',
                           'Title: ${createController.title.value}\nDescription: ${createController.description.value}',
                           snackPosition: SnackPosition.TOP,
-                          duration: Duration(seconds: 5),
+                          duration: const Duration(seconds: 5),
                         );
                       },
                       style: ElevatedButton.styleFrom(

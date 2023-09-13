@@ -8,7 +8,8 @@ class InputTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final void Function()? onPressed;
 
-  InputTextField({
+  const InputTextField({
+    super.key,
     required this.controller,
     this.obscureText = false,
     required this.keyboardType,

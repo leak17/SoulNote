@@ -94,6 +94,17 @@ class ProfileView extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 10),
+          Text(
+            profileController.userName.value,
+            style: TextStyle(
+              fontFamily: 'KantumruyPro',
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: ThemeColor.colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 10),
         ],
       ),
     );
@@ -114,7 +125,7 @@ class ProfileView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildAboutMeSection(),
+            _buildAboutMeSection(context),
             const SizedBox(height: 56),
             _buildCustomButtons(context),
             const SizedBox(height: 8),
@@ -124,18 +135,32 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildAboutMeSection() {
+  Widget _buildAboutMeSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'About Me',
-          style: TextStyle(
-            fontFamily: 'KantumruyPro',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: ThemeColor.mainColor,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'About Me',
+              style: TextStyle(
+                fontFamily: 'KantumruyPro',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: ThemeColor.mainColor,
+              ),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.edit,
+                color: ThemeColor.blueColor,
+              ),
+              onPressed: () {
+                _editAboutMe(context);
+              },
+            ),
+          ],
         ),
         const Divider(),
         const SizedBox(height: 8),
@@ -182,6 +207,68 @@ class ProfileView extends StatelessWidget {
         ),
         const SizedBox(height: 8),
       ],
+    );
+  }
+
+  void _editAboutMe(BuildContext context) {
+    final TextEditingController aboutMeController =
+        TextEditingController(text: profileController.aboutMeText.value);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Edit About Me',
+            style: TextStyle(
+              fontFamily: 'KantumruyPro',
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: ThemeColor.mainColor,
+            ),
+          ),
+          content: SizedBox(
+            width: 300, // Adjust the width as needed
+            child: TextField(
+              controller: aboutMeController,
+              maxLines: 5, // Adjust the number of lines as needed
+              decoration: const InputDecoration(
+                hintText: 'Enter your new about me text',
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'KantumruyPro',
+                  color: ThemeColor.mainColor,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                final updatedAboutMe = aboutMeController.text;
+                profileController.saveAboutMeToDataSource(updatedAboutMe);
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Save',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'KantumruyPro',
+                  color: ThemeColor.colorScheme.onError,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -244,7 +331,7 @@ class ProfileView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'KantumruyPro',
-                  color: ThemeColor.colorScheme.primary,
+                  color: ThemeColor.mainColor,
                 ),
               ),
             ),
@@ -258,7 +345,7 @@ class ProfileView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'KantumruyPro',
-                  color: ThemeColor.colorScheme.error,
+                  color: ThemeColor.colorScheme.onError,
                 ),
               ),
             ),

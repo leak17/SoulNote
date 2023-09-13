@@ -12,6 +12,7 @@ class JournalBox extends StatefulWidget {
   @override
   JournalBoxState createState() => JournalBoxState();
 }
+
 class JournalBoxState extends State<JournalBox> {
   final CreateController createController = Get.put(CreateController());
 
@@ -153,14 +154,7 @@ class JournalBoxState extends State<JournalBox> {
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text(
-                "Cancel",
-                style: TextStyle(
-                  fontFamily: 'KantumruyPro',
-                  color: ThemeColor.mainColor,
-                  fontSize: 14,
-                ),
-              ),
+              child: const Text("Cancel"),
             ),
           ],
         );
