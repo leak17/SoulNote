@@ -83,6 +83,8 @@ class CreateController extends GetxController {
     imageFile.value = null;
   }
 
+  final Rx<Function?> onJournalEntrySaved = (null).obs;
+
   Future<void> saveJournalEntry() async {
     // Save the image to storage and get the path
     String? imagePath;
