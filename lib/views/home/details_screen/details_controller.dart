@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:js_interop';
 import 'package:diary_journal/core/api/constants/api_constant.dart';
 import 'package:diary_journal/core/api/constants/api_header_constant.dart';
-import 'package:diary_journal/views/create/local_widget/mood.dart';
 import 'package:diary_journal/views/home/note_model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +10,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:diary_journal/views/home/home_controller.dart';
 import 'package:http/http.dart' as http;
+
+import '../../create/local_widget/mood.dart';
 
 class DetailsController extends GetxController {
   TextEditingController title = TextEditingController();
@@ -118,13 +118,15 @@ class DetailsController extends GetxController {
       homeController.updateNoteContent(noteIndex, newNote.title,
           newNote.description, newNote.mood.toString());
       await updateNoteOnApi(newNote);
+
+      Get.find<HomeController>().updateNoteImage(noteIndex, imagePath);
     }
   }
 
-  Future<String> saveImageToStorage(File imageFile) async {
+  Future<String> saveImageToStorage(File image) async {
     final appDir = await getApplicationDocumentsDirectory();
     final fileName = 'image_${DateTime.now()}.png';
-    final savedImage = await imageFile.copy('${appDir.path}/$fileName');
+    final savedImage = await image.copy('${appDir.path}/$fileName');
     return savedImage.path;
   }
 

@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/views/create/create_controller.dart';
 import 'package:diary_journal/views/create/local_widget/mood.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 
 class JournalBox extends StatefulWidget {
   const JournalBox({Key? key}) : super(key: key);
@@ -72,41 +70,6 @@ class _JournalBoxState extends State<JournalBox> {
       color: ThemeColor.awfulColor,
     ),
   ];
-
-  String? selectedEmojiName;
-  Map<String, Emoji> emojiMap = {};
-
-  Future<void> loadSelectedEmoji() async {
-    try {
-      final appDir = await getApplicationDocumentsDirectory();
-      final emojiPath = '${appDir.path}/selected_emoji.txt';
-
-      // Read the selected emoji name from the file
-      final emojiName = await File(emojiPath).readAsString();
-
-      setState(() {
-        selectedEmojiName = emojiName;
-      });
-    } catch (error) {
-      print('Error loading emoji: $error');
-    }
-  }
-
-  Future<void> saveEmojiLocally(Emoji emoji) async {
-    try {
-      final appDir = await getApplicationDocumentsDirectory();
-      final emojiPath = '${appDir.path}/selected_emoji.txt';
-
-      await File(emojiPath).writeAsString(emoji.name);
-
-      setState(() {
-        selectedEmojiName = emoji.name;
-        emojiMap[emoji.name] = emoji;
-      });
-    } catch (error) {
-      print('Error saving emoji: $error');
-    }
-  }
 
   Future<void> showImagePickerDialog(BuildContext context) async {
     final shouldUpdateImage = await showDialog<bool>(
@@ -334,7 +297,6 @@ class _JournalBoxState extends State<JournalBox> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Obx(() {
-                  // Obx will rebuild the widget whenever imageFile changes
                   return createController.imageFile.value != null &&
                           createController.imageFile.value!.existsSync()
                       ? SizedBox(
@@ -390,7 +352,6 @@ class _JournalBoxState extends State<JournalBox> {
                             onPressed: () {
                               showMoodPicker(context);
                             },
-                            // ignore: unnecessary_null_comparison
                             icon: createController.selectedMood != null
                                 ? Container(
                                     decoration: BoxDecoration(
@@ -413,7 +374,7 @@ class _JournalBoxState extends State<JournalBox> {
                                 : Icon(
                                     Icons.emoji_emotions,
                                     color: ThemeColor.colorScheme.onSurface,
-                                    size: 50,
+                                    size: 24,
                                   ),
                           ),
                           IconButton(

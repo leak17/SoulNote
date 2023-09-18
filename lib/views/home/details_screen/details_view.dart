@@ -20,6 +20,7 @@ class DetailsView extends StatelessWidget {
     required this.noteIndex,
     required this.imageFile,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final DetailsController detailsController = Get.put(
@@ -277,12 +278,12 @@ class DetailsView extends StatelessWidget {
                       onPressed: () {
                         detailsController.saveJournalEntry();
 
-                        Get.snackbar(
-                          'Saved Note',
-                          '${detailsController.imageFile.value}\nTitle: ${detailsController.title.value}\nDescription: ${detailsController.description.value}\nMood: ${detailsController.selectedMood.value}',
-                          snackPosition: SnackPosition.TOP,
-                          duration: const Duration(seconds: 5),
-                        );
+                        // Get.snackbar(
+                        //   'Saved Note',
+                        //   '${detailsController.imageFile.value}\nTitle: ${detailsController.title.value}\nDescription: ${detailsController.description.value}\nMood: ${detailsController.selectedMood.value}',
+                        //   snackPosition: SnackPosition.TOP,
+                        //   duration: const Duration(seconds: 5),
+                        // );
                         Get.back();
                       },
                       style: ElevatedButton.styleFrom(
