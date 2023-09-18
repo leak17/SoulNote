@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/views/home/details_screen/details_view.dart';
 import 'package:diary_journal/views/home/home_controller.dart';
@@ -9,16 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-
+import 'note_model/note_model.dart';
 class HomeView extends StatelessWidget {
   HomeView({Key? key}) : super(key: key);
-
   final HomeController homeController = Get.put(HomeController());
-
   Future<void> fetchData() async {
     await homeController.fetchDataFromApi();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,33 +25,33 @@ class HomeView extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: InkWell(
-              onTap: () {},
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
-                child: const Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search),
-                          hintText: 'Search...',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12.0),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: TextField(
+                      controller: homeController.searchController,
+                      onChanged: (value) {
+                        homeController.searchNotes(value);
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'Search...',
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 12.0,
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
           EasyDateTimeLine(
             initialDate: Get.put(HomeController()).selectedDate.value,
             onDateChange: (selectedDate) {
@@ -82,10 +78,18 @@ class HomeView extends StatelessWidget {
                 child: Obx(() {
                   var controller = Get.find<HomeController>();
                   return ListView.builder(
-                    itemCount: controller.notes.length,
+                    // itemCount: controller.notes.length,
+                    // itemBuilder: (context, index) {
+                    //   final note = controller.notes[index];
+                    
+                    
+                    itemCount: homeController.filteredNotes.isNotEmpty
+                        ? homeController.filteredNotes.length
+                        : controller.notes.length,
                     itemBuilder: (context, index) {
-                      final note = controller.notes[index];
-
+                      final note = homeController.filteredNotes.isNotEmpty
+                          ? homeController.filteredNotes[index]
+                          : controller.notes[index];
                       // Check if note has an imagePath
                       Widget imageWidget =
                           const SizedBox(); // Default empty widget
@@ -138,7 +142,6 @@ class HomeView extends StatelessWidget {
                           ),
                         ),
                       );
-
                       return Slidable(
                         actionPane: const SlidableDrawerActionPane(),
                         actionExtentRatio: 0.25,
@@ -155,7 +158,6 @@ class HomeView extends StatelessWidget {
                                   'Description: ${note.description}'
                                 ];
                                 String shareText = shareTexts.join('\n\n');
-
                                 if (note.imagePath != null &&
                                     note.imagePath!.isNotEmpty) {
                                   Share.shareFiles([note.imagePath!],
@@ -178,7 +180,6 @@ class HomeView extends StatelessWidget {
                                 // Fetch the selected image file
                                 File? selectedImageFile = await homeController
                                     .getImageFileFromNote(note);
-
                                 // Navigate to the details view with the image file
                                 Get.to(
                                   DetailsView(

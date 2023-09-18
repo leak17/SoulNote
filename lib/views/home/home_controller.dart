@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:diary_journal/core/api/constants/api_constant.dart';
 import 'package:diary_journal/core/api/constants/api_header_constant.dart';
 import 'package:diary_journal/views/home/note_model/note_model.dart';
@@ -12,9 +11,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
   final TextEditingController searchController = TextEditingController();
-
   final FocusNode searchFocusNode = FocusNode();
   Rx<DateTime> selectedDate = DateTime.now().obs;
+  List<Note> filteredNotes = <Note>[].obs;
+  // RxList<Note> filteredNotes = <Note>[].obs;
+  void searchNotes(String query) {
+    filteredNotes.clear();
+    filteredNotes.assignAll(notes.where((note) {
+      final title = note.title.toLowerCase();
+      final description = note.description.toLowerCase();
+      final search = query.toLowerCase();
+      return title.contains(search) || description.contains(search);
+    }).toList());
+    update();
+  }
 
   void updateSelectedDate(DateTime newDate) {
     selectedDate.value = newDate;
@@ -31,7 +41,6 @@ class HomeController extends GetxController {
 
   // Notes
   var notes = <Note>[].obs;
-
   @override
   void onInit() {
     super.onInit();
@@ -62,6 +71,7 @@ class HomeController extends GetxController {
     if (savedNotes != null) {
       notes.value =
           savedNotes.map((e) => Note.fromMap(json.decode(e))).toList();
+      filteredNotes.assignAll(notes);
     }
   }
 
@@ -104,10 +114,8 @@ class HomeController extends GetxController {
     final header = await ApiHeaderConstant.headerWithToken();
     try {
       final response = await http.get(url, headers: header);
-
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-
         for (final item in data) {
           final note = Note.fromMap(item);
           notes.add(note);
@@ -127,7 +135,6 @@ class HomeController extends GetxController {
     'assets/images/Bad.png': ThemeColor.badColor,
     'assets/images/Awful.png': ThemeColor.awfulColor,
   };
-
   // delete in UI
   void deleteNoteByIndex(int index) {
     if (index >= 0 && index < notes.length) {
@@ -154,15 +161,12 @@ class HomeController extends GetxController {
   //     print('Error while deleting from API: $e');
   //   }
   // }
-
   Future<void> deleteNoteFromApi(int index) async {
     if (index >= 0 && index < notes.length) {
       String id = notes[index].id; // Fetching the id from the Note
-
       final url =
           Uri.parse('https://soulnote-production.up.railway.app/journal/$id');
       final header = await ApiHeaderConstant.headerWithToken();
-
       try {
         final response = await http.delete(url, headers: header);
         if (response.statusCode == 200) {

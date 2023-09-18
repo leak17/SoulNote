@@ -29,7 +29,7 @@ class SignUpView extends GetView<SignUpController> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.asset(
-                      'assets/images/diary_logo.png',
+                      'assets/images/logo.png',
                       width: 100,
                       height: 100,
                       fit: BoxFit.cover,

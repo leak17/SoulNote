@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
 import 'package:diary_journal/core/api/constants/api_constant.dart';
 import 'package:diary_journal/core/api/constants/api_header_constant.dart';
-import 'package:diary_journal/core/api/utils/save_local_data.dart';
 import 'package:diary_journal/core/routes/app_routes.dart';
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:flutter/material.dart';
