@@ -24,7 +24,7 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: CustomAppBar(),
-        backgroundColor: const Color.fromARGB(233, 0, 0, 0),
+        backgroundColor: ThemeColor.mainColor,
         elevation: 0,
       ),
       body: Column(
