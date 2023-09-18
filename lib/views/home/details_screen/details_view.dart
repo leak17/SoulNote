@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:diary_journal/theme/theme_color.dart';
-import 'package:diary_journal/views/create/create_controller.dart';
 import 'package:diary_journal/views/home/note_model/note_model.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ class DetailsView extends StatelessWidget {
     required this.note,
     required this.noteIndex,
   }) : super(key: key);
-  final CreateController createController = Get.put(CreateController());
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +63,7 @@ class DetailsView extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         Navigator.of(context).pop(true);
-                        await createController.takePhoto();
+                        await detailsController.takePhoto();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ThemeColor.colorScheme.onSurface,
@@ -101,7 +99,7 @@ class DetailsView extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         Navigator.of(context).pop(true);
-                        await createController.pickImageFromGallery();
+                        await detailsController.pickImageFromGallery();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ThemeColor.colorScheme.onSurface,
@@ -147,9 +145,9 @@ class DetailsView extends StatelessWidget {
       );
 
       if (shouldUpdateImage != null && shouldUpdateImage) {
-        final File? imageFile = createController.imageFile.value;
+        final File? imageFile = detailsController.imageFile.value;
         if (imageFile != null) {
-          await createController.saveImageToStorage(imageFile);
+          await detailsController.saveImageToStorage(imageFile);
         }
       }
     }
@@ -181,213 +179,242 @@ class DetailsView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: ThemeColor.mainColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, color: ThemeColor.colorScheme.onSurface,),
           onPressed: () {
             Get.back();
           },
         ),
         centerTitle: true,
-        title: const Text('Edit Journal Entry'),
+        title: Text(
+          'Edit Journal Entry',
+          style: TextStyle(color: ThemeColor.colorScheme.onSurface),
+        ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: createController.decrementMonth,
-                  child: Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      color: ThemeColor.mainColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.chevron_left,
-                        color: ThemeColor.colorScheme.onSurface,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Future.delayed(const Duration(seconds: 2));
+        },
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 16),
+                  InkWell(
+                    onTap: () {
+                      detailsController.decrementDay();
+                    },
+                    borderRadius: BorderRadius.circular(17.5),
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: ThemeColor.mainColor,
+                        shape: BoxShape.circle,
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      backgroundColor: ThemeColor.mainColor,
-                    ),
-                    child: Text(
-                      DateFormat.yMMMd().format(createController.date.value),
-                      style: TextStyle(
-                        color: ThemeColor.colorScheme.onSurface,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                GestureDetector(
-                  onTap: createController.incrementMonth,
-                  child: Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      color: ThemeColor.mainColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.chevron_right,
-                        color: ThemeColor.colorScheme.onSurface,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    detailsController.saveJournalEntry();
-                    Get.back();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ThemeColor.mainColor,
-                  ),
-                  child: Text(
-                    "Save",
-                    style: TextStyle(
-                      color: ThemeColor.colorScheme.onSurface,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: ThemeColor.blueColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Obx(() {
-                      return createController.imageFile.value != null &&
-                              createController.imageFile.value!.existsSync()
-                          ? SizedBox(
-                              height: 200,
-                              child: Image.file(
-                                createController.imageFile.value!,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : Container();
-                    }),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: detailsController.title,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: ThemeColor.colorScheme.onSurface,
-                            ),
-                            onChanged: (value) =>
-                                createController.setTitle(value),
-                            decoration: InputDecoration(
-                              hintText: 'What is your title?',
-                              hintStyle: TextStyle(
-                                color: ThemeColor.colorScheme.onSurface,
-                                fontFamily: 'KantumruyPro',
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  showImagePickerDialog(context);
-                                },
-                                icon: Icon(
-                                  Icons.photo,
-                                  color: ThemeColor.colorScheme.onSurface,
-                                  size: 24,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  showEmojiPicker(context);
-                                },
-                                icon: selectedEmojiName != null
-                                    ? Text(
-                                        emojiMap[selectedEmojiName!]?.emoji ??
-                                            '',
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                          color:
-                                              ThemeColor.colorScheme.onSurface,
-                                        ),
-                                      )
-                                    : Icon(
-                                        Icons.emoji_emotions,
-                                        color: ThemeColor.colorScheme.onSurface,
-                                        size: 24,
-                                      ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.share,
-                                  color: ThemeColor.colorScheme.onSurface,
-                                  size: 24,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    TextField(
-                      controller: detailsController.description,
-                      style: TextStyle(
-                        color: ThemeColor.colorScheme.onSurface,
-                      ),
-                      maxLines: null,
-                      onChanged: (value) =>
-                          createController.setDescription(value),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "What's on your mind?",
-                        hintStyle: TextStyle(
-                          fontFamily: 'KantumruyPro',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                      child: Center(
+                        child: Icon(
+                          Icons.chevron_left,
                           color: ThemeColor.colorScheme.onSurface,
                         ),
                       ),
                     ),
-                  ],
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Obx(
+                      () => TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          backgroundColor: ThemeColor.mainColor,
+                        ),
+                        child: Text(
+                          DateFormat.yMMMd()
+                              .format(detailsController.date.value),
+                          style: TextStyle(
+                            color: ThemeColor.colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  InkWell(
+                    onTap: () {
+                      detailsController.incrementDay();
+                    },
+                    borderRadius: BorderRadius.circular(17.5),
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: ThemeColor.mainColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.chevron_right,
+                          color: ThemeColor.colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 25),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        detailsController.saveJournalEntry();
+
+                        Get.snackbar(
+                          'Saved Note',
+                          '${detailsController.imageFile.value}\nTitle: ${detailsController.title.value}\nDescription: ${detailsController.description.value}\nMood: ${detailsController.selectedMood.value}',
+                          snackPosition: SnackPosition.TOP,
+                          duration: const Duration(seconds: 5),
+                        );
+                        Get.back();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ThemeColor.mainColor,
+                      ),
+                      child: Text(
+                        "Save",
+                        style: TextStyle(
+                          fontFamily: 'KantumruyPro',
+                          color: ThemeColor.colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: ThemeColor.blueColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Obx(() {
+                        return detailsController.imageFile.value != null &&
+                                detailsController.imageFile.value!.existsSync()
+                            ? SizedBox(
+                                height: 200,
+                                child: Image.file(
+                                  detailsController.imageFile.value!,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Container();
+                      }),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: detailsController.title,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: ThemeColor.colorScheme.onSurface,
+                              ),
+                              onChanged: (value) =>
+                                  detailsController.setTitle(value),
+                              decoration: InputDecoration(
+                                hintText: 'What is your title?',
+                                hintStyle: TextStyle(
+                                  color: ThemeColor.colorScheme.onSurface,
+                                  fontFamily: 'KantumruyPro',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    showImagePickerDialog(context);
+                                  },
+                                  icon: Icon(
+                                    Icons.photo,
+                                    color: ThemeColor.colorScheme.onSurface,
+                                    size: 24,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    showEmojiPicker(context);
+                                  },
+                                  icon: selectedEmojiName != null
+                                      ? Text(
+                                          emojiMap[selectedEmojiName!]?.emoji ??
+                                              '',
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            color: ThemeColor
+                                                .colorScheme.onSurface,
+                                          ),
+                                        )
+                                      : Icon(
+                                          Icons.emoji_emotions,
+                                          color:
+                                              ThemeColor.colorScheme.onSurface,
+                                          size: 24,
+                                        ),
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.share,
+                                    color: ThemeColor.colorScheme.onSurface,
+                                    size: 24,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(),
+                      TextField(
+                        controller: detailsController.description,
+                        style: TextStyle(
+                          color: ThemeColor.colorScheme.onSurface,
+                        ),
+                        maxLines: null,
+                        onChanged: (value) =>
+                            detailsController.setDescription(value),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "What's on your mind?",
+                          hintStyle: TextStyle(
+                            fontFamily: 'KantumruyPro',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: ThemeColor.colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          // Your JournalBox Widget (Kept at the bottom)
-        ],
+          ],
+        ),
       ),
     );
   }

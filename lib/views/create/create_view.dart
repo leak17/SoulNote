@@ -31,8 +31,11 @@ class CreateView extends StatelessWidget {
               child: Row(
                 children: [
                   const SizedBox(width: 16),
-                  GestureDetector(
-                    onTap: createController.decrementMonth,
+                  InkWell(
+                    onTap: () {
+                      createController.decrementDay();
+                    },
+                    borderRadius: BorderRadius.circular(17.5),
                     child: Container(
                       width: 35,
                       height: 35,
@@ -50,22 +53,28 @@ class CreateView extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Expanded(
-                    child: TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        backgroundColor: ThemeColor.mainColor,
-                      ),
-                      child: Text(
-                        DateFormat.yMMMd().format(createController.date.value),
-                        style: TextStyle(
-                          color: ThemeColor.colorScheme.onSurface,
+                    child: Obx(
+                      () => TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          backgroundColor: ThemeColor.mainColor,
+                        ),
+                        child: Text(
+                          DateFormat.yMMMd()
+                              .format(createController.date.value),
+                          style: TextStyle(
+                            color: ThemeColor.colorScheme.onSurface,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(width: 4),
-                  GestureDetector(
-                    onTap: createController.incrementMonth,
+                  InkWell(
+                    onTap: () {
+                      createController.incrementDay();
+                    },
+                    borderRadius: BorderRadius.circular(17.5),
                     child: Container(
                       width: 35,
                       height: 35,
@@ -81,27 +90,17 @@ class CreateView extends StatelessWidget {
                       ),
                     ),
                   ),
+                  
                   const SizedBox(width: 16),
                   Padding(
                     padding: const EdgeInsets.only(right: 25),
                     child: ElevatedButton(
-                      // onPressed: () {
-                      //   createController.saveJournalEntry();
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     SnackBar(
-                      //       content: Text(
-                      //         'Saved Note\nTitle: ${createController.title.value}\nDescription: ${createController.description.value}',
-                      //       ),
-                      //       duration: const Duration(seconds: 5),
-                      //     ),
-                      //   );
-                      // },
                       onPressed: () {
                         createController.saveJournalEntry();
 
                         Get.snackbar(
                           'Saved Note',
-                          'Title: ${createController.title.value}\nDescription: ${createController.description.value}',
+                          '${createController.imageFile.value}\nTitle: ${createController.title.value}\nDescription: ${createController.description.value}\nMood: ${createController.selectedMood.value}',
                           snackPosition: SnackPosition.TOP,
                           duration: const Duration(seconds: 5),
                         );
@@ -130,6 +129,7 @@ class CreateView extends StatelessWidget {
           ],
         ),
       ),
+    
     );
   }
 }

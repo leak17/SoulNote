@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:diary_journal/theme/theme_color.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:diary_journal/core/api/constants/api_constant.dart';
@@ -18,25 +19,25 @@ class HomeController extends GetxController {
   }
 
   void deleteJournalEntry(int index) async {
-  if (index >= 0 && index < notes.length) {
-    final deletedNote = notes.removeAt(index);
+    if (index >= 0 && index < notes.length) {
+      final deletedNote = notes.removeAt(index);
 
-    // Send a DELETE request to the API to delete the journal entry by 'id'.
-    final response = await deleteJournalEntryOnApi(deletedNote.id);
+      // Send a DELETE request to the API to delete the journal entry by 'id'.
+      final response = await deleteJournalEntryOnApi(deletedNote.id);
 
-    if (response.statusCode == 200) {
-      print('Journal entry deleted from API successfully.');
-    } else {
-      print('Failed to delete journal entry from API: ${response.statusCode}');
-      // Re-add the entry if the API request fails to maintain consistency.
-      notes.insert(index, deletedNote);
+      if (response.statusCode == 200) {
+        print('Journal entry deleted from API successfully.');
+      } else {
+        print(
+            'Failed to delete journal entry from API: ${response.statusCode}');
+        // Re-add the entry if the API request fails to maintain consistency.
+        notes.insert(index, deletedNote);
+      }
+
+      // Save the updated notes list to persistent storage here if needed.
+      saveNotes();
     }
-
-    // Save the updated notes list to persistent storage here if needed.
-    saveNotes();
   }
-}
-
 
   // Notes
   var notes = <Note>[].obs;
@@ -52,13 +53,15 @@ class HomeController extends GetxController {
     saveNotes();
   }
 
-  void createNote(String title, String description, [String? imagePath]) {
+  void createNote(String title, String description, String mood,
+      [String? imagePath]) {
     Note note = Note(
       id: "",
       title: title,
       subTitle: "",
       description: description,
       imagePath: imagePath,
+      mood: mood,
     );
     addNote(note);
   }
@@ -84,7 +87,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> updateNoteContent(
-      int index, String newTitle, String newDescription) async {
+      int index, String newTitle, String newDescription, String newMood) async {
     if (index >= 0 && index < notes.length) {
       notes[index] = Note(
         id: "",
@@ -92,6 +95,7 @@ class HomeController extends GetxController {
         subTitle: "",
         description: newDescription,
         imagePath: notes[index].imagePath,
+        mood: newMood,
       );
       saveNotes();
     }
@@ -119,19 +123,26 @@ class HomeController extends GetxController {
   }
 
   Future<http.Response> deleteJournalEntryOnApi(String id) async {
-  final url = Uri.parse('${ApiConstant.journal}/$id');
-  final header = await ApiHeaderConstant.headerWithToken();
+    final url = Uri.parse('${ApiConstant.journal}/$id');
+    final header = await ApiHeaderConstant.headerWithToken();
 
-  try {
-    final response = await http.delete(
-      url,
-      headers: header,
-    );
-    return response;
-  } catch (error) {
-    print('Error deleting journal entry from API: $error');
-    throw error;
+    try {
+      final response = await http.delete(
+        url,
+        headers: header,
+      );
+      return response;
+    } catch (error) {
+      print('Error deleting journal entry from API: $error');
+      throw error;
+    }
   }
-}
 
+  final Map<String, Color> moodIconBackgroundColors = {
+    'assets/images/Awsome.png': ThemeColor.successColor,
+    'assets/images/Happy.png': ThemeColor.happyColor,
+    'assets/images/Neutral.png': ThemeColor.nautralColor,
+    'assets/images/Bad.png': ThemeColor.badColor,
+    'assets/images/Awful.png': ThemeColor.awfulColor,
+  };
 }

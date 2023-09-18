@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:diary_journal/core/api/constants/api_constant.dart';
 import 'package:diary_journal/core/api/constants/api_header_constant.dart';
+import 'package:diary_journal/views/create/local_widget/mood.dart';
 import 'package:diary_journal/views/home/note_model/note_model.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,15 +14,20 @@ import 'package:http/http.dart' as http;
 class CreateController extends GetxController {
   Rx<DateTime> date = DateTime.now().obs;
   Rx<File?> imageFile = Rx<File?>(null);
+  Rx<Mood?> selectedMood = Rx<Mood?>(null);
 
-  void incrementMonth() {
-    date.value =
-        DateTime(date.value.year, date.value.month + 1, date.value.day);
+  void setSelectedMood(Mood? mood) {
+    selectedMood.value = mood;
   }
 
-  void decrementMonth() {
+  void incrementDay() {
     date.value =
-        DateTime(date.value.year, date.value.month - 1, date.value.day);
+        DateTime(date.value.year, date.value.month, date.value.day + 1);
+  }
+
+  void decrementDay() {
+    date.value =
+        DateTime(date.value.year, date.value.month, date.value.day - 1);
   }
 
   Future<void> pickImageFromGallery() async {
@@ -86,10 +92,12 @@ class CreateController extends GetxController {
 
     // Create the Note instance with the imagePath
     Note newNote = Note(
-        id: "",
-        title: title.value,
-        description: description.value,
-        imagePath: imagePath);
+      id: "",
+      title: title.value,
+      description: description.value,
+      imagePath: imagePath,
+      mood: selectedMood.value?.iconPath ?? 'assets/images/Awsome.png',
+    );
 
     // Send data to the API
     await sendDataToApi(newNote);
@@ -116,7 +124,7 @@ class CreateController extends GetxController {
       "sub_title": "",
       "content": newNote.description,
       "image": newNote.imagePath,
-      "mood": ""
+      "mood": newNote.mood
     };
 
     try {
@@ -128,9 +136,9 @@ class CreateController extends GetxController {
 
       if (response.statusCode == 200) {
         print('Data sent to API successfully');
+        print('Response body: ${response.body}');
       } else {
         print('Failed to send data to API: ${response.statusCode}');
-        print('Response body: ${response.body}');
       }
     } catch (error) {
       print('Error sending data to API: $error');

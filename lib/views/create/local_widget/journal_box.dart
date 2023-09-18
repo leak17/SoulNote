@@ -1,8 +1,11 @@
 import 'dart:io';
+
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/views/create/create_controller.dart';
+import 'package:diary_journal/views/create/local_widget/mood.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -10,23 +13,68 @@ class JournalBox extends StatefulWidget {
   const JournalBox({Key? key}) : super(key: key);
 
   @override
-  JournalBoxState createState() => JournalBoxState();
+  _JournalBoxState createState() => _JournalBoxState();
 }
 
-class JournalBoxState extends State<JournalBox> {
-  final CreateController createController = Get.put(CreateController());
-
+class _JournalBoxState extends State<JournalBox> {
+  late String selectedMoodIconPath;
+  late CreateController createController;
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-
-  String? selectedEmojiName;
-  Map<String, Emoji> emojiMap = {};
 
   @override
   void initState() {
     super.initState();
-    loadSelectedEmoji();
+    // Set a default mood when the widget initializes
+    createController = Get.put(CreateController());
+    createController.setSelectedMood(moods[0]); // Set the first mood as default
+
+    selectedMoodIconPath = createController.selectedMood.value?.iconPath ??
+        'assets/images/Awsome.png';
+
+    createController.selectedMood.listen((mood) {
+      if (mounted) {
+        setState(() {
+          selectedMoodIconPath = mood?.iconPath ?? 'assets/images/Awsome.png';
+        });
+      }
+    });
   }
+
+  List<Mood> moods = [
+    Mood(
+      iconPath: 'assets/images/Awsome.png',
+      name: 'Awsome',
+      size: 24,
+      color: ThemeColor.successColor,
+    ),
+    Mood(
+        iconPath: 'assets/images/Happy.png',
+        name: 'Happy',
+        size: 24,
+        color: ThemeColor.happyColor),
+    Mood(
+      iconPath: 'assets/images/Neutral.png',
+      name: 'Neutral',
+      size: 24,
+      color: ThemeColor.nautralColor,
+    ),
+    Mood(
+      iconPath: 'assets/images/Bad.png',
+      name: 'Bad',
+      size: 24,
+      color: ThemeColor.badColor,
+    ),
+    Mood(
+      iconPath: 'assets/images/Awful.png',
+      name: 'Awful',
+      size: 24,
+      color: ThemeColor.awfulColor,
+    ),
+  ];
+
+  String? selectedEmojiName;
+  Map<String, Emoji> emojiMap = {};
 
   Future<void> loadSelectedEmoji() async {
     try {
@@ -49,7 +97,6 @@ class JournalBoxState extends State<JournalBox> {
       final appDir = await getApplicationDocumentsDirectory();
       final emojiPath = '${appDir.path}/selected_emoji.txt';
 
-      // Write the selected emoji name to a file
       await File(emojiPath).writeAsString(emoji.name);
 
       setState(() {
@@ -180,27 +227,92 @@ class JournalBoxState extends State<JournalBox> {
     }
   }
 
-  Future<void> showEmojiPicker(BuildContext context) async {
-    final emoji = await showModalBottomSheet<Emoji>(
+  Future<void> showMoodPicker(BuildContext context) async {
+    final selectedMood = await showModalBottomSheet<Mood>(
       context: context,
       builder: (BuildContext context) {
-        return EmojiPicker(
-          onEmojiSelected: (Category? category, Emoji? emoji) {
-            if (emoji != null) {
-              saveEmojiLocally(emoji);
-              Navigator.of(context).pop();
-            }
+        return ListView.builder(
+          itemCount: moods.length,
+          itemBuilder: (context, index) {
+            final mood = moods[index];
+            return ListTile(
+              leading: GestureDetector(
+                onTap: () {
+                  // Open color picker when the mood icon is tapped
+                  showColorPicker(context, mood);
+                },
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    mood.color,
+                    BlendMode.srcIn,
+                  ),
+                  child: Image.asset(
+                    mood.iconPath,
+                    width: 50,
+                    height: 50,
+                  ),
+                ),
+              ),
+              title: Text(mood.name),
+              onTap: () {
+                // Update the selected mood in the controller
+                createController.setSelectedMood(mood);
+
+                Navigator.of(context).pop(mood);
+              },
+            );
           },
-          config: const Config(
-            columns: 7,
-          ),
         );
       },
     );
 
-    if (emoji != null) {
-      print("Selected Emoji: ${emoji.emoji}");
+    if (selectedMood != null) {
+      print("Selected Mood: ${selectedMood.name}");
     }
+  }
+
+  Future<void> showColorPicker(BuildContext context, Mood mood) async {
+    Color pickerColor =
+        mood.color; // Initialize the picker color with the mood's color
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Pick a color'),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: pickerColor,
+              onColorChanged: (Color color) {
+                setState(() {
+                  pickerColor = color;
+                });
+              },
+              showLabel: true, // Show color value label
+              pickerAreaHeightPercent: 0.8, // Adjust the picker area height
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the color picker dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Update the mood's color with the selected color
+                setState(() {
+                  mood.color = pickerColor;
+                });
+                Navigator.of(context).pop(); // Close the color picker dialog
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -237,28 +349,28 @@ class JournalBoxState extends State<JournalBox> {
                 Row(
                   children: [
                     Expanded(
-                        child: TextField(
-                      controller: TextEditingController(
-                          text: createController.title.value),
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: ThemeColor.colorScheme.onSurface,
-                      ),
-                      onChanged: (value) {
-                        createController.setTitle(value);
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'What is your title?',
-                        hintStyle: TextStyle(
-                          color: ThemeColor.colorScheme.onSurface,
-                          fontFamily: 'KantumruyPro',
-                          fontSize: 18,
+                      child: TextField(
+                        controller: titleController,
+                        style: TextStyle(
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          color: ThemeColor.colorScheme.onSurface,
                         ),
-                        border: InputBorder.none,
+                        onChanged: (value) {
+                          createController.setTitle(value);
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'What is your title?',
+                          hintStyle: TextStyle(
+                            color: ThemeColor.colorScheme.onSurface,
+                            fontFamily: 'KantumruyPro',
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          border: InputBorder.none,
+                        ),
                       ),
-                    )),
+                    ),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Row(
@@ -276,20 +388,32 @@ class JournalBoxState extends State<JournalBox> {
                           ),
                           IconButton(
                             onPressed: () {
-                              showEmojiPicker(context);
+                              showMoodPicker(context);
                             },
-                            icon: selectedEmojiName != null
-                                ? Text(
-                                    emojiMap[selectedEmojiName!]?.emoji ?? '',
-                                    style: TextStyle(
-                                      fontSize: 24,
+                            // ignore: unnecessary_null_comparison
+                            icon: createController.selectedMood != null
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
                                       color: ThemeColor.colorScheme.onSurface,
+                                    ),
+                                    child: ColorFiltered(
+                                      colorFilter: ColorFilter.mode(
+                                        createController
+                                            .selectedMood.value!.color,
+                                        BlendMode.srcIn,
+                                      ),
+                                      child: Image.asset(
+                                        selectedMoodIconPath,
+                                        width: 28,
+                                        height: 28,
+                                      ),
                                     ),
                                   )
                                 : Icon(
                                     Icons.emoji_emotions,
                                     color: ThemeColor.colorScheme.onSurface,
-                                    size: 24,
+                                    size: 50,
                                   ),
                           ),
                           IconButton(
@@ -307,8 +431,7 @@ class JournalBoxState extends State<JournalBox> {
                 ),
                 const Divider(),
                 TextField(
-                  controller: TextEditingController(
-                      text: createController.description.value),
+                  controller: descriptionController,
                   style: TextStyle(
                     color: ThemeColor.colorScheme.onSurface,
                   ),

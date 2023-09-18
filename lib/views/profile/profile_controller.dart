@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:diary_journal/core/api/constants/api_header_constant.dart';
-import 'package:diary_journal/core/api/utils/save_local_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:diary_journal/core/api/constants/api_constant.dart';
 import 'package:get/get.dart';

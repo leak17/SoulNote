@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Note {
-  final String id; // Add the 'id' property
+  final String id;
   final String title;
   final String description;
   final String? subTitle;
@@ -10,7 +10,7 @@ class Note {
   final String? mood;
 
   Note({
-    required this.id, // Include the 'id' property
+    required this.id,
     required this.title,
     this.subTitle,
     required this.description,
@@ -32,7 +32,7 @@ class Note {
 
   static Note fromMap(Map<String, dynamic> map) {
     return Note(
-      id: map['id'], // Parse 'id' from the map
+      id: map['id'],
       title: map['title'],
       subTitle: map['sub_title'],
       description: map['content'],

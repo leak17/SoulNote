@@ -105,6 +105,40 @@ class HomeView extends StatelessWidget {
                           fit: BoxFit.cover,
                         );
                       }
+                      Widget moodIconWidget = Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: homeController
+                                  .moodIconBackgroundColors[note.mood ?? ''] ??
+                              ThemeColor.colorScheme.secondaryContainer,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 2,
+                              blurRadius: 4,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Container(
+                          width: 25,
+                          height: 25,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              note.mood ?? 'assets/images/Awsome.png',
+                              width: 25,
+                              height: 25,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      );
+
                       return Slidable(
                         actionPane: const SlidableDrawerActionPane(),
                         actionExtentRatio: 0.25,
@@ -190,7 +224,7 @@ class HomeView extends StatelessWidget {
                                 fontSize: 14,
                               ),
                             ),
-                            trailing: const Icon(Icons.emoji_emotions),
+                            trailing: moodIconWidget,
                           ),
                         ),
                       );
