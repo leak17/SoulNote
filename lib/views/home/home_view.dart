@@ -8,17 +8,22 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({Key? key}) : super(key: key);
+  HomeView({Key? key}) : super(key: key);
+
+  final HomeController homeController = Get.put(HomeController());
+
+  Future<void> fetchData() async {
+    await homeController.fetchDataFromApi();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut(() => HomeController());
-
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: const CustomAppBar(),
+        flexibleSpace: CustomAppBar(),
         backgroundColor: const Color.fromARGB(233, 0, 0, 0),
         elevation: 0,
       ),
@@ -37,8 +42,14 @@ class HomeView extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextField(
-                          // ... (your text field code)
-                          ),
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                          hintText: 'Search...',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12.0),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -46,9 +57,9 @@ class HomeView extends StatelessWidget {
             ),
           ),
           EasyDateTimeLine(
-            initialDate: Get.find<HomeController>().selectedDate.value,
+            initialDate: Get.put(HomeController()).selectedDate.value,
             onDateChange: (selectedDate) {
-              Get.find<HomeController>().updateSelectedDate(selectedDate);
+              Get.put(HomeController()).updateSelectedDate(selectedDate);
             },
             activeColor: ThemeColor.colorScheme.primary,
             dayProps: EasyDayProps(
@@ -104,7 +115,21 @@ class HomeView extends StatelessWidget {
                               caption: 'Share',
                               color: ThemeColor.colorScheme.primary,
                               icon: Icons.share,
-                              onTap: () {},
+                              onTap: () {
+                                List<String> shareTexts = [
+                                  'Title: ${note.title}',
+                                  'Description: ${note.description}'
+                                ];
+                                String shareText = shareTexts.join('\n\n');
+
+                                if (note.imagePath != null &&
+                                    note.imagePath!.isNotEmpty) {
+                                  Share.shareFiles([note.imagePath!],
+                                      text: shareText);
+                                } else {
+                                  Share.share(shareText);
+                                }
+                              },
                             ),
                           ),
                         ],

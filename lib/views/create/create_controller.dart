@@ -1,10 +1,14 @@
 import 'dart:io';
+import 'package:diary_journal/core/api/constants/api_constant.dart';
+import 'package:diary_journal/core/api/constants/api_header_constant.dart';
+import 'package:diary_journal/views/home/note_model/note_model.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../home/home_controller.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class CreateController extends GetxController {
   Rx<DateTime> date = DateTime.now().obs;
@@ -38,21 +42,6 @@ class CreateController extends GetxController {
     }
   }
 
-  // Future<void> saveImageToStorage(File imageFile) async {
-  //   try {
-  //     final appDir = await getApplicationDocumentsDirectory();
-  //     final localPath = appDir.path;
-  //     final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-  //     final localFile = File('$localPath/$fileName');
-  //     await imageFile.copy(localFile.path);
-
-  //     print('Image saved to: ${localFile.path}');
-  //   } catch (error) {
-  //     print('Error saving image: $error');
-  //   }
-  // }
-
   Future<String?> saveImageToStorage(File imageFile) async {
     try {
       final appDir = await getApplicationDocumentsDirectory();
@@ -70,7 +59,6 @@ class CreateController extends GetxController {
     }
   }
 
-  // note new properties
   RxString title = ''.obs;
   RxString description = ''.obs;
 
@@ -80,6 +68,13 @@ class CreateController extends GetxController {
 
   void setDescription(String newDescription) {
     description.value = newDescription;
+  }
+
+  void reset() {
+    title.value = '';
+    description.value = '';
+    date.value = DateTime.now();
+    imageFile.value = null;
   }
 
   Future<void> saveJournalEntry() async {
@@ -95,6 +90,10 @@ class CreateController extends GetxController {
         description: description.value,
         imagePath: imagePath);
 
+    // Send data to the API
+    await sendDataToApi(newNote);
+
+    // The rest of your code remains unchanged
     final prefs = await SharedPreferences.getInstance();
     final List<String> entries = prefs.getStringList('journal_entries') ?? [];
 
@@ -103,6 +102,37 @@ class CreateController extends GetxController {
     prefs.setStringList('journal_entries', entries);
 
     // Add the newNote to the notes list in HomeController
-    Get.find<HomeController>().addNote(newNote);
+    Get.put(HomeController()).addNote(newNote);
+    reset();
+  }
+
+  Future<void> sendDataToApi(Note newNote) async {
+    final url = Uri.parse(ApiConstant.journal);
+    final header = await ApiHeaderConstant.headerWithToken();
+
+    final jsonData = {
+      "title": newNote.title,
+      "sub_title": "",
+      "content": newNote.description,
+      "image": newNote.imagePath,
+      "mood": ""
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        headers: header,
+        body: jsonEncode(jsonData),
+      );
+
+      if (response.statusCode == 200) {
+        print('Data sent to API successfully');
+      } else {
+        print('Failed to send data to API: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+    } catch (error) {
+      print('Error sending data to API: $error');
+    }
   }
 }

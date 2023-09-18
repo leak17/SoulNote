@@ -22,7 +22,25 @@ class ProfileView extends StatelessWidget {
             _buildHeader(context),
             const SizedBox(height: 20),
             Expanded(
-              child: _buildProfileDetails(context),
+              child: FutureBuilder(
+                future: profileController.fetchDataFromApi(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          ThemeColor.mainColor,
+                        ),
+                        strokeWidth: 3,
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return _buildProfileDetails(context);
+                  }
+                },
+              ),
             ),
           ],
         ),
@@ -104,7 +122,16 @@ class ProfileView extends StatelessWidget {
               color: ThemeColor.colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 4),
+          Text(
+            profileController.email.value,
+            style: TextStyle(
+              fontFamily: 'KantumruyPro',
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: ThemeColor.colorScheme.onSurface,
+            ),
+          ),
         ],
       ),
     );

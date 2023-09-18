@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:diary_journal/core/api/constants/api_header_constant.dart';
+import 'package:http/http.dart' as http;
+import 'package:diary_journal/core/api/constants/api_constant.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -7,9 +10,9 @@ import 'package:path_provider/path_provider.dart';
 class ProfileController extends GetxController {
   RxString profileImageUrl = RxString(
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9qMp3RM66v5flm1qdQm-xI8qajl0USrQT2A&usqp=CAU');
-  // RxString userName = RxString("John Doe");
-  // RxString userRole = RxString("Designer");
-  RxString userName = RxString("");
+  RxString userName = RxString("Admin");
+  RxString email = RxString("admin99@gmail.com");
+
   RxString aboutMeText = RxString(
       'Passionate UI/UX designer with a focus on creating user-centered and visually appealing interfaces. Over 5 years of experience working on a variety of projects, from mobile apps to web platforms.');
 
@@ -49,14 +52,29 @@ class ProfileController extends GetxController {
   }
 
   void saveAboutMeToDataSource(String updatedAboutMe) {
-    // Replace this with the code to save the updatedAboutMe to your data source
-    // For example, if you're using Firebase Firestore:
-    // FirebaseFirestore.instance.collection('users').doc(userId).update({
-    //   'aboutMeText': updatedAboutMe,
-    // });
-
-    // You can also update the aboutMeText property in your controller:
     aboutMeText.value = updatedAboutMe;
+  }
+
+  Future<void> fetchDataFromApi() async {
+    final url = Uri.parse(ApiConstant.profile);
+    final header = await ApiHeaderConstant.headerWithToken();
+
+    try {
+      final response = await http.get(url, headers: header);
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        final newUserName = responseData['username'];
+        final newEmail = responseData['email'];
+        userName.value = newUserName;
+        email.value = newEmail;
+        print('API Response: $responseData');
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
   }
 
   // Future<void> signOut() async {

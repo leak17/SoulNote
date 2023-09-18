@@ -13,7 +13,7 @@ class MoodView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: const CustomAppBar(),
+        flexibleSpace: CustomAppBar(),
         backgroundColor: ThemeColor.transparentColor,
         elevation: 0,
       ),

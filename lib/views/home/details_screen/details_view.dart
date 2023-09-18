@@ -2,28 +2,29 @@ import 'dart:io';
 
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/views/create/create_controller.dart';
+import 'package:diary_journal/views/home/note_model/note_model.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:diary_journal/views/home/details_screen/details_controller.dart';
-import 'package:diary_journal/views/home/home_controller.dart';
 
 class DetailsView extends StatelessWidget {
   final Note note;
   final int noteIndex;
 
-  const DetailsView({Key? key, required this.note, required this.noteIndex})
-      : super(key: key);
+  DetailsView({
+    Key? key,
+    required this.note,
+    required this.noteIndex,
+  }) : super(key: key);
+  final CreateController createController = Get.put(CreateController());
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut(() => DetailsController(noteIndex: noteIndex));
-    final DetailsController detailsController = Get.find<DetailsController>();
-    final CreateController createController = Get.put(CreateController());
-    // final HomeController homeController = Get.find<HomeController>();
-
+    final DetailsController detailsController =
+        Get.put(DetailsController(noteIndex: noteIndex));
     String? selectedEmojiName;
     Map<String, Emoji> emojiMap = {};
 

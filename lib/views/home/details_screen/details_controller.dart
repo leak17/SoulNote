@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:diary_journal/core/api/constants/api_constant.dart';
+import 'package:diary_journal/views/home/note_model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:diary_journal/views/home/home_controller.dart';
+import 'package:http/http.dart' as http;
 
 class DetailsController extends GetxController {
   TextEditingController title = TextEditingController();
@@ -22,6 +25,13 @@ class DetailsController extends GetxController {
     final note = homeController.notes[noteIndex];
     title.text = note.title;
     description.text = note.description;
+  }
+
+  @override
+  void onClose() {
+    title.dispose();
+    description.dispose();
+    super.onClose();
   }
 
   Future<void> saveJournalEntry() async {
@@ -60,4 +70,26 @@ class DetailsController extends GetxController {
     final savedImage = await image.copy('${appDir.path}/$fileName');
     return savedImage.path;
   }
+
+  // Future<void> updateNoteOnApi(Note note) async {
+  //   final url = Uri.parse(ApiConstant.journal);
+
+  //   try {
+  //     final response = await http.put(
+  //       Uri.parse('$url/notes/${note.id}'),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: jsonEncode(note.toMap()),
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       print('Note updated successfully on the API');
+  //     } else {
+  //       print('Failed to update note on the API');
+  //     }
+  //   } catch (e) {
+  //     print('Error updating note on the API: $e');
+  //   }
+  // }
 }

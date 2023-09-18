@@ -81,7 +81,8 @@ class SignUpController extends GetxController {
     try {
       final response =
           await performSignUp(username, email, password, confirmPassword);
-
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
       if (response.statusCode == 201) {
         handleSuccessfulSignUp(response);
       } else {

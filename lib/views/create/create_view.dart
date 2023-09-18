@@ -15,7 +15,7 @@ class CreateView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: const CustomAppBar(),
+        flexibleSpace: CustomAppBar(),
         backgroundColor: ThemeColor.transparentColor,
         elevation: 0,
       ),
@@ -85,6 +85,17 @@ class CreateView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 25),
                     child: ElevatedButton(
+                      // onPressed: () {
+                      //   createController.saveJournalEntry();
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(
+                      //       content: Text(
+                      //         'Saved Note\nTitle: ${createController.title.value}\nDescription: ${createController.description.value}',
+                      //       ),
+                      //       duration: const Duration(seconds: 5),
+                      //     ),
+                      //   );
+                      // },
                       onPressed: () {
                         createController.saveJournalEntry();
 

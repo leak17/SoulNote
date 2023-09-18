@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({super.key});
+  CustomAppBar({super.key});
+  final ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
-    final profileController = Get.find<ProfileController>();
-
     return SafeArea(
       child: Container(
         color: ThemeColor.mainColor,
@@ -24,7 +23,7 @@ class CustomAppBar extends StatelessWidget {
               height: 40,
             ),
             Text(
-              'Sak Lysem',
+              profileController.userName.value,
               style: TextStyle(
                 fontSize: 14,
                 fontFamily: 'KantumruyPro',

@@ -13,7 +13,7 @@ class ShareView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: const CustomAppBar(),
+        flexibleSpace: CustomAppBar(),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),

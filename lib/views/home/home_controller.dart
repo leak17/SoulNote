@@ -1,33 +1,12 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
+import 'package:diary_journal/core/api/constants/api_constant.dart';
+import 'package:diary_journal/core/api/constants/api_header_constant.dart';
+import 'package:diary_journal/views/home/note_model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class Note {
-  final String title;
-  final String description;
-  final String? imagePath;
-  final ImageProvider? imageProvider;
-
-  Note(
-      {required this.title,
-      required this.description,
-      this.imagePath,
-      this.imageProvider});
-
-  Map<String, dynamic> toMap() {
-    return {'title': title, 'description': description, 'imagePath': imagePath};
-  }
-
-  static Note fromMap(Map<String, dynamic> map) {
-    return Note(
-      title: map['title'],
-      description: map['description'],
-      imagePath: map['imagePath'],
-    );
-  }
-}
 
 class HomeController extends GetxController {
   final TextEditingController searchController = TextEditingController();
@@ -97,6 +76,27 @@ class HomeController extends GetxController {
         imagePath: notes[index].imagePath,
       );
       saveNotes();
+    }
+  }
+
+  Future<void> fetchDataFromApi() async {
+    final url = Uri.parse(ApiConstant.journal);
+    final header = await ApiHeaderConstant.headerWithToken();
+    try {
+      final response = await http.get(url, headers: header);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+
+        for (final item in data) {
+          final note = Note.fromMap(item);
+          notes.add(note);
+        }
+      } else {
+        print('Failed to load data from API');
+      }
+    } catch (e) {
+      print('Error: $e');
     }
   }
 }

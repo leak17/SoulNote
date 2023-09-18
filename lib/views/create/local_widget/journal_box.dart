@@ -12,8 +12,12 @@ class JournalBox extends StatefulWidget {
   @override
   JournalBoxState createState() => JournalBoxState();
 }
+
 class JournalBoxState extends State<JournalBox> {
   final CreateController createController = Get.put(CreateController());
+
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   String? selectedEmojiName;
   Map<String, Emoji> emojiMap = {};
@@ -233,25 +237,28 @@ class JournalBoxState extends State<JournalBox> {
                 Row(
                   children: [
                     Expanded(
-                      child: TextField(
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: ThemeColor.colorScheme.onSurface,
-                        ),
-                        onChanged: (value) => createController.setTitle(value),
-                        decoration: InputDecoration(
-                          hintText: 'What is your title?',
-                          hintStyle: TextStyle(
-                            color: ThemeColor.colorScheme.onSurface,
-                            fontFamily: 'KantumruyPro',
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          border: InputBorder.none,
-                        ),
+                        child: TextField(
+                      controller: TextEditingController(
+                          text: createController.title.value),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: ThemeColor.colorScheme.onSurface,
                       ),
-                    ),
+                      onChanged: (value) {
+                        createController.setTitle(value);
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'What is your title?',
+                        hintStyle: TextStyle(
+                          color: ThemeColor.colorScheme.onSurface,
+                          fontFamily: 'KantumruyPro',
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    )),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Row(
@@ -300,11 +307,15 @@ class JournalBoxState extends State<JournalBox> {
                 ),
                 const Divider(),
                 TextField(
+                  controller: TextEditingController(
+                      text: createController.description.value),
                   style: TextStyle(
                     color: ThemeColor.colorScheme.onSurface,
                   ),
                   maxLines: null,
-                  onChanged: (value) => createController.setDescription(value),
+                  onChanged: (value) {
+                    createController.setDescription(value);
+                  },
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "What's on your mind?",
@@ -315,7 +326,7 @@ class JournalBoxState extends State<JournalBox> {
                       color: ThemeColor.colorScheme.onSurface,
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),

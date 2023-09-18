@@ -52,7 +52,7 @@ class AppPages {
     ),
     GetPage(
       name: Paths.HOME,
-      page: () => const HomeView(),
+      page: () => HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
