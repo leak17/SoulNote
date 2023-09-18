@@ -12,8 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:diary_journal/views/home/home_controller.dart';
 import 'package:http/http.dart' as http;
 
-import '../../create/local_widget/mood.dart';
-
 class DetailsController extends GetxController {
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();

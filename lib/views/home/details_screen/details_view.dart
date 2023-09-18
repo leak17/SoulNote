@@ -20,7 +20,6 @@ class DetailsView extends StatelessWidget {
     required this.noteIndex,
     required this.imageFile,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final DetailsController detailsController = Get.put(
