@@ -113,25 +113,31 @@ class ProfileView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Text(
-            profileController.userName.value,
-            style: TextStyle(
-              fontFamily: 'KantumruyPro',
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: ThemeColor.colorScheme.onSurface,
+          Obx(
+            () => Column(
+              children: [
+                Text(
+                  profileController.userName.value,
+                  style: TextStyle(
+                    fontFamily: 'KantumruyPro',
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: ThemeColor.colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  profileController.email.value,
+                  style: TextStyle(
+                    fontFamily: 'KantumruyPro',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: ThemeColor.colorScheme.onSurface,
+                  ),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            profileController.email.value,
-            style: TextStyle(
-              fontFamily: 'KantumruyPro',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: ThemeColor.colorScheme.onSurface,
-            ),
-          ),
+          )
         ],
       ),
     );
@@ -282,6 +288,7 @@ class ProfileView extends StatelessWidget {
               onPressed: () {
                 final updatedAboutMe = aboutMeController.text;
                 profileController.saveAboutMeToDataSource(updatedAboutMe);
+                profileController.updateAboutMe();
                 Navigator.pop(context);
               },
               child: Text(

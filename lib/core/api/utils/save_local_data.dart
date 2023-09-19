@@ -25,13 +25,15 @@ class SaveLocalData {
     return sharePreference.getBool(isLogin) ?? false;
   }
 
-  static Future<void> setUserId(int id) async {
+  // Modify this to save the userId as String
+  static Future<void> setUserId(String id) async {
     var sharePreference = await SharedPreferences.getInstance();
-    await sharePreference.setInt(userId, id);
+    await sharePreference.setString(userId, id);
   }
 
-  static Future<int> getUserId() async {
+// Modify this to retrieve the userId as String
+  static Future<String> getUserId() async {
     var sharePreference = await SharedPreferences.getInstance();
-    return sharePreference.getInt(userId) ?? 0;
+    return sharePreference.getString(userId) ?? "";
   }
 }
