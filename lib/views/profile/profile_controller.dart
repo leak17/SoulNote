@@ -104,12 +104,6 @@ class ProfileController extends GetxController {
   }
 
   Future<void> updateAboutMe() async {
-    // final userId = await SaveLocalData.getUserId();
-    // final url = Uri.parse('${ApiConstant.baseUrl}/users/$userId');
-    // // final url = Uri.parse('${ApiConstant.baseUrl}/users/${userId.value}');
-    // // final String userId = await fetchDataFromApi();
-    // // final url = Uri.parse('${ApiConstant.baseUrl}/users/$userId');
-    // final header = await ApiHeaderConstant.headerWithToken();
     final userId = await fetchUserIdFromApi();
     if (userId == null) {
       print('Error fetching userId');
