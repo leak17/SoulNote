@@ -86,6 +86,7 @@ class CreateController extends GetxController {
 
     // Create the Note instance with the imagePath
     Note newNote = Note(
+        id: "",
         title: title.value,
         description: description.value,
         imagePath: imagePath);

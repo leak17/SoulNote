@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:js_interop';
 import 'package:diary_journal/core/api/constants/api_constant.dart';
+import 'package:diary_journal/core/api/constants/api_header_constant.dart';
 import 'package:diary_journal/views/home/note_model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,7 +47,9 @@ class DetailsController extends GetxController {
 
     if (noteIndex >= 0 && noteIndex < entries.length) {
       Note newNote = Note(
+        id: "",
         title: title.text,
+        subTitle: "",
         description: description.text,
         imagePath: imagePath,
         imageProvider: imagePath != null && imagePath.isNotEmpty
@@ -61,6 +65,7 @@ class DetailsController extends GetxController {
       final homeController = Get.find<HomeController>();
       homeController.updateNoteContent(
           noteIndex, newNote.title, newNote.description);
+          await updateNoteOnApi(newNote);
     }
   }
 
@@ -70,6 +75,39 @@ class DetailsController extends GetxController {
     final savedImage = await image.copy('${appDir.path}/$fileName');
     return savedImage.path;
   }
+
+  Future<void> updateNoteOnApi(Note note) async {
+  final url = Uri.parse(ApiConstant.journal);
+
+  final header = await ApiHeaderConstant.headerWithToken();
+
+  final jsonData = {
+    // Map your Note object properties to the API's expected format
+    "id": "",
+    "title": note.title,
+    "sub_title": "",
+    "content": note.description,
+    "image": note.imagePath,
+    "mood": ""
+    // Add other fields as needed
+  };
+
+  try {
+    final response = await http.put(
+      Uri.parse('$url/notes/${note.id}'), // Adjust the URL and endpoint as needed
+      headers: header,
+      body: jsonEncode(jsonData),
+    );
+
+    if (response.statusCode == 200) {
+      print('Note updated successfully on the API');
+    } else {
+      print('Failed to update note on the API');
+    }
+  } catch (e) {
+    print('Error updating note on the API: $e');
+  }
+}
 
   // Future<void> updateNoteOnApi(Note note) async {
   //   final url = Uri.parse(ApiConstant.journal);

@@ -17,12 +17,26 @@ class HomeController extends GetxController {
     selectedDate.value = newDate;
   }
 
-  void deleteJournalEntry(int index) {
-    if (index >= 0 && index < notes.length) {
-      notes.removeAt(index);
-      // You may want to save the updated notes list to persistent storage here
+  void deleteJournalEntry(int index) async {
+  if (index >= 0 && index < notes.length) {
+    final deletedNote = notes.removeAt(index);
+
+    // Send a DELETE request to the API to delete the journal entry by 'id'.
+    final response = await deleteJournalEntryOnApi(deletedNote.id);
+
+    if (response.statusCode == 200) {
+      print('Journal entry deleted from API successfully.');
+    } else {
+      print('Failed to delete journal entry from API: ${response.statusCode}');
+      // Re-add the entry if the API request fails to maintain consistency.
+      notes.insert(index, deletedNote);
     }
+
+    // Save the updated notes list to persistent storage here if needed.
+    saveNotes();
   }
+}
+
 
   // Notes
   var notes = <Note>[].obs;
@@ -40,7 +54,9 @@ class HomeController extends GetxController {
 
   void createNote(String title, String description, [String? imagePath]) {
     Note note = Note(
+      id: "",
       title: title,
+      subTitle: "",
       description: description,
       imagePath: imagePath,
     );
@@ -71,7 +87,9 @@ class HomeController extends GetxController {
       int index, String newTitle, String newDescription) async {
     if (index >= 0 && index < notes.length) {
       notes[index] = Note(
+        id: "",
         title: newTitle,
+        subTitle: "",
         description: newDescription,
         imagePath: notes[index].imagePath,
       );
@@ -99,4 +117,21 @@ class HomeController extends GetxController {
       print('Error: $e');
     }
   }
+
+  Future<http.Response> deleteJournalEntryOnApi(String id) async {
+  final url = Uri.parse('${ApiConstant.journal}/$id');
+  final header = await ApiHeaderConstant.headerWithToken();
+
+  try {
+    final response = await http.delete(
+      url,
+      headers: header,
+    );
+    return response;
+  } catch (error) {
+    print('Error deleting journal entry from API: $error');
+    throw error;
+  }
+}
+
 }
