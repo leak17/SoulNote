@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:js_interop';
 import 'package:diary_journal/core/api/constants/api_constant.dart';
 import 'package:diary_journal/core/api/constants/api_header_constant.dart';
 import 'package:diary_journal/views/create/local_widget/mood.dart';
