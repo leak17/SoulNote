@@ -122,10 +122,10 @@ class DetailsController extends GetxController {
     }
   }
 
-  Future<String> saveImageToStorage(File image) async {
+  Future<String> saveImageToStorage(File imageFile) async {
     final appDir = await getApplicationDocumentsDirectory();
     final fileName = 'image_${DateTime.now()}.png';
-    final savedImage = await image.copy('${appDir.path}/$fileName');
+    final savedImage = await imageFile.copy('${appDir.path}/$fileName');
     return savedImage.path;
   }
 

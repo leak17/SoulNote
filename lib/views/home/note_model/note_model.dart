@@ -41,7 +41,6 @@ class Note {
     );
   }
 
-
   Note copyWith({
     String? id,
     String? title,
