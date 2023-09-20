@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:diary_journal/views/home/details_screen/details_view.dart';
 import 'package:diary_journal/views/home/home_controller.dart';
-import 'package:diary_journal/widget/custom_app_bar.dart';
-import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -23,8 +21,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: CustomAppBar(),
-        backgroundColor: const Color.fromARGB(233, 0, 0, 0),
+        backgroundColor: ThemeColor.mainColor,
         elevation: 0,
       ),
       body: Column(
@@ -54,17 +51,6 @@ class HomeView extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ),
-          EasyDateTimeLine(
-            initialDate: Get.put(HomeController()).selectedDate.value,
-            onDateChange: (selectedDate) {
-              Get.put(HomeController()).updateSelectedDate(selectedDate);
-            },
-            activeColor: ThemeColor.colorScheme.primary,
-            dayProps: EasyDayProps(
-              todayHighlightStyle: TodayHighlightStyle.withBackground,
-              todayHighlightColor: ThemeColor.mainColor,
             ),
           ),
           const SizedBox(height: 20.0),
@@ -174,9 +160,19 @@ class HomeView extends StatelessWidget {
                               caption: 'Edit',
                               color: ThemeColor.blueColor,
                               icon: Icons.edit,
-                              onTap: () {
+                              onTap: () async {
+                                // Fetch the selected image file
+                                File? selectedImageFile = await homeController
+                                    .getImageFileFromNote(note);
+
+                                // Navigate to the details view with the image file
                                 Get.to(
-                                    DetailsView(note: note, noteIndex: index));
+                                  DetailsView(
+                                    note: note,
+                                    noteIndex: index,
+                                    imageFile: selectedImageFile,
+                                  ),
+                                );
                               },
                             ),
                           ),

@@ -12,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:diary_journal/views/home/home_controller.dart';
 import 'package:http/http.dart' as http;
 
+import '../../create/local_widget/mood.dart';
+
 class DetailsController extends GetxController {
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
@@ -20,8 +22,12 @@ class DetailsController extends GetxController {
   Rx<Mood?> selectedMood = Rx<Mood?>(null);
 
   int noteIndex;
+  File? initialImageFile;
 
-  DetailsController({required this.noteIndex});
+  DetailsController({
+    required this.noteIndex,
+    required this.initialImageFile, // Pass the initial image file here
+  });
 
   @override
   void onInit() {
@@ -30,6 +36,9 @@ class DetailsController extends GetxController {
     final note = homeController.notes[noteIndex];
     title.text = note.title;
     description.text = note.description;
+
+    // Set the initial image file if available
+    imageFile.value = initialImageFile;
   }
 
   @override

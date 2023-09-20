@@ -6,23 +6,30 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:diary_journal/views/home/details_screen/details_controller.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DetailsView extends StatelessWidget {
   final Note note;
   final int noteIndex;
+  final File? imageFile;
 
   DetailsView({
     Key? key,
     required this.note,
     required this.noteIndex,
+    required this.imageFile,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final DetailsController detailsController =
-        Get.put(DetailsController(noteIndex: noteIndex));
+    final DetailsController detailsController = Get.put(
+      DetailsController(
+        noteIndex: noteIndex,
+        initialImageFile: imageFile, // Pass the imageFile as initialImageFile
+      ),
+    );
+
     String? selectedEmojiName;
     Map<String, Emoji> emojiMap = {};
 
@@ -179,7 +186,10 @@ class DetailsView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: ThemeColor.mainColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: ThemeColor.colorScheme.onSurface,),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: ThemeColor.colorScheme.onSurface,
+          ),
           onPressed: () {
             Get.back();
           },

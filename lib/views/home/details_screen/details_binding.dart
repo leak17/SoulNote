@@ -5,7 +5,7 @@ class detailBinding extends Bindings {
   final int noteIndex = 0;
   @override
   void dependencies() {
-    Get.lazyPut(() => DetailsController(noteIndex: noteIndex));
+    // Get.lazyPut(() => DetailsController(noteIndex: noteIndex));
 
   }
 }

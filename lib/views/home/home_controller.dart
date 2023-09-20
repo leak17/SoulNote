@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:diary_journal/theme/theme_color.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,6 +18,15 @@ class HomeController extends GetxController {
 
   void updateSelectedDate(DateTime newDate) {
     selectedDate.value = newDate;
+  }
+
+  // Add this method to get the image file from a note
+  Future<File?> getImageFileFromNote(Note note) async {
+    if (note.imagePath != null && note.imagePath!.isNotEmpty) {
+      return File(note.imagePath!);
+    } else {
+      return null;
+    }
   }
 
   // Notes
@@ -77,6 +87,14 @@ class HomeController extends GetxController {
         imagePath: notes[index].imagePath,
         mood: newMood,
       );
+      saveNotes();
+    }
+  }
+
+  void updateNoteImage(int index, String? imagePath) {
+    if (index >= 0 && index < notes.length) {
+      final updatedNote = notes[index].copyWith(imagePath: imagePath);
+      notes[index] = updatedNote;
       saveNotes();
     }
   }
