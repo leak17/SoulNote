@@ -11,32 +11,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
   final TextEditingController searchController = TextEditingController();
+
   final FocusNode searchFocusNode = FocusNode();
   Rx<DateTime> selectedDate = DateTime.now().obs;
 
   void updateSelectedDate(DateTime newDate) {
     selectedDate.value = newDate;
-  }
-
-  void deleteJournalEntry(int index) async {
-    if (index >= 0 && index < notes.length) {
-      final deletedNote = notes.removeAt(index);
-
-      // Send a DELETE request to the API to delete the journal entry by 'id'.
-      final response = await deleteJournalEntryOnApi(deletedNote.id);
-
-      if (response.statusCode == 200) {
-        print('Journal entry deleted from API successfully.');
-      } else {
-        print(
-            'Failed to delete journal entry from API: ${response.statusCode}');
-        // Re-add the entry if the API request fails to maintain consistency.
-        notes.insert(index, deletedNote);
-      }
-
-      // Save the updated notes list to persistent storage here if needed.
-      saveNotes();
-    }
   }
 
   // Notes
@@ -122,22 +102,6 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<http.Response> deleteJournalEntryOnApi(String id) async {
-    final url = Uri.parse('${ApiConstant.journal}/$id');
-    final header = await ApiHeaderConstant.headerWithToken();
-
-    try {
-      final response = await http.delete(
-        url,
-        headers: header,
-      );
-      return response;
-    } catch (error) {
-      print('Error deleting journal entry from API: $error');
-      throw error;
-    }
-  }
-
   final Map<String, Color> moodIconBackgroundColors = {
     'assets/images/Awsome.png': ThemeColor.successColor,
     'assets/images/Happy.png': ThemeColor.happyColor,
@@ -145,4 +109,52 @@ class HomeController extends GetxController {
     'assets/images/Bad.png': ThemeColor.badColor,
     'assets/images/Awful.png': ThemeColor.awfulColor,
   };
+
+  // delete in UI
+  void deleteNoteByIndex(int index) {
+    if (index >= 0 && index < notes.length) {
+      notes.removeAt(index);
+      saveNotes();
+    }
+  }
+
+  // delete from API
+  // Future<void> deleteNoteFromApi(String id) async {
+  //   final url =
+  //       Uri.parse('https://soulnote-production.up.railway.app/journal/$id');
+  //   final header = await ApiHeaderConstant.headerWithToken();
+  //   print('Attempting to delete note with ID: $id');
+  //   try {
+  //     final response = await http.delete(url, headers: header);
+  //     print("journal Id is : $id");
+  //     if (response.statusCode == 200) {
+  //       print("Delete Successfully!");
+  //     } else {
+  //       print('Failed to delete note from API');
+  //     }
+  //   } catch (e) {
+  //     print('Error while deleting from API: $e');
+  //   }
+  // }
+
+  Future<void> deleteNoteFromApi(int index) async {
+    if (index >= 0 && index < notes.length) {
+      String id = notes[index].id; // Fetching the id from the Note
+
+      final url =
+          Uri.parse('https://soulnote-production.up.railway.app/journal/$id');
+      final header = await ApiHeaderConstant.headerWithToken();
+
+      try {
+        final response = await http.delete(url, headers: header);
+        if (response.statusCode == 200) {
+          print('Successfully deleted from API');
+        } else {
+          print('Failed to delete data from API: ${response.body}');
+        }
+      } catch (e) {
+        print('Error while deleting from API: $e');
+      }
+    }
+  }
 }

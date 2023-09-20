@@ -186,11 +186,16 @@ class HomeView extends StatelessWidget {
                               caption: 'Delete',
                               color: ThemeColor.colorScheme.error,
                               icon: Icons.delete,
-                              onTap: () {
-                                // Call the delete function when the "Delete" action is triggered
-                                controller.deleteJournalEntry(index);
-                                // Refresh the UI to reflect the updated list
-                                controller.update();
+                              // onTap: () {
+                              //   // await controller.deleteNoteFromApi(
+                              //   //     controller.notes[index].id);
+                              //   controller.deleteNoteByIndex(index);
+                              // },
+                              onTap: () async {
+                                await controller.deleteNoteFromApi(
+                                    index); // Delete the note from the API
+                                controller.deleteNoteByIndex(
+                                    index); // Delete the note from UI and SharedPreferences
                               },
                             ),
                           ),
