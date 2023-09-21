@@ -5,6 +5,7 @@ import 'package:diary_journal/widget/Term&Condition.dart';
 import 'package:diary_journal/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:diary_journal/core/api/utils/save_local_data.dart';
 
 class ProfileView extends StatelessWidget {
   final ProfileController profileController = Get.put(ProfileController());
@@ -370,8 +371,9 @@ class ProfileView extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: () async {
+                await SaveLocalData.logout();
+
                 Navigator.pushReplacementNamed(context, Routes.SIGN_IN);
               },
               child: Text(

@@ -36,4 +36,15 @@ class SaveLocalData {
     var sharePreference = await SharedPreferences.getInstance();
     return sharePreference.getString(userId) ?? "";
   }
+
+  static Future<void> logout() async {
+    var sharePreference = await SharedPreferences.getInstance();
+    await sharePreference.remove(token); // Removes the token
+    await sharePreference.remove(isLogin); // Removes the login status
+    await sharePreference.remove(userId); // Removes the userId
+
+    print("Token after logout: ${sharePreference.getString(token)}");
+    print("IsLogin after logout: ${sharePreference.getBool(isLogin)}");
+    print("UserId after logout: ${sharePreference.getString(userId)}");
+  }
 }
