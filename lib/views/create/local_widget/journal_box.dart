@@ -374,7 +374,7 @@ class _JournalBoxState extends State<JournalBox> {
                                 : Icon(
                                     Icons.emoji_emotions,
                                     color: ThemeColor.colorScheme.onSurface,
-                                    size: 24,
+                                    size: 50,
                                   ),
                           ),
                           IconButton(
