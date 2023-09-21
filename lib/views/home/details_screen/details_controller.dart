@@ -14,11 +14,14 @@ import 'package:http/http.dart' as http;
 import '../../create/local_widget/mood.dart';
 
 class DetailsController extends GetxController {
+  // late String selectedMoodIconPath;
+  // late DetailsController detailsController;
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
   Rx<File?> imageFile = Rx<File?>(null);
   Rx<DateTime> date = DateTime.now().obs;
   Rx<Mood?> selectedMood = Rx<Mood?>(null);
+  Rx<Color?> selectedMoodColor = Rx<Color?>(null);
 
   int noteIndex;
   File? initialImageFile;
@@ -38,6 +41,7 @@ class DetailsController extends GetxController {
 
     // Set the initial image file if available
     imageFile.value = initialImageFile;
+
   }
 
   @override
@@ -57,6 +61,7 @@ class DetailsController extends GetxController {
 
   void setSelectedMood(Mood? mood) {
     selectedMood.value = mood;
+    selectedMoodColor.value = mood?.color;
   }
 
   void incrementDay() {
@@ -103,7 +108,7 @@ class DetailsController extends GetxController {
         subTitle: "",
         description: description.text,
         imagePath: imagePath,
-        mood: '',
+        mood: selectedMood.value?.iconPath ?? 'assets/images/Awsome.png',
         imageProvider: imagePath != null && imagePath.isNotEmpty
             ? FileImage(File(imagePath))
             : const AssetImage('assets/images/default_image.jpg')
@@ -141,7 +146,7 @@ class DetailsController extends GetxController {
       "sub_title": "",
       "content": note.description,
       "image": note.imagePath,
-      "mood": ""
+      "mood": note.mood
     };
 
     try {
@@ -160,4 +165,6 @@ class DetailsController extends GetxController {
       print('Error updating note on the API: $e');
     }
   }
+
+
 }

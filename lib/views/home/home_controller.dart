@@ -60,13 +60,15 @@ class HomeController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? savedNotes = prefs.getStringList('journal_entries');
     if (savedNotes != null) {
-      notes.value = savedNotes.map((e) => Note.fromMap(json.decode(e))).toList();
+      notes.value =
+          savedNotes.map((e) => Note.fromMap(json.decode(e))).toList();
     }
   }
 
   Future<void> saveNotes() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> stringNotes = notes.map((e) => json.encode(e.toMap())).toList();
+    List<String> stringNotes =
+        notes.map((e) => json.encode(e.toMap())).toList();
     prefs.setStringList('journal_entries', stringNotes);
   }
 

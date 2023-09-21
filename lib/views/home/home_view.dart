@@ -56,6 +56,17 @@ class HomeView extends StatelessWidget {
               ),
             ),
           ),
+          EasyDateTimeLine(
+            initialDate: Get.put(HomeController()).selectedDate.value,
+            onDateChange: (selectedDate) {
+              Get.put(HomeController()).updateSelectedDate(selectedDate);
+            },
+            activeColor: ThemeColor.colorScheme.primary,
+            dayProps: EasyDayProps(
+              todayHighlightStyle: TodayHighlightStyle.withBackground,
+              todayHighlightColor: ThemeColor.mainColor,
+            ),
+          ),
           const SizedBox(height: 20.0),
           Expanded(
             child: Container(

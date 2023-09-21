@@ -23,7 +23,8 @@ class _JournalBoxState extends State<JournalBox> {
   @override
   void initState() {
     super.initState();
-    // Set a default mood when the widget initializes
+    // Set a default mood when the
+    // widget initializes
     createController = Get.put(CreateController());
     createController.setSelectedMood(moods[0]); // Set the first mood as default
 
