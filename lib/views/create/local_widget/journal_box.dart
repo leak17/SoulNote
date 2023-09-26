@@ -378,14 +378,14 @@ class _JournalBoxState extends State<JournalBox> {
                                     size: 24,
                                   ),
                           ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.share,
-                              color: ThemeColor.colorScheme.onSurface,
-                              size: 24,
-                            ),
-                          ),
+                          // IconButton(
+                          //   onPressed: () {},
+                          //   icon: Icon(
+                          //     Icons.share,
+                          //     color: ThemeColor.colorScheme.onSurface,
+                          //     size: 24,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
