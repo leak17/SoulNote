@@ -7,6 +7,9 @@ A new Flutter project.
 |||||
 |---|---|---|---|
 |![pic](https://github.com/leak17/SoulNote/assets/115885247/6e1c72b8-b9cc-4470-b47b-3ca6cdb60bbc)|![pic1](https://github.com/leak17/SoulNote/assets/115885247/87547906-157e-43da-9308-a9d7986eedb3)|![pic2](https://github.com/leak17/SoulNote/assets/115885247/e4398f06-9663-45c7-be34-e5e035dc6826)|![pic3](https://github.com/leak17/SoulNote/assets/115885247/8fd58e6f-d862-4c14-85eb-b491ef07cfd4)|
+|![pic4](https://github.com/leak17/SoulNote/assets/115885247/15c2b2fa-6e7e-42be-9827-d42470f7f47e)|![pic5](https://github.com/leak17/SoulNote/assets/115885247/d4e3224d-b73d-442b-8d6f-ee8601d107a1)|![pic6](https://github.com/leak17/SoulNote/assets/115885247/d50392a8-5b32-47c2-88ed-9efb2e2c5693)|![pic6](https://github.com/leak17/SoulNote/assets/115885247/7fa4a557-4c94-47fe-918e-8a3afb9c1d3d)|
+|![pic7](https://github.com/leak17/SoulNote/assets/115885247/fdc9e5a4-5dcb-4c52-be82-9b4caa603933)|![pic8](https://github.com/leak17/SoulNote/assets/115885247/014bdb26-8b46-4974-b270-0e2d21532165)|![pic9](https://github.com/leak17/SoulNote/assets/115885247/19552737-3232-4008-b1c3-e82ed00a86e7)|![pic10](https://github.com/leak17/SoulNote/assets/115885247/8bc0aee2-bd1b-4710-8db4-c7bbf29483a8)|
+|![pic11](https://github.com/leak17/SoulNote/assets/115885247/92f0a82a-b9c2-4fdb-b462-cb7586bc6363)|![pic12](https://github.com/leak17/SoulNote/assets/115885247/c3226e22-b9d8-4f58-a14b-c8f3d908526d)|![pic13](https://github.com/leak17/SoulNote/assets/115885247/03d7e800-9894-4a37-b149-34728bb2362e)|![pic14](https://github.com/leak17/SoulNote/assets/115885247/a45d5032-4254-4fb6-8111-fc41f6a144e4)|
 
 This project is a starting point for a Flutter application.
 
