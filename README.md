@@ -4,6 +4,10 @@ A new Flutter project.
 
 ## Getting Started
 
+|||||
+|---|---|---|---|
+|![pic2](https://github.com/leak17/SoulNote/assets/115885247/bfd1d790-a5ea-4088-ba3b-d45eec5c9460)|![pic3](https://github.com/leak17/SoulNote/assets/115885247/428f7484-d038-4614-a82c-048b913ce66e)|![pic4](https://github.com/leak17/SoulNote/assets/115885247/cc38bc07-554e-44e0-89ab-c7621a4fca81)|![pic5](https://github.com/leak17/SoulNote/assets/115885247/13d3c296-eba0-4da4-8797-581118fa5e52)|
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
